@@ -1,0 +1,37 @@
+{include file="inc/header.html"} 
+<div style="clear:both;"></div>
+
+<div class="about_all">
+  <div class="about_a_left" style="height:100%;">
+   <img src="{$TMPL}/images/4.jpg" width=400 height=268>
+    <ul>
+    	{foreach from=$article_list item=article_list} 
+				<li onClick="window.location.href='{$article_list.url}'" {if $cid == $article_list.id}class="hove"{/if} style="cursor:pointer;"><a {if $cid == $article_list.id}style="color:#fff"{/if}>{$article_list.cate_title}</a></li>
+	    {/foreach}
+	</ul>
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>{$article.title}</span>
+	 </div>
+      <div class="about_a_right_a_a">
+	      <div class="font_about">
+		      {$article.content}
+		  </div>	  
+	  </div>
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+<script type="text/javascript">
+	window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_all").css('height', (document.body.clientHeight-430));
+};
+</script>
+{include file="inc/footer.html"}

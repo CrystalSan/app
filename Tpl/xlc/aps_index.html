@@ -1,0 +1,344 @@
+{include file="inc/header.html"} 
+ 
+<script type="text/javascript" src="{$TMPL}/js/discover.js"></script>
+
+	 <!--焦点图js开始-->
+	<link href="{$TMPL}/css/jquery.sliderTabs.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="{$TMPL}/js/jquery.sliderTabs.min.js"></script>
+    <script type="text/javascript" src="{$TMPL}/js/deal.js"></script>
+    <script type="text/javascript" src="{$TMPL}/js/deal_comment.js"></script>
+  
+    <script type="text/javascript">
+	 $(function(){
+		$("#xzdq1").bind('click',function(){
+			$("#xzdq").toggle(100);
+		});
+		$("#xzdq1_hide").bind('click',function(){
+			$("#xzdq").hide();
+		});
+	 });
+	 function setTab(name,cursel,n){
+	 	
+		 for(i=1;i<=n;i++){
+		  var menu=document.getElementById(name+i);
+		  var con=document.getElementById("con_"+name+"_"+i);
+		  menu.className=i==cursel?"hover":"";
+		  
+		  if(i==cursel){
+		  	$("#"+"con_"+name+"_"+i).show();
+		  	//con.style.display="block";
+		  }else{
+		  		$("#"+"con_"+name+"_"+i).hide();
+		  	//con.style.display="none";
+		  }
+ 		 }
+	}
+	
+        
+	//生成项目数组
+	var dealIdArray = new Array();
+	var dealPercentArray = new Array();
+{foreach from=$deal_list item=deal_item2 key=key2 }
+	dealIdArray[{$key2}] = {$deal_item2.id};
+	{if $deal_item2.percent>100}
+	dealPercentArray[{$key2}] = 100;
+	{else}
+	dealPercentArray[{$key2}] = {$deal_item2.percent};
+	{/if}
+{/foreach}
+</script>
+<div style="clear:both;"></div>
+
+ <div class="xm_lista">
+     <div class="area">
+     	<a href="javascript:void(0);" class="addres" id="xzdq1">{if $p_loc}{$p_loc}<a href="{if $is_classic}{url r="aps#index" p="r=classic"}{else}{url r="aps#index"}{/if}" class="fa_no"></a>{else}地区 {/if}</a>
+	  <div style="clear:both;"></div>
+	  			<div id="xzdq" class="xzdq">
+						<br /><a href="javascript:void(0);" id="xzdq1_hide" class="hide" style="background:url({$TMPL}/images/xzdq_hide.png);	margin-right: 10px;margin-top: 5px;"></a>
+						<br />
+						<div id="Tab1" class="Tab1">
+							<div class="Menubox">
+								<ul>
+								   <li class="hover con_top" name="hot">热门地区</li>
+								   {foreach from=$area_array_str item=area_item}
+								   <li class="con_top" name="{$area_item}">{$area_item}</li>
+								   {/foreach}
+								</ul>
+							</div>
+							<script>
+								$(function(){
+									$(".con_top").bind('click',function(){
+										 var name=$(this).attr("name");
+										 $(".con_top").each(function(i){
+										 	var each_name=$(this).attr("name");
+										 	if(each_name==name){
+												$(this).addClass("hover");
+												$("#con_one_"+each_name).show();
+											}else{
+												$(this).removeClass("hover");
+												$("#con_one_"+each_name).hide();
+											}
+										 });
+									});
+									 
+								});
+							</script>
+							<div class="Contentbox">  
+								<div id="con_one_hot" class="con_box" >
+									{foreach from=$hot_area item=city_item}
+										<a href="{$city_item.url}" title="{$city_item.name}">{$city_item.name}</a>
+									{/foreach}
+								</div>
+								 {foreach from=$area_array item=area_item key=k}
+								 <div id="con_one_{$area_array_str[$k]}" class="tab-content con_box" style="display:none">
+									 <div class="city-content tab-pane active" id="city_item_ABCD">
+										{foreach from=$area_item item=item key=k_str}
+										<div class="item">
+										    <span>{$k_str}</span>
+											<ul>
+												{foreach from=$item item=item_1 key=k_str}
+												<li><a href="{$item_1.url}">{$item_1.name}</a></li>
+												{/foreach}
+												<div class="clear"></div>
+											</ul>
+											<div class="blank"></div>
+										</div>
+										{/foreach}
+									</div>
+ 								 </div>
+								 {/foreach}
+							</div>
+						</div>
+					</div>
+       <span class="add_xm">
+	    <table >
+	     <tr>
+		 <td><a href="{url r="aps" p="type=$p_type"}" {if $p_state eq ''}class="atg"{/if}>所有项目{if $p_state eq ''}({$deal_count}){/if}</a></td>
+		 {foreach from=$state_list item=state_item key=key}
+				<td><a href="{$state_item.url}" title="{$state_item.name}" {if $p_state eq $key}class="atg"{/if}>{$state_item.name}{if $p_state eq $key}({$deal_count}){/if}</a></td>
+		 {/foreach}
+		 <td id="btn_select">
+		    <select name="deal_sort" class="deal_sort">
+					<option {if !$p_r}selected="selected"{/if}  value="{url r="aps" p="type=$p_type"}">请选择</option>
+					<option {if $p_r eq 'rec'}selected="selected"{/if} value="{url r="aps" p="r=rec&type=$p_type"}">推荐项目</option>
+					<option {if $p_r eq 'yure'}selected="selected"{/if} value="{url r="aps" p="r=yure&type=$p_type"}">正在预热</option>
+					<option {if $p_r eq 'new'}selected="selected"{/if} value="{url r="aps" p="r=new&type=$p_type"}">最新上线</option>
+					<option {if $p_r eq 'nend'}selected="selected"{/if} value="{url r="aps" p="r=nend&type=$p_type"}">即将结束</option>
+					<option {if $p_r eq 'classic'}selected="selected"{/if} value="{url r="aps" p="r=classic&type=$p_type"}">经典项目</option>
+				</select>
+		 </td>
+		 </tr>
+		</table>
+	</span>
+		<script type="text/javascript">
+			$("#btn_select").bind("change",
+				function(){
+					location.href = $('#btn_select option:selected').val();
+				}
+			);
+		</script>
+	  <span>
+     </div>
+	 <div style="clear:both;"></div>
+     <div class="xm_lista_ul">
+	   <ul>
+				<li><a href="{url r="aps" p="type=0"}" {if $pid==""}class="actb"{/if} title="全部">全部</a></li>
+	   	{foreach from=$cate_list item=cate_item}
+				<li>
+					{if $cate_item.pid eq 0}
+					<a {if $pid eq $cate_item.id}class="actb"{/if} href="{$cate_item.url}" title="{$cate_item.name}">{$cate_item.name}</a>
+					{/if}
+				</li>
+			{/foreach}
+	   </ul>
+	 </div>
+	 <div class="xm_lista_content">
+	 	{foreach from=$deal_list item=deal_item2 key2=key2 name="deal_items"}
+	        <div class="proc_a">
+			     <!--<div class="proc_a_a">
+				    <a href="{url r="deal#show" p="id=$deal_item2.id"}"><img src="{$TMPL}/images/suport_hover.png"/></a>
+				 </div>-->
+				 <div class="proc_a_b">
+				    <a href="{url r="ap#show" p="id=$deal_item2.id"}"  title="{$deal_item2.name}"><img src="{if $deal_item2.image eq ''}{$TMPL}/images/empty_thumb.gif{else}{function name="get_spec_image" v=$deal_item2.image w="122" h="92" g="1"}{/if}" alt="{$deal_item2.name}" /></a>
+					  <span class="going">
+					  {if $deal_item2.begin_time > $now}
+					  	即将开始
+					  {elseif $deal_item2.end_time < $now and $deal_item2.end_time neq 0}
+					  	{if $deal_item2.percent gte 100}已成功{else $deal_item2.percent gt 0}筹资失败{/if}
+					  {else}
+							{if $deal_item2.percent gte 100}
+								已成功
+							{else}
+								{if $deal_item2.end_time eq 0}
+									长期项目
+								{else}
+									{if $deal_item2.type eq 1}
+									融资中
+									{else}
+									筹资中
+									{/if}
+			 					{/if}
+							{/if}
+						{/if}
+					  </span>
+				 </div>
+				 <div class="proc_a_c">
+				   <h4 style="font-weight:bold;"><a href="{url r="ap#show" p="id=$deal_item2.id"}" style="color:#000;text-decoration:none;">{function name="msubstr" v=$deal_item2.name b=0 e=25}</a></h4>
+				   <ul>
+				      <li><a href="#"><img src="{$TMPL}/images/sur.png" border=0></a><span>{$deal_item2.support_count}</span></li>
+					  <li><a href="#"><img src="{$TMPL}/images/view.png" border=0></a><span>{$deal_item2.focus_count}</span></li>
+				   </ul>
+				 </div>
+				 <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:16px;color:#ff7800;font-weight:bold;">{$deal_item2.limit_ap}</li>
+					   <li style="font-size:14px;color:#999999;">目标</li>
+					</ul>
+				 </div>
+				 <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:16px;font-weight:bold;">{$deal_item2.ap_amount}</li>
+					   <li style="font-size:14px;color:#999999;">{if $deal_item2.type eq 1}已预购{else}已筹资{/if}</li>
+					</ul>
+				 </div>	
+         <div class="proc_a_e">
+				    <ul>
+							{if $deal_item2.begin_time > $now}
+								<li style="font-size:16px;font-weight:bold;text-align:left;padding-left:15px;">{$deal_item2.left_begin_days}天</li>
+					   		<li style="font-size:14px;color:#999999;">距离开始</li>
+					   	{elseif $deal_item2.end_time < $now and $deal_item2.end_time neq 0}
+					   		<li style="font-size:16px;font-weight:bold;text-align:left;padding-left:15px;">{if $deal_item2.percent gt 100}{function name="to_date" v="$deal_item2.success_time" f="Y/m/d"}{else}{function name="to_date" v="$deal_item2.end_time" f="Y/m/d"}{/if}</li>
+					   		<li style="font-size:14px;color:#999999;">结束时间</li>
+					   	{else}
+					   		{if $deal_item2.end_time eq 0}
+						   		<li style="font-size:16px;font-weight:bold;text-align:left;padding-left:15px;">长期项目</li>
+						   		<li style="font-size:14px;color:#999999;">长期项目</li>
+								{else}
+									<li style="font-size:16px;font-weight:bold;text-align:left;padding-left:15px;">{$deal_item2.remain_days}天</li>
+						   		<li style="font-size:14px;color:#999999;">剩余时间</li>
+								{/if}
+							{/if}
+						</ul>
+				 </div>					 
+				 <div class="proc_a_f">
+				 		{if $deal_item2.end_time < $now and $deal_item2.end_time neq 0}
+					  	{if $deal_item2.percent gte 100}<span class="wancheng"></span>{else $deal_item2.percent gt 0}<span class="jieshu"></span>{/if}
+					  {else}
+							{if $deal_item2.percent gte 100}
+								<span class="wancheng"></span>
+							{/if}
+						{/if}
+					 <canvas id="myCanvas_{$deal_item2.id}" class="circle" width="60" height="60"></canvas>   
+				 </div>
+			  </div>
+			 {/foreach}
+			  
+        <div style="clear:both;"></div>
+        <div id="pin_loading" rel="/index.php?ctl=ajax&act=ap&p=1">正在努力加载</div>	
+			  <div class="fy2"> 
+                <ul>
+                   {$pages}
+                 </ul>
+           </div>			  
+	 </div>
+ </div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+<!--圆形进度条-->
+<script type="text/javascript">
+	
+//x,y 坐标,radius 半径,process 百分比,backColor 中心颜色, proColor 进度颜色, fontColor 中心文字颜色,展示ID
+function DrowProcess(x,y,radius,process,backColor,proColor,fontColor,canid){
+	var canvas = document.getElementById('myCanvas_'+canid);
+
+	if (canvas.getContext) {
+		var cts = canvas.getContext('2d');
+	}else{
+		return;
+	}
+	
+	cts.beginPath();  
+	// 坐标移动到圆心  
+	cts.moveTo(x, y);  
+	// 画圆,圆心是24,24,半径24,从角度0开始,画到2PI结束,最后一个参数是方向顺时针还是逆时针  
+	cts.arc(x, y, radius, 0, Math.PI * 2, false);  
+	cts.closePath();  
+	// 填充颜色  
+	cts.fillStyle = backColor;  
+	cts.fill();
+
+	cts.beginPath();  
+	// 画扇形的时候这步很重要,画笔不在圆心画出来的不是扇形  
+	cts.moveTo(x, y);  
+	// 跟上面的圆唯一的区别在这里,不画满圆,画个扇形  
+	cts.arc(x, y, radius, Math.PI * 1.5, Math.PI * 1.5 -  Math.PI * 2 * process / 100, true);  
+	cts.closePath();  
+	cts.fillStyle = proColor;  
+	cts.fill(); 
+	
+	//填充背景白色
+	cts.beginPath();  
+	cts.moveTo(x, y); 
+	cts.arc(x, y, radius - (radius * 0.26), 0, Math.PI * 2, true);  
+	cts.closePath();
+	cts.fillStyle = 'rgba(255,255,255,1)';  
+	cts.fill(); 
+
+	// 画一条线  
+	cts.beginPath();  
+	cts.arc(x, y, radius-(radius*0.30), 0, Math.PI * 2, true);  
+	cts.closePath();  
+	// 与画实心圆的区别,fill是填充,stroke是画线  
+	cts.strokeStyle = backColor;  
+	cts.stroke();  
+	  
+	//在中间写字 
+	cts.font = "bold 9pt Arial";  
+	cts.fillStyle = fontColor;  
+	cts.textAlign = 'center';  
+	cts.textBaseline = 'middle';  
+	cts.moveTo(x, y);  
+	cts.fillText(process+"%", x, y);  
+	
+}
+bfb = 0;
+time=0;
+function Start(){
+	
+	DrowProcess(30,30,30,55,'#ddd','#32CD32','#32CD32');
+
+	t = setTimeout(Start,5);
+	if(bfb>=35){
+		clearTimeout(t);
+		bfb=0;
+		return;
+	}
+	bfb+=1;
+}
+
+function Create(){
+	
+	//DrowProcess(420,60,55,25,'#ddd','#32CD32','#32CD32');
+}
+
+
+$(function(){
+	for(var i=0;i<dealIdArray.length;i++){
+		if(dealPercentArray[i]<=25){
+			DrowProcess(30,30,30,dealPercentArray[i],'#ddd','#32CD32','#32CD32',dealIdArray[i]);
+		}else if(dealPercentArray[i]<=50){
+			DrowProcess(30,30,30,dealPercentArray[i],'#ddd','#09F','#09F',dealIdArray[i]);
+		}else{
+			DrowProcess(30,30,30,dealPercentArray[i],'#ddd','#ff7800','#ff7800',dealIdArray[i]);
+		}
+	}
+	Create();
+});
+</script>
+{include file="inc/footer.html"}

@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+ <meta http-equiv= "X-UA-Compatible" content = "IE=edge,chrome=1"/>
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+<title>{if $page_title neq ''}{$page_title} - {/if}{$site_name} - {$seo_title}</title>
+<meta name="keywords" content="{if $page_seo_keyword neq ''}{$page_seo_keyword}{else}{$seo_keyword}{/if}" />
+<meta name="description" content="{if $page_seo_description neq ''}{$page_seo_description}{else}{$seo_description}{/if}" />
+    
+    <script type="text/javascript">
+	var APP_ROOT = '{$APP_ROOT}';
+	var LOADER_IMG = '{$TMPL}/images/lazy_loading.gif';
+	var ERROR_IMG = '{$TMPL}/images/image_err.gif';
+	{if app_conf("APP_MSG_SENDER_OPEN") eq 1}
+	var send_span = {function name="app_conf" v="SEND_SPAN"}000;
+	{/if}
+</script>
+    <link href="{$TMPL}/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+	<link href="{$TMPL}/css/style.css" type="text/css" rel="stylesheet">
+<link href="{$TMPL}/css/weebox.css" rel="stylesheet">
+<link href="{$TMPL}/css/fancybox.css" rel="stylesheet">
+<script type="text/javascript" src="{$TMPL}/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.bgiframe.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.weebox.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.pngfix.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.fancybox.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/lazyload.js"></script>
+{if APP_MSG_SENDER_OPEN==1}
+<script type="text/javascript" src="{$TMPL}/js/msg_sender.js"></script>
+{/if}
+{if HAS_DEAL_NOTIFY>0}
+<script type="text/javascript" src="{$TMPL}/js/notify_sender.js"></script>
+{/if}
+<script type="text/javascript" src="{$TMPL}/js/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/script.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/index.js"></script>
+
+	<!--导航条固定-->
+    <script type="text/javascript">
+        var mt = 0;
+        $(function () {
+            var mydiv = document.getElementById("nv");
+            var mt = mydiv.offsetTop;
+            window.onscroll = function () {
+                var t = document.documentElement.scrollTop || document.body.scrollTop;
+                if (t > mt) {
+                    mydiv.style.position = "fixed";
+                    mydiv.style.margin = "0";
+                    mydiv.style.top = "0";
+					
+                }
+                else {
+                    mydiv.style.margin = "0 0";
+                    mydiv.style.position = "static";
+                }
+            }
+        });
+        function showUserInfoUl(){
+        		if($("#user_info_ul").css("display")=='none'){
+        			$("#user_info_ul").show();
+        		}else{
+        			$("#user_info_ul").hide();
+        		}
+        }
+    </script>
+<!--[if IE 6]>
+	<script src="{$TMPL}/js/DD_belatedPNG_0.0.8a-min.js"></script>
+	<script>
+	DD_belatedPNG.fix('.banner .btn_tit ul li.on , .banner .btn_tit ul li , .mx_1 , .mx_2 , .mx_3 , .mx_4 , .xzdq1 , .zcz , .timeline-left-gray , .deal_log_title .title , .timeline-comment-top , .timeline-start span , .pageleft a , .dz , .kj , .boxaddress , .xzdq , .con6 .sub , .fx i , .attention_focus_deal i , .head_down_icon , .banner .prev , .banner .next , .mxr_1 , .mxr_2 , .mxr_3 , .shenhe .shenhe_info li , .mod_title i , .box4 .mod_cont3 .leader_t , .box4 .mod_cont3 .leader_w , .box4 .mod_cont3 .leader_r , .box4 .mod_cont3 .leader_x , .box4 .mod_cont3 .leader_p , .step_box , .pageleft a i , .invester_all .col_a , .article_l li.on , .article_box .article_r_list h3'); 
+	</script>
+<![endif]-->
+
+	 <!--焦点图js开始-->
+    
+    
+ </head>
+ <body>
+ <!--导航-->
+ <div class="top_bar" style="z-index:999;position: relative;top: 1px;" id="nv">
+    <div class="top_banner">
+	    <div class="top_banner_left">
+		    <a href="{$APP_ROOT}/"><img src="{$TMPL}/images/logoname.png"/ border=0></a>
+		</div>
+		<div class="top_banner_right">
+		     <div class="top_bar_ul">
+		     	<ul>
+			    {foreach from=$nav_list item=nav_item}
+						<li><a href="{$nav_item.url}" {if $nav_item.deals=='deals'}class="act"{/if} title="{$nav_item.name}">{$nav_item.name}</a></li>
+					{/foreach}
+				</ul>
+			 </div>
+			 <div class="search">
+		         <!--<div class="search_input">
+				    <p><img src="{$TMPL}/images/search_biao.png" border=0><input type="text" placeholder="搜索项目、用户" class="search_xm"></p>
+				 </div>-->
+			 </div>
+			 <div class="top_login">
+			   {if $user_info}
+			        <img src="{function name="get_user_avatar" uid=$user_info.id type="middle"}" width=50 height=50>
+			         <div class="top_name">
+							   <a href="javascript:void(0);" onClick="showUserInfoUl();">{function name="msubstr" v=$user_info.user_name b=0 e=10}</a>
+							</div>
+						     <ul id="user_info_ul" class="top_menu_ul">
+								    <li><a href="{url r="home" p="id=$user_info.id"}">用户中心</a></li>
+										<li><a href="{url r="news#fav"}">查看关注</a></li>
+								    <li><a href="{url r="cha"}">查看系统消息{if $USER_MESSAGE_COUNT>0}({$USER_MESSAGE_COUNT}){/if}</a></li>
+										<li><a href="{url r="notify"}">查看通知{if $USER_NOTIFY_COUNT>0}({$USER_NOTIFY_COUNT}){/if}</a></li>
+										<li><a href="{url r="user#loginout"}" style="border-bottom:none;">退出</a></li>
+								</ul>
+         {else}
+         <a href="javascript:void(0);" onclick="javascript:show_pop_login();"><img src="{$TMPL}/images/index_login.png" border=0></a>
+				 <a href="{url r="user#register"}"><img src="{$TMPL}/images/index_register.png" border=0></a>
+         {/if}
+			 </div>
+		</div>
+	</div>
+ </div>

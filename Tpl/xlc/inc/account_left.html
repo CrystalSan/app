@@ -1,0 +1,53 @@
+	<div class="about_a_left_img">
+	    <img src="{function name="get_user_avatar" uid=$user_info.id type="middle"}">
+		<div style="clear:both;"></div>
+		<span>{$user_info.user_name}</span>
+		<p style="color:#fff;">积分：{$user_ap}</p>
+	</div>
+<!--网站左侧下拉开始-->
+<div class="container">
+<div class="leftsidebar_box">
+		<div class="line"></div>
+		<dl class="system_log" style="margin-bottom:0px;">
+			<dt>个人设置<img src="{$TMPL}/images/select_xl01.png"></dt>
+			<dd {if $module eq 'settings'&& $action eq 'index'}class="first_dd"{/if}><a href="{url r="settings#index"}">资料修改</a></dd>
+			<dd {if $module eq 'settings'&& $action eq 'bind'}class="first_dd"{/if}><a href="{url r="settings#bind"}">实名认证</a></dd>
+			<dd {if $module eq 'settings'&& $action eq 'security'}class="first_dd"{/if} style="padding-bottom:10px;"><a href="{url r="settings#security"}">安全信息</a></dd>
+            <dd {if $module eq 'settings'&& $action eq 'consignee'}class="first_dd"{/if} style="padding-bottom:10px;"><a href="{url r="settings#consignee"}">地址管理</a></dd>
+		</dl>
+	
+		<dl class="custom" style="margin-bottom:0px;">
+			<dt>我的项目<img src="{$TMPL}/images/select_xl01.png"></dt>
+			<dd {if $module eq 'account'&& ($action eq 'project' || $action eq 'get_investor_status' || $action eq 'get_leader_list' || $action eq 'support' || $action eq 'paid')}class="first_dd"{/if}><a href="{url r="account#project"}"">发布项目列表</a></dd>
+			<dd {if $module eq 'account'&& $action eq 'index'}class="first_dd"{/if}><a href="{url r="account#index"}">支持的项目列表</a></dd>
+			<dd {if $module eq 'account'&& $action eq 'focus' }class="first_dd"{/if} style="padding-bottom:10px;"><a href="{url r="account#focus" p="type=0"}">关注的项目列表</a></dd>
+			
+		</dl>
+	
+		<dl class="app" style="margin-bottom:0px;">
+			<dt >我的资金<img src="{$TMPL}/images/select_xl01.png"></dt>
+			<dd {if $module eq 'account'&& ($action eq 'money_index' || $action eq 'money_carry_bank' || $action eq 'refund' || $action eq 'credit')}class="first_dd"{/if}><a href="{url r="account#money_index"}">我的全部资金</a></dd>
+			<dd {if $module eq 'account'&& $action eq 'dongjie'}class="first_dd"{/if}><a href="{url r="account#dongjie"}" style="padding-bottom:10px;">我的冻结资金</a></dd>
+		
+		</dl>
+	
+		<dl class="cloud" style="margin-bottom:0px;">
+			<dt>我的评论<img src="{$TMPL}/images/select_xl01.png"></dt>
+			<dd {if $module eq 'account'&& $action eq 'pinglun'}class="first_dd"{/if}><a href="{url r="account#pinglun"}" style="padding-bottom:10px;">我的评论列表</a></dd>
+		</dl>
+	
+		<dl class="syetem_management" style="margin-bottom:0px;">
+			<dt>我的消费明细<img src="{$TMPL}/images/select_xl01.png"></dt>
+			<dd {if $module eq 'account'&& $action eq 'touzi'}class="first_dd"{/if}><a href="{url r="account#touzi"}" style="padding-bottom:10px;">我的投资记录列表</a></dd>
+			
+		</dl>
+	
+		<dl class="source" style="margin-bottom:0px;">
+			<dt>消息中心<img src="{$TMPL}/images/select_xl01.png"></dt>
+			<dd {if $module eq 'account'&& $action eq 'xitong'}class="first_dd"{/if}><a href="{url r="account#xitong"}">系统消息</a></dd>
+			<dd {if $module eq 'account'&& $action eq 'wodexiaoxi'}class="first_dd"{/if}><a href="{url r="account#wodexiaoxi" p="type=0"}">我的消息</a></dd>
+			<dd {if $module eq 'user'&& $action eq 'loginout' }class="first_dd"{/if}><a href="{url r="user#loginout"}" style="padding-bottom:10px;">退出</a></dd>
+		</dl>
+	</div>
+	
+</div>

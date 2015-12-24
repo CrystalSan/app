@@ -1,0 +1,162 @@
+﻿{include file="inc/header.html"} 
+<?php
+$this->_var['dpagejs'][] = $this->_var['TMPL_REAL']."/js/index.js";
+$this->_var['dcpagejs'][] = $this->_var['TMPL_REAL']."/js/index.js";
+?>
+<script type="text/javascript" src="{function name="parse_script" v="$dpagejs" c="$dcpagejs"}"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.SuperSlide.2.1.js"></script>
+<style>
+	.index_title{
+		font-weight:normal;
+		height:50px;
+		line-height:50px;
+		margin:0 auto;
+		position:relative;
+	}
+	.index_title span{
+		font-size:30px;
+	}
+	.index_title a{
+		position:absolute;
+		right:0;
+		top:8px;
+		color:#fff;
+		width:85px;
+		height:35px;
+		line-height:35px;
+		display:block;
+		text-indent:-999em;
+		background:url({$TMPL}/images/view_more.png) no-repeat;
+	}
+</style>
+
+<!--  海报区域开始  1-->
+<div class="banner slideBox" id="banner">
+	<div class="btn_tit effect_hd">
+		<ul>
+			{foreach from=$image_list item=image_item}
+			<li></li>
+			{/foreach}
+		</ul>
+	</div>
+	<div class="banner_cont effect_bd">
+		<ul>
+			{foreach from=$image_list item=image_item}
+			<li><a href="{$image_item.url}" target=_blank style="display:block;background: url({function name="get_spec_image" v=$image_item.image w=1902 h=350 g=2})"></a></li>
+			{/foreach}
+		</ul>
+	</div>
+	<div class="fy_box" style="">
+		<!--左右翻页按钮，可以不用-->
+		<a class="prev" href="javascript:void(0)"></a>
+		<a class="next" href="javascript:void(0)"></a>
+	</div>
+	
+</div>
+<script type="text/javascript"> 
+	if(!$(".banner_cont ul").has('li').length){ 
+		$("#banner").css("display","none");
+	} 
+	
+	if($(".banner_cont ul").find('li').length==1){ 
+		$(".btn_tit").css("display","none");
+	}
+	else if($(".banner_cont ul").find('li').length>1){
+		$(".btn_tit").css("display","block");
+	}
+	if($(".banner_cont ul").find('li').length>1){
+		jQuery("#banner").slide({mainCell:".banner_cont ul",effect:"leftLoop",easing:"easeInOutQuint",delayTime:500,autoPlay:true});
+		$("#banner").mousemove(function(){
+			$(this).find(".prev").show();
+			$(this).find(".next").show();
+		}).mouseout(function(){
+			$(this).find(".prev").hide();
+			$(this).find(".next").hide();
+		});
+	}
+</script>
+<!--  海报区域结束  -->
+<div class="adv_index">
+	<adv adv_id="index_top" />
+</div>
+<!--  选项卡开始  -->
+<!--  选项卡结束  -->
+<!--四个数值-->
+<style>
+.tou{
+	width:100%; height:80px; margin-top:50px;}
+.tou .biao{
+	width:1200px; height:80px; margin:0 auto; border:1px solid #CCC;}
+.tou .biao ul{
+	width:100%; height:30px; margin:0 auto; margin-top:2%; margin-left:20px;}
+.tou .biao li{
+	height:30px; line-height:30px; float:left; width:300px;}
+.tou .biao li img{
+	float:left;}
+.tou .biao li span{
+	display:block; float:left; margin-left:30px; padding:0;}
+</style>
+<div class="tou">
+	<div class="biao">
+    	<ul>
+        {foreach from=$virtual_effect item=virtual_effect}
+        	<li><img src="{$TMPL}/img/xiangmu.png" width="30" height="30" /><span style="font-size:24px; color:#FF8000;">{$virtual_effect}</span><span>项目总数</span></li>{/foreach}
+            {foreach from=$zhuce_num item=zhuce_num}
+            <li><img src="{$TMPL}/img/zhuce.png" width="30" height="30" /><span style="font-size:24px; color:#FF8000;">{$zhuce_num.count(*)}</span><span>注册人数</span></li>{/foreach}
+            {foreach from=$virtual_person item=virtual_person}
+            <li><img src="{$TMPL}/img/canyu.png" width="30" height="30" /><span style="font-size:24px; color:#FF8000;">{$virtual_person}</span><span>参与次数</span></li>{/foreach}
+            {foreach from=$virtual_money item=virtual_money}
+            <li><img src="{$TMPL}/img/zong.png" width="30" height="30" /><span style="font-size:24px; color:#FF8000;">{$virtual_money}</span><span>总众筹金额</span></li>{/foreach}
+            
+        </ul>
+    </div>
+</div>
+<!--四个数值结束-->
+<!--  项目列表开始  -->
+<div class="wrap" style="margin-top:20px;">
+	<div class="category" style="display:none;">
+		<ul style="float:left">
+			<li><a href="{url r="deals" p="r=rec"}" target=_blank>推荐项目</a></li>
+			<li><a href="{url r="deals" p="r=new"}" target=_blank>最新上线</a></li>
+			<li><a href="{url r="deals" p="r=nend"}" target=_blank>即将结束</a></li>
+			<li><a href="{url r="deals" p="r=classic"}" target=_blank>经典项目</a></li>
+		</ul>
+		<ul class="tab-nav" style="float:right">
+			{foreach from=$cate_list item=cate_item name="address"}
+				{if $smarty.foreach.address.iteration lt 11}
+					<li>{if $cate_item.pid eq 0}<a href="{url r="deals" p="id=$cate_item.id"}" title="{$cate_item.name}" target=_blank>{$cate_item.name}</a>{/if}</li>
+				{/if}
+			{/foreach}
+		</ul>
+	</div>
+	<div class="blank"></div>
+	{if $deal_list}
+	<h3 class="wrap index_title" style="border-bottom:1px dashed #CCCCCC;">
+	 	<span>推荐项目</span>{foreach from=$shu item=shu}
+        <span style="font-size:18px; margin-left:20px;">项目数:<span style="font-size:18px; color:#FF8000;">{$shu}</span></span>{/foreach}
+	 	<a href="{url r="deals" p="r=rec"}" target="_blank" class="f_r">查看更多</a>
+	</h3>
+	<div class="blank"></div>
+	<div id="pin_box" style="border:1px solid #CCC;">
+		{include file="inc/deal_list.html"}
+	</div>
+	<div class="blank20"></div>
+	{/if}
+	{if $deal_list_invest}
+	<h3 class="wrap index_title"  style="border-bottom:1px dashed #CCCCCC;">
+	 	<span>所有项目</span>{foreach from=$all_shu item=all_shu}
+        <span style="font-size:18px; margin-left:20px;">项目数:<span style="font-size:18px; color:#FF8000;">{$all_shu}</span></span>{/foreach}
+	 	<a href="{url r="deals" p="type=0"}" target="_blank" class="f_r">查看更多</a>
+	</h3>
+	<div class="blank"></div>
+	<div id="pin_box" style="border:1px solid #CCC;">
+		{include file="inc/deal_list_invest.html"}
+	</div>
+	{/if}
+ </div>
+<!--  项目列表结束  -->
+<div class="blank30"></div>
+<!--梦想开始的地方开始-->
+<!--梦想开始的地方结束-->
+<div id="gotop" style="display: block;z-index:99;"></div>
+{include file="inc/footer.html"} 

@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+ <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+<title>{if $page_title neq ''}{$page_title} - {/if}{$site_name} - {$seo_title}</title>
+<meta name="keywords" content="{if $page_seo_keyword neq ''}{$page_seo_keyword}{else}{$seo_keyword}{/if}" />
+<meta name="description" content="{if $page_seo_description neq ''}{$page_seo_description}{else}{$seo_description}{/if}" />
+    
+	<script type="text/javascript">
+	var APP_ROOT = '{$APP_ROOT}';
+	var LOADER_IMG = '{$TMPL}/images/lazy_loading.gif';
+	var ERROR_IMG = '{$TMPL}/images/image_err.gif';
+	{if app_conf("APP_MSG_SENDER_OPEN") eq 1}
+	var send_span = {function name="app_conf" v="SEND_SPAN"}000;
+	{/if}
+</script>
+<!-- Bootstrap -->
+    <link href="{$TMPL}/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+	<link href="{$TMPL}/css/style.css" type="text/css" rel="stylesheet">
+<link href="{$TMPL}/css/weebox.css" rel="stylesheet">
+<script type="text/javascript" src="{$TMPL}/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.bgiframe.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.weebox.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.pngfix.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/lazyload.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/script.js"></script>
+{if APP_MSG_SENDER_OPEN==1}
+<script type="text/javascript" src="{$TMPL}/js/msg_sender.js"></script>
+{/if}
+{if HAS_DEAL_NOTIFY>0}
+<script type="text/javascript" src="{$TMPL}/js/notify_sender.js"></script>
+{/if}
+<script type="text/javascript" src="{$TMPL}/js/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/user_register.js"></script>
+<!--[if IE 6]>
+	<script src="{$TMPL}/js/DD_belatedPNG_0.0.8a-min.js"></script>
+	<script>
+	DD_belatedPNG.fix('.banner .btn_tit ul li.on , .banner .btn_tit ul li , .mx_1 , .mx_2 , .mx_3 , .mx_4 , .xzdq1 , .zcz , .timeline-left-gray , .deal_log_title .title , .timeline-comment-top , .timeline-start span , .pageleft a , .dz , .kj , .boxaddress , .xzdq , .con6 .sub , .fx i , .attention_focus_deal i , .head_down_icon , .banner .prev , .banner .next , .mxr_1 , .mxr_2 , .mxr_3 , .shenhe .shenhe_info li , .mod_title i , .box4 .mod_cont3 .leader_t , .box4 .mod_cont3 .leader_w , .box4 .mod_cont3 .leader_r , .box4 .mod_cont3 .leader_x , .box4 .mod_cont3 .leader_p , .step_box , .pageleft a i , .invester_all .col_a , .article_l li.on , .article_box .article_r_list h3'); 
+	</script>
+<![endif]-->
+	<!--焦点图代码结束-->
+ </head>
+ <body>
+   <div class="top_logina">
+      <div class="top_logoa">
+	     <a href="{$APP_ROOT}/"><img src="{$TMPL}/images/logo.png" border=0></a>
+	  </div>
+   </div>
+    <div class="top20"><img src="{$TMPL}/images/topzhuce.png"></div>
+   <div class="login">
+         <form id="user_register_form" name="user_register_form" action="{url r="user#do_register"}">
+            <div class="form-group logo_table logo_table1">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>会员名称:</label>
+              <input type="text" id="user_name" name="user_name" class="form-control input_width" placeholder="请输入会员名称">
+              <div class="tip_box"></div>
+           </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table logo_table1">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>创建密码:</label>
+              <input type="password" id="user_pwd" name="user_pwd" class="form-control input_width" placeholder="请输入至少8位数字加英文密码">
+			   			<div class="tip_box"></div>
+            </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table logo_table1">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>确认密码:</label>
+              <input type="password" id="confirm_user_pwd" name="confirm_user_pwd" class="form-control input_width" placeholder="请输入至少8位数字加英文密码">
+			   			<div class="tip_box"></div>
+            </div>
+        <div style="clear:both;"></div>
+        {if app_conf("USER_INVESTMENT") eq 1}
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">会员类型:</label>
+              <select id="select_box" name="select_box" style="float: left;">
+								<option value="0">请选择类型</option>
+								<option value="1">创业者</option>
+								<option value="2">投资者</option>
+							</select>
+            </div>
+            <div class="tip_box"></div>
+        <div style="clear:both;"></div>
+				{/if}
+				{if app_conf("USER_VERIFY") eq 2}
+            <div class="form-group logo_table logo_table1">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>手机号码:</label>
+              <input type="text" class="form-control input_width" id="mobile" name="mobile" placeholder="请输入手机号码11位">
+			   			<div class="tip_box"></div>
+            </div>	
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table logo_table1">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>手机验证:</label>
+              <input type="text" class="form-control input_test" id="verify_coder" name="verify_coder" placeholder="请输入验证码">
+			      <a href="javascript:void(0);" id="J_send_sms_verify" class="test_code">获取验证码</a>
+              <div class="tip_box"></div>
+            </div>
+		    <div style="clear:both;"></div>
+				{/if}
+            <div class="form-group" style="line-height:42px;">
+                  <div class="col-sm-offset-1 col-sm-7">
+                     <div class="checkbox">
+                       <label><a href="javascript:void(0);" onClick="changetk();"><img id="tk_img" src="{$TMPL}/images/hovera.png" border=0 ></a><a href="{url "article" p="cid=84"}">同意{function name="app_conf" v="SITE_NAME"}服务条款</a></label>
+                      
+                     </div>
+                  </div>
+            </div>
+            <input type="hidden" value="1" id="tk_ipt" />
+            <input type="hidden" value="1" name="ajax" />
+			<div style="clear:both;"></div>
+            <div class="form-group logo_table " style="margin:0 auto;text-align:center;">
+			     	<a href="javascript:void(0);" id="submit_form" class="button_login" style="margin-left:37%;">提交注册</a>
+            </div>
+           	<div class="form-group logo_table">
+			     	<a href="{url r="user#login"}" style="text-decoration:none;color:#ff7800;font-size:16px;">返回登录</a>
+            </div>
+        </form>
+   </div>
+ <script type="text/javascript">
+ 	function changetk(){
+ 		if($("#tk_ipt").val()==1){
+ 			$("#tk_ipt").val(0);
+ 			$("#tk_img").attr("src","{$TMPL}/images/hover.png");
+ 		}else{
+ 			$("#tk_ipt").val(1);
+ 			$("#tk_img").attr("src","{$TMPL}/images/hovera.png");
+ 		}
+ 		
+ 	}
+	show_tip();
+	
+	var code_timeer = null;
+	var code_lefttime = 0 ;
+	$(document).ready(function(){
+		
+		$(".c_1").show();
+		$(".n_1").addClass("c");
+		$("#J_send_sms_verify").bind("click",function(){
+			send_mobile_verify_sms();
+		});
+			
+	});	
+		
+	function send_mobile_verify_sms(){
+		$("#J_send_sms_verify").unbind("click");
+	
+		if(!$.checkMobilePhone($("#mobile").val()))
+		{
+			form_error($("#mobile"),"手机号码格式错误");	
+			$("#J_send_sms_verify").bind("click",function(){
+				send_mobile_verify_sms();
+			});
+			return false;
+		}
+		
+		if(!$.maxLength($("#mobile").val(),11,true))
+		{
+			$("#mobile").focus();
+			$("#mobile").next().show().text("长度不能超过11位");			
+			$("#mobile").next().css({"color":"red"});
+			$("#J_send_sms_verify").bind("click",function(){
+				
+				send_mobile_verify_sms();
+			});
+			return false;
+		}
+		
+		
+		if($.trim($("#mobile").val()).length == 0)
+		{				
+			form_error($("#mobile"),"{function name="sprintf" format="手机号码不能为空" value="手机号码"}");
+			$("#J_send_sms_verify").bind("click",function(){
+				send_mobile_verify_sms();
+			});
+			return false;
+		}
+	
+		   var ajaxurl = APP_ROOT+"/index.php?ctl=ajax&act=check_field";
+		   
+			var query = new Object();
+			query.field_name = "mobile";
+			query.field_data = $.trim($("#mobile").val());
+			
+			$.ajax({ 
+				url: ajaxurl,
+				data:query,
+				type: "POST",
+				dataType: "json",
+				success: function(data){
+					if(data.status==1)
+					{	
+						var sajaxurl = APP_ROOT+"/index.php?ctl=ajax&act=send_mobile_verify_code&is_only=1";
+						var squery = new Object();
+						squery.mobile = $.trim($("#mobile").val());
+						$.ajax({ 
+							url: sajaxurl,
+							data:squery,
+							type: "POST",
+							dataType: "json",
+							success: function(sdata){
+									
+								if(sdata.status==1)
+								{
+									code_lefttime = 60;
+									code_lefttime_func();
+									$.showSuccess(sdata.info);
+									return false;
+								}
+								else
+								{
+										
+									$("#J_send_sms_verify").bind("click",function(){
+										send_mobile_verify_sms();
+									});
+									$.showErr(sdata.info);
+									return false;
+								}
+							}
+						});	
+					}
+					else
+					{	
+						$("#J_send_sms_verify").bind("click",function(){
+							send_mobile_verify_sms();
+						});			
+						form_error($("#mobile"),data.info);
+						return false;
+					}
+				}
+			});	
+		
+		
+	}
+	function code_lefttime_func(){
+		clearTimeout(code_timeer);
+		$("#J_send_sms_verify").html(code_lefttime+"秒后重新发送");
+		code_lefttime--;
+		if(code_lefttime >0){
+			code_timeer = setTimeout(code_lefttime_func,1000);
+		}
+		else{
+			code_lefttime = 60;
+			$("#J_send_sms_verify").html("发送验证码");
+			$("#J_send_sms_verify").bind("click",function(){
+				send_mobile_verify_sms();
+			});
+		}
+		
+	}	
+</script>
+{include file="inc/footer.html"}

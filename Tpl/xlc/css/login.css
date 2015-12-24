@@ -1,0 +1,116 @@
+﻿/*登录框*/
+.loginbg{
+	width:100%;
+	margin:0 auto;
+	padding:0 auto;
+	position:relative;
+}
+.login_bg{
+	width:100%;
+	
+}
+
+.login_bg img{
+	width:100%;
+	position:fixed;
+} 
+
+.login_log{
+	position:absolute;
+	width:240px;
+	height:240px;
+	right:10%;
+	top:100px;
+	background:rgba(255,255,255,0.8)!important;
+	background-color:#fff;
+	opacity:0.8;
+	filter:alpha(opacity:80);
+}
+.login_loga{
+	width:80%;
+	margin:10% auto;
+	text-align:center;
+	
+}
+.login_loga ul{
+	width:100%;
+	margin:0 auto;
+	
+}
+.login_loga ul li{
+	float:left;
+	list-style:none;
+	width:33%;
+	
+	
+}
+
+.login_loga p{
+	margin-top:8%;
+	display:block;
+	line-height:20px;
+	
+}
+.login_loga span{
+	width:70%;
+	border:1px solid #000;
+	display:block;
+	margin:0 auto;
+	text-align:center;
+	padding:4% 8%;
+	border-radius:3px;
+	
+}
+.login_loga span a{
+	text-decoration:none;
+	color:#000;
+}
+.login_pa{
+	margin:0 auto;
+	text-align:center;
+}
+/*登录框*/
+.login_logb{
+	width:80%;
+	margin:10% auto;
+	text-align:center;
+	
+}
+.login_logb table{
+	width:100%;
+	border:none;
+}
+.login_logb table tr td{
+	line-height:50px;
+	margin-top:5px;
+}
+.login_logb table tr td input{
+	width:100%;
+	background:none;
+	border:1px solid #000;
+	height:40px;
+	padding-left:2%;
+}
+.login_logb p{
+	
+	display:block;
+	line-height:20px;
+	
+}
+.login_span{
+	width:70%;
+	border:1px solid #000;
+	display:block;
+	margin:0 auto;
+	text-align:center;
+	
+	border-radius:3px;
+	line-height:40px;
+}
+.login_tdspan{
+	height:70px;
+}
+.login_span a{
+	text-decoration:none;
+	color:#000;
+}

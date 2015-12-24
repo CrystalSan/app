@@ -1,0 +1,112 @@
+{include file="inc/header.html"}
+<script type="text/javascript" src="{$TMPL}/js/refund.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>我的资金</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;我的全部资金</span>
+		   
+	 </div>
+    <div class="about_b_c">
+    <div class="set_bottom" style="padding-bottom:0px;">
+	<div class="setpay">
+	   <ul>
+	    <li><a href="{url r="account#money_index"}" {if $module eq 'account'&& $action eq 'money_index'}class="setpaya"{/if}>账户主页</a></li>
+			<li><a href="{url r="account#money_carry_bank"}" {if $module eq 'account'&& ($action eq 'money_carry_bank'|| $action eq 'money_carry')}class="setpaya"{/if}>会员提现</a></li>
+			<li><a href="{url r="account#refund"}" {if $module eq 'account'&& $action eq 'refund'}class="setpaya"{/if}>提现日志</a></li>
+			<li><a href="{url r="account#credit"}" {if $module eq 'account'&& $action eq 'credit'}class="setpaya"{/if}>收支明细</a></li>
+	   </ul>
+	 </div>
+    </div>
+     {if $refund_list}
+     <table style="width:100%;border:1px solid #dddada;" cellpadding=0 cellspacing=0>
+			 <tr style="height:50px;line-height:50px;background:#ff7800;color:#fff;">
+			  <td >金额</td>
+				<td >时间</td>
+				<td>提现备注</td>
+				<td>状态</td>
+				<td>支付时间</td>
+				<td>操作</td>
+			 </tr>
+			 {foreach from=$refund_list item=refund_item}
+			 <tr style="border-bottom:#dddada solid 1px;line-height:70px;">
+			  <td width=20%>{function name="format_price" v=$refund_item.money}</td>
+				<td width=20%>{function name="to_date" v=$refund_item.create_time}</td>
+				<td width=15%>{$refund_item.memo}</td>
+				<td width=15%>
+				  {if $refund_item.is_pay eq 1}
+					申请通过，请耐心等待金额支付 {$refund_item.reply}
+					{elseif $refund_item.is_pay eq 2}
+					申请未通过 {$refund_item.reply}
+					{elseif $refund_item.is_pay eq 3}
+					提现成功，金额已发放，请查收 {$refund_item.pay_log}
+					{else}
+					审核中，请耐心等待
+					{/if}
+				</td>
+				<td width=20%>{function name="to_date" v=$refund_item.pay_time}</td>
+				<td width=10%>
+					<a href="{url r="account#delrefund" p="id=$refund_item.id"}" class="delrefund linkgreen">删除</a>
+				</td>
+			 </tr>
+			 {/foreach}
+		 </table>
+        <div style="clear:both;"></div>
+			  <div class="fy2" style="width:100%;padding-top:30px;"> 
+            {$pages}
+        </div>
+        {else}
+        <div class="empty_tip">
+					还没任何提现记录
+				</div>
+				<div class="blank20"></div>
+				{/if}
+
+	 </div>
+
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

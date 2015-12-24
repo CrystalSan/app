@@ -1,0 +1,181 @@
+{include file="inc/header.html"}
+
+<script type="text/javascript" src="{$TMPL}/js/upload_deal_item_image.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/edit_deal_item.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/ajaxupload.js"></script>
+<style>
+	.setmid_new {
+		margin-top: 12px;
+	}
+	#add_item_form{ display:none }
+	.control-group{position:relative;}
+	.holder_tip{left:105px}
+</style>
+<div class="set1">
+    <div class="set_top">
+	  <img src="{$TMPL}/images/set2.jpg"> 
+	</div>
+	<div class="set_bottom" style="padding-bottom:0px;">
+		<div class="setpay" style="border-bottom: 1px solid #CCC;">
+		   <ul>
+		    <li><a href="{url r="project#edit" p="id=$deal_item.id"}" class="setpaya">项目详情</a></li>
+				<li><a href="{url r="project#add_item" p="id=$deal_item.id"}" >回报设置</a></li>
+		   </ul>
+		</div>
+  </div>
+	<div class="set_bottom">
+	       <div class="sur_xm_con_left_b" style="border:none;">
+		     <p>回报设置 -- {$deal_item.name} </p>
+			  <div class="sur_xm_con_left_b_cona">
+			     <p><r style="color:#ff7800;">【建议设置3个以上的回报】</r>，回报多样化更能提高关注度。</p> 
+				  <p><r style="color:#ff7800;">【建议设置几十、几百、上千元的支持档位】</r>，回报差异化更能满足不同人得需求。</p> 
+				   <p><r style="color:#ff7800;">【建议设置有创意的回报】</r>，与众不同的回报更能打动支持者。</p> 
+			  </div>
+		  </div>
+	</div>
+	{if $deal_item_list}
+	<div class="set_bottom">
+	  <table style="width:100%;font-size:18px;font-weight:bold;">
+	      <tr style="background:#f0f1f1;padding:5px 10px;height:50px;">
+		        <td>回报标题</td>
+		        <td>价格</td>
+			    <td>描述</td>
+			    <td>限额</td>
+			    <td>配送</td>
+				<td colspan=2>操作</td>
+		  </tr>
+		  {foreach from=$deal_item_list item=item}
+		  <tr style="margin:10px 10px;border-bottom:1px solid #cccccc;">
+		     <td style="color:#ff7800;">{$item.title}</td>
+		     <td style="color:#ff7800;">{function name="format_price" v=$item.price}</td>
+			 <td>{$item.description}</td>
+			 <td>{if $item.is_limit_user eq 0}不限{else} {if $item.limit_user eq 0}不限{else}{$item.limit_user}位{/if}{/if}</td>
+			 <td>{if $item.is_delivery eq 0}无需配送{else}运费 {if $item.delivery_fee eq 0}包邮{else}{function name="format_price" v=$item.delivery_fee}{/if}{/if}</td>
+			 <td><a href="{url r="project#edit_item" p="id=$item.id"}" style="color:#ff7800;">编辑</a></td>
+			 <td><a href="{url r="project#del_item" p="id=$item.id"}" style="color:#ff7800;">删除</a></td>
+		  </tr>
+		  {/foreach}
+	  </table>	
+	  <div style="clear:both;"><br><br><br></div>
+	</div>
+	{/if}
+	<div id="add_item_form">
+    <form class="ajax_form" id="item_form" action="{url r="project#save_deal_item"}" method="post">
+		<div class="set_bottom">
+	       <div class="sur_xm_con_left_f">            
+	       	  <div class="form-group logo_table">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>回报标题:</label>
+              <input type="text" class="form-control input_width" name="title" placeholder="请输入回报标题">
+           </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>支持金额:</label>
+              <input type="text" class="form-control input_width" name="price" placeholder="请输入支持金额">
+           </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>回报内容:</label>
+               <textarea rows=6 cols=38 style="float:left;" name="description" placeholder="请输入回报内容"></textarea>
+            </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table " style="margin-top:20px;">
+             <label for="name" class="logo_tex ">说明图片:</label>
+		        <span class="shagnchuan">
+		        	<label class="fileupload" onclick="upd_file(this,'image_file');" style="cursor:pointer;">
+								<input type="file" class="filebox" name="image_file" id="image_file" style="cursor:pointer;padding:0;height:39px;width:97px;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity:0;opacity:0"/>						
+							</label>
+						</span>
+            </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">是否配送:</label>
+             <select name="is_delivery" style="float:left;height:50px;width:80px;" id="is_delivery">				
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+            </div>
+		    <div style="clear:both;"></div>
+           <!-- <div class="form_row control-group" style="display:none;">
+							<label class="form_lable">运费:</label>
+							<input type="text" value="" class="form-control input_width" name="delivery_fee" />
+							<label class="tip_box" >元</label>
+						</div>-->
+			<div class="form-group logo_table" style="display:none;">
+             <label for="name" class="logo_tex">运费:</label>
+             	<input type="text" value="" style="float:left;width:50px;line-height:30px;border:1px solid #dddddd;padding-top:10px;" name="delivery_fee" />
+				<span style="float:left;padding-top:15px;padding-left:10px;">元</span>
+            </div>			
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">是否限购:</label>
+            <select name="is_limit_user" style="float:left;height:50px;width:80px;" id="is_limit_user">				
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+            </div>
+
+		    <div style="clear:both;"></div>
+           <!-- <div class="form_row control-group" style="display:none; ">
+							<label class="form_lable">限购人数:</label>
+							<input type="text" value="" class="textbox w100" name="limit_user" />
+							<label class="tip_box">人</label>
+						</div>-->
+			<div class="form-group logo_table" style="display:none;">
+             <label for="name" class="logo_tex">限购人数:</label>
+             	<input type="text" value="" style="float:left;width:50px;line-height:30px;border:1px solid #dddddd;padding-top:10px;" name="limit_user" />
+				<span style="float:left;padding-top:15px;padding-left:10px;">人</span>
+            </div>			
+      		<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">回报时间:</label>
+              <span style="float:left;padding-top:15px;padding-right:10px;">项目成功后</span>
+              <input type="text" value="" style="float:left;width:50px;line-height:30px;border:1px solid #dddddd;padding-top:10px;" name="repaid_day" />
+			   			<span style="float:left;padding-top:15px;padding-left:10px;">天</span>
+            </div>
+						<div style="clear:both;"></div>
+						<input type="hidden" name="deal_id" value="{$deal_item.id}" />
+						<input type="hidden" name="ajax" value="1" />
+		      
+		   </div>
+		   
+	       <div class="sur_xm_con_left_r">
+		       <div class="sur_xm_con_left_r_e">
+			     <span style="float:left;">编辑预览</span>
+				 <p style="font-size:18px;">支持￥<r style="color:#ff7800;" id="support_price">0</r>元</p>
+				 <p>0位支持者<span id="limit_user_box" style="display:none;">限额<span id="limit_user">0</span>位,剩余<span id="remain_user">0</span>位</span></p>
+				 <p id="repaid_content">回报内容</p>
+				 <p>
+				 	<div id="image_box_outer" style="display:none;">
+						<div class="blank"></div>	
+						<div id="image_box"></div>	
+						<div class="blank1"></div>					
+					</div>
+				 </p>
+				 <p id="repaid_day_box">预计回报发放时间：项目成功结束后<span id="repaid_day">0</span>天内</P>
+				 <p id="delivery_box">运费 ￥<span id="delivery_fee_box">0</span></p>
+				 <p>支持￥<font id="support_price_btn">0</font>元</p>
+			   </div>
+		   </div>
+	</div>
+	<div class="set_bottom">
+			<div class="form-group logo_table">
+        <a href="javascript:void(0);" class="ui-button button_login">保存回报项目</a>
+     		<a href="javascript:void(0);" id="cancel_add" class="button_register">取消添加</a>
+
+      </div>
+	</div>
+	</form>
+	</div>
+	<div class="set_bottom">
+		     <div id="add_item_row" class="form-group logo_table">
+		       <a href="javascript:void(0);" id="add_item_btn" class="button_login">新增回报项目</a>
+			     <a href="javascript:void(0);" id="submit_deal_btn" url="{url r="project#submit_deal" p="id=$deal_item.id"}" jump="{url r="project#checkok"}" class="button_register" >提交审核</a>
+		      </div>   
+  </div>	
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+<!--结尾-->
+
+{include file="inc/footer.html"}

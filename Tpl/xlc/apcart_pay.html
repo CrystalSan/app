@@ -1,0 +1,118 @@
+{include file="inc/header.html"} 
+<script type="text/javascript" src="{$TMPL}/js/apcart_pay.js"></script>
+<div style="clear:both;"></div>
+
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+<div class="sur_xm">
+ <div class="sur_xm_bar">
+    <dl>
+	    <dt>{$deal_info.name}</dt>
+		<dd><r style="color:#ff7800;font-size:36px;">{$deal_item.ap_price}积分</r> {if $deal_item.is_delivery eq 1}				
+					{if $deal_item.delivery_ap neq 0}
+					邮费:{$deal_item.delivery_ap}积分
+					{else}
+					包邮
+					{/if}
+				{/if}</dd>
+	</dl>
+ </div>
+ <div class="sur_xm_con">
+ 		<form class="pay_form" action="{url r="apcart#go_pay"}" target="_blank" method="post">
+      <div class="sur_xm_con_left">
+	         <div class="pay_cont1">
+			    <div class="pay_cont1_left">
+				   <span>应付总额<r style="color:#ff7800;font-size:30px;">{$deal_item.total_ap}积分</r></span>
+				   <div class="pay_cont1_left_pay">
+				       <p>使用积分支付：</p>
+				        <p style="color:#666666;">可用积分：{$user_ap}</p>
+						<input type="hidden" name="max_pay" value="{$deal_item.total_ap}" />
+				   </div>
+				</div>
+			 </div>
+		
+		  	<div style="clear:both;"></div>
+		  	{if $user_ap>=$deal_item.total_ap}
+		     	<a class="sub ui-button">确认</a>
+		  	{else}
+		  		您积分不足，请到<a href="http://www.iqianjin.com" target="_blank">爱钱进</a>进行获取。
+		  	{/if}
+					<input type="hidden" id="back_url" value="{url r="account"}" />	
+					<input type="hidden" value="{$memo}" name="memo" />	
+					<input type="hidden" value="{$deal_item.id}" name="id" />
+					<input type="hidden" value="{$consignee_id}" name="consignee_id" />	
+					<input type="hidden" value="2" name="ap_partner_id" />
+					<input type="hidden" value="41" name="payment_id" />
+					<input type="hidden" value="1" name="ajax" />
+	  </div>
+	   <div class="sur_xm_con_right">
+           <div class="banner_c">
+		    <ul>
+			    <li style="box-shadow:0 0 5px #000"> 
+				   <div class="banner_d">
+				   	<a href="{url r="ap#show" p="id=$deal_info.id"}" title="{$deal_info.name}" target="_blank" >
+						<img  src="{if $deal_info.image eq ''}{$TMPL}/images/empty_thumb.gif{else}{function name="get_spec_image" v=$deal_info.image w="300" h="340" g="1"}{/if}" border="0" width="300px" height="340px"/>
+					</a>
+					  <div class="banner_d_a">
+					     <span class="banner_d_a_left" style="float:none;"><a href="{url r="ap#show" p="id=$deal_info.id"}" title="{$deal_info.name}">{$deal_info.name}</a></span>
+						
+					  </div>
+					</div>
+					 <div class="banner_d_b">
+					    <div style="width:100%;margin-left:2%;position:relative;">
+		                   <div class="progress" style="width:240px;margin-top:5%;">
+		                   	{if $deal_info.percent>100}
+                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:100%;">
+                            </div>
+                        {else}
+                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_info.percent}%;">
+                            </div>
+                        {/if}
+				 
+				          </div>
+				          <span style="color:#666666;font-size:14px;position:absolute;top:5%;right:0;padding-right:5%;color:#ff7800">{$deal_info.percent}%</span>
+				        </div>
+                         <table width="100%">
+						     <tr>
+							    <td style="font-size:18px;color:#ff7800;">{$deal_info.limit_ap}积分</td>
+								<td style="font-size:18px;color:#333333">{$deal_info.ap_amount}积分</td>
+								<td style="font-size:18px;color:#333333">
+									{if $deal_info.begin_time > $now}
+										未上线
+									{elseif $deal_info.end_time < $now and $deal_info.end_time neq 0}
+										已过期
+									{else}
+										{if $deal_info.end_time eq 0}
+										长期项目
+										{else}
+										<font>{$deal_info.remain_days}</font>天
+										{/if}
+									{/if}
+									</td>
+							 </tr>
+							 <tr>
+							  <td style="color:#999999;font-size:16px;">目标</td>
+								<td style="color:#999999;font-size:16px;">已筹</td>
+								<td style="color:#999999;font-size:16px;">剩余时间</td>
+							 </tr>
+						 </table>						
+					 </div>
+				</li>
+				
+			
+			</ul>
+		  </div> 	   
+	   </div>
+ </div>
+</form>
+</div>
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+<!--
+返回顶部代码
+-->
+
+{include file="inc/footer.html"}

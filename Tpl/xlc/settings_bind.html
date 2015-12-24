@@ -1,0 +1,422 @@
+{include file="inc/header.html"}
+
+<script type="text/javascript" src="{$TMPL}/js/upload_deal_image.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/ajaxupload.js"></script>
+<script type="text/javascript">
+    var ROOT = '{$APP_ROOT}/xlc.php';
+    var VAR_MODULE = "m";
+    var VAR_ACTION = "a";
+    var WEB_SESSION_ID = '<?php echo es_session::id(); ?>';
+    var EMOT_URL = '{$APP_ROOT}/public/emoticons/';
+    var MAX_FILE_SIZE = "<?php echo (app_conf("MAX_IMAGE_SIZE")/1000000)."MB"; ?>";
+    var UPLOAD_URL ='{$APP_ROOT}/xlc.php?m=File&a=do_upload&upload_type=0&dir=image' ;
+	var UPLOAD_SWF='{$TMPL}/js/plupload/Moxie.swf';
+	var UPLOAD_XAP='{$TMPL}/js/plupload//Moxie.xap';
+	var ALLOW_IMAGE_EXT= "gif,jpg,jpeg,png,bmp";
+	var MAX_IMAGE_SIZE= "<?php echo (app_conf("MAX_IMAGE_SIZE")/1000000)."MB"; ?>";
+	function get_file_fun(str){
+  		$(str).ui_upload({multi:false,
+		FileUploaded:function(ajaxobj){
+ 				if(ajaxobj.error==1)
+				{
+					$.showErr(ajaxobj.message);
+				}else{
+					$(str).attr('src',ajaxobj.url);
+					if(str=='#business_tax'||str=='#business_code'||str=='#business_licence'){
+						str=str.replace("#","");
+ 						$("#identify_"+str).val(ajaxobj.url);
+					}else{
+						$(str+"_image").val(ajaxobj.url);
+					}
+					
+ 				}
+			},Error:function(error){
+			$.showErr(error.message);
+ 		}});
+	}
+</script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+  	
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>个人设置</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;实名认证</span>
+		   
+	 </div>
+	 	{if $user_info.is_investor>0}
+			{if $user_info.investor_status==0}
+			<p style="text-align:left;margin-top:10px;">已提交,认证中</p>
+			<p style="text-align:left;margin-top:10px;"><a href="javascript:void(0);" style="text-decoration:none;" id="J_setting_paypwd">认证中</a></p>
+			{elseif $user_info.investor_status==1}
+			<p style="text-align:left;margin-top:10px;">已设置</p>
+			<p style="text-align:left;margin-top:10px;"><a href="javascript:void(0);" style="text-decoration:none;" id="J_setting_paypwd">认证成功</a></p>
+			{elseif $user_info.investor_status==2}
+			<p style="text-align:left;margin-top:10px;">未通过</p>
+			<p style="text-align:left;margin-top:10px;"><a href="javascript:void(0);" style="text-decoration:none;" id="J_setting_paypwd">修改</a></p>
+			{/if}
+		{else}
+		<p style="text-align:left;margin-top:10px;">未认证</p>
+		<p style="text-align:left;margin-top:10px;"><a href="javascript:void(0);" style="text-decoration:none;" id="J_setting_paypwd">设置</a></p>
+		{/if}
+		<form class="ajax_form_identify" action="{url r="settings#binding_investor"}" id="settingbind" name="settingbind">
+	  {if $user_info.is_investor == 0 ||($user_info.is_investor>0&&$user_info.investor_status == 2)}
+		  {if $user_info.is_investor>0&&$user_info.investor_status==2&&$user_info.investor_send_info}
+				<div class="form_row control-group f_red" style="line-height:26px">
+					<label class="form_lable smaller_form_lable fail_form_lable"><i></i>错误理由:</label>
+					<span class="f_l" style="width:423px">{$user_info.investor_send_info}</span>
+				</div>
+				<div class="blank0"></div>
+			{/if}
+	  <div style="text-align:left; font-size:16px;width:70%;margin-left:20%;margin-bottom:20px;">
+	    <div style="text-decoration:none;color:#ff7800;float:left;margin-right:10%;margin-left:20px;"><input type="radio" name="is_investor" value="1" {if $user_info.is_investor==0||$user_info.is_investor==1}checked="checked"{/if}  />个人会员</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    <div style="text-decoration:none;color:#ff7800;float:left;"><input type="radio" name="is_investor" value="2" {if $user_info.is_investor==2}checked="checked"{/if} />企业会员</div>
+	 	</div>
+     <div class="about_b_c">
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;" id="identify_name_str">{if $user_info.is_investor==0||$user_info.is_investor==1}个人{else}法人{/if}身份证姓名:</label>
+              <input type="text" id="" value="{$user_info.identify_name}" class="form-control input_width"  name="identify_name"/>
+           </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">身份证号码:</label>
+             <input type="text" id="" value="{$user_info.identify_number}" class="form-control input_width" name="identify_number" />			   
+            </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">身份证正面:</label>
+			       <div style="clear:both;"></div>
+			     <div class="admin_img" id="audit_data_legal_num">
+			     	<label class="fileupload" onclick="upd_file(this,'identify_positive','identify_positive_image');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $user_info.identify_positive_image eq ''}{$TMPL}/images/upload_bg.png{else}{$user_info.identify_positive_image}{/if}') repeat scroll 0% 0%;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="identify_positive" id="identify_positive"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>
+			     	<input type="hidden" name="identify_positive_image" id="identify_positive_image"  value="{$user_info.identify_positive_image}" rel="num" />
+				 </div>
+			   
+            </div>		
+		    <div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">身份证反面:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img" id="audit_data_legal_credit_num">
+                 	<label class="fileupload" onclick="upd_file(this,'identify_nagative','identify_nagative_image');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $user_info.identify_nagative_image eq ''}{$TMPL}/images/upload_bg.png{else}{$user_info.identify_nagative_image}{/if}') repeat scroll 0% 0%;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="identify_nagative" id="identify_nagative"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>
+						        <input type="hidden" name="identify_nagative_image" id="identify_nagative_image" value="{$user_info.identify_nagative_image}" rel="num" />
+				 </div>
+			   
+            </div>	
+			<div style="clear:both;height:150px;"></div>
+			
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">本人持证照:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img" id="audit_data_legal_credit_num">
+                 	<label class="fileupload" onclick="upd_file(this,'identify_take','identify_take_image');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $user_info.identify_take_image eq ''}{$TMPL}/images/upload_bg.png{else}{$user_info.identify_take_image}{/if}') repeat scroll 0% 0%;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="identify_take" id="identify_take"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>
+						        <input type="hidden" name="identify_take_image" id="identify_take_image" value="{$user_info.identify_take_image}" rel="num" />
+				 </div>
+			   
+            </div>	
+			<div style="clear:both;height:150px;"></div>
+				 <div id="qy_div" style="{if $user_info.is_investor neq 2}display:none;{/if}">
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">企业名称:</label>
+									<input type="text" id="" value="{$user_info.identify_business_name}" class="form-control input_width" name="identify_business_name"/>			   
+            </div>
+			<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">营业执照:</label>
+			       <div style="clear:both;"></div>
+			     <div class="admin_img" id="audit_data_legal_num">
+			     	<label class="fileupload" onclick="upd_file(this,'business_licence','identify_business_licence');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $user_info.identify_business_licence eq ''}{$TMPL}/images/upload_bg.png{else}{$user_info.identify_business_licence}{/if}') repeat scroll 0% 0%;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="business_licence" id="business_licence"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>
+							<input type="hidden" name="identify_business_licence" id="identify_business_licence"  value="{$user_info.identify_business_licence}" rel="num" />
+				 </div>
+			   
+            </div>				
+			<div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">组织机构代码证:</label>
+			       <div style="clear:both;"></div>
+			     <div class="admin_img" id="audit_data_legal_credit_num">
+			     	<label class="fileupload" onclick="upd_file(this,'business_code','identify_business_code');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $user_info.identify_business_code eq ''}{$TMPL}/images/upload_bg.png{else}{$user_info.identify_business_code}{/if}') repeat scroll 0% 0%;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="business_code" id="business_code"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>
+              <input type="hidden" name="identify_business_code" id="identify_business_code" value="{$user_info.identify_business_code}" rel="num" />
+				 </div>
+			   
+            </div>		
+		    <div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">税务登记证:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img" id="audit_data_legal_credit_num">
+                 	<label class="fileupload" onclick="upd_file(this,'business_tax','identify_business_tax');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $user_info.identify_business_tax eq ''}{$TMPL}/images/upload_bg.png{else}{$user_info.identify_business_tax}{/if}') repeat scroll 0% 0%;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="business_tax" id="business_tax"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>
+		                <input type="hidden" name="identify_business_tax" id="identify_business_tax" value="{$user_info.identify_business_tax}" rel="num" />
+				 </div>
+            </div>
+         </div>
+			<div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">手机号:</label>
+              <input type="text" class="form-control input_width" value="{function name="hideMobile" v=$user_info.mobile}" disabled="disabled">
+            </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">验证码:</label>
+								<input type="text" value="" class="small_textbox mr10" name="verify" style="width:120px;"/>
+			      		<a href="javascript:void(0);" class="test_code" id="J_send_sms_verify_iden">获取验证码</a>
+            </div>
+			<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+                <a href="javascript:void(0);" class="ui-button button_login">提交</a>
+            </div>
+								<input type="hidden" value="1" name="ajax" />
+								<input type="hidden" value="0" name="step" />
+	 		</div>
+			 {else}
+			 		<p style="text-align:left; font-size:16px;padding-left:100px;">
+			 			<div style="text-decoration:none;color:#ff7800;">{if $user_info.is_investor==0||$user_info.is_investor==1}
+						个人会员
+						{else}
+						企业会员
+						{/if}
+						</div>
+	 				</p>
+     <div class="about_b_c">
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;" id="identify_name_str">{if $user_info.is_investor==0||$user_info.is_investor==1}个人{else}法人{/if}身份证姓名:</label>
+              <input type="text" id="" value="{$user_info.identify_name}" class="form-control input_width" readonly  name="identify_name" />
+           </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">身份证号码:</label>
+             <input type="text" id="" value="{$user_info.identify_number}" class="form-control input_width" readonly name="identify_number" />			   
+            </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">身份证正面:</label>
+			       <div style="clear:both;"></div>
+			     <div class="admin_img" id="audit_data_legal_num">
+			     	<img src="{$user_info.identify_positive_image}" width="150" height="150"/>
+				 </div>
+			   
+            </div>		
+		    <div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">身份证反面:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img" id="audit_data_legal_credit_num">
+						      <img src="{$user_info.identify_nagative_image}" width="150" height="150"/>
+				 </div>
+			   
+            </div>	
+			<div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">本人持证照:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img" id="audit_data_legal_credit_num">
+						      <img src="{$user_info.identify_take_image}" width="150" height="150"/>
+				 </div>
+			   
+            </div>	
+			<div style="clear:both;height:150px;"></div>
+				 <div id="qy_div" style="{if $user_info.is_investor neq 2}display:none;{/if}">
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">企业名称:</label>
+									<input type="text" id="" value="{$user_info.identify_business_name}" class="form-control input_width" name="identify_business_name" readonly />			   
+            </div>
+			<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">营业执照:</label>
+			       <div style="clear:both;"></div>
+			     <div class="admin_img" id="audit_data_legal_num">
+							<img src="{$user_info.identify_business_licence}" width="150" height="150"/>
+				 </div>
+			   
+            </div>				
+			<div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">组织机构代码证:</label>
+			       <div style="clear:both;"></div>
+			     <div class="admin_img" id="audit_data_legal_credit_num">
+              <img src="{$user_info.identify_business_code}" width="150" height="150"/>
+				 </div>
+			   
+            </div>		
+		    <div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">税务登记证:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img" id="audit_data_legal_credit_num">
+		                <img src="{$user_info.identify_business_tax}" width="150" height="150"/>
+				 </div>
+            </div>
+         </div>
+			<div style="clear:both;height:150px;"></div>
+	 		</div>
+			 {/if}
+ </form>	 
+
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+<script type="text/javascript" >
+	var code_timeer = null;
+	var code_lefttime = 0 ;
+		$(document).ready(function(){
+			{if $method}
+				$("#{$method}").show();
+			{/if}
+			
+			
+			
+			$(".ui-button").bind("click",function(){
+				$("settingbind").submit();
+			});
+			
+			
+ 			$("#J_send_sms_verify").bind("click",function(){
+				send_mobile_verify_sms();
+			});	
+			$("#email_verify_code").bind("click",function(){
+				step=$(".ajax_form_email").find("input[name='step']").val();
+				if(step==1){
+					email=$(".ajax_form_email").find("input[name='email']").val();
+					send_email_verify(step,email,"#email_verify_code");
+				}else{
+					if(step==2){
+						send_email_verify(step,'',"#email_verify_code");
+					}
+				}
+ 			});
+			$("#J_send_sms_verify_pay").bind("click",function(){
+  				send_mobile_verify_sms_custom(2,'',"#J_send_sms_verify_pay");
+			});
+			//J_send_sms_verify_iden
+			$("#J_send_sms_verify_iden").bind("click",function(){
+  				send_mobile_verify_sms_custom(2,'',"#J_send_sms_verify_iden");
+			});
+			bind_ajax_form_custom(".ajax_form_user_name");
+			bind_ajax_form_custom(".ajax_form_paypassword");
+			bind_ajax_form_custom(".ajax_form_mobile");
+			bind_ajax_form_custom(".ajax_form_email");
+			bind_ajax_form_custom(".ajax_form_password");
+			//ajax_form_identify
+			bind_ajax_form_custom(".ajax_form_identify");
+			$(".ajax_form_identify").find("input[name='is_investor']").bind('click',function(){
+				$("#qy_div").toggle();
+ 				if($(this).val()==2){
+					$("#identify_name_str").html("法人身份证姓名");
+				}else{
+					$("#identify_name_str").html("个人身份证姓名");
+				}
+			});
+		})
+ 		function send_mobile_verify_sms(){
+			type=$.trim($("#settings-mobile-type").val());
+ 			if(type!=2){
+				if($.trim($("#settings-mobile").val()).length == 0)
+				{			
+		 			$.showErr("手机号码不能为空");
+					return false;
+				}
+		 		if(!$.checkMobilePhone($("#settings-mobile").val()))
+				{
+		 			$.showErr("手机号码格式错误");
+					return false;
+				}
+ 				if(!$.maxLength($("#settings-mobile").val(),11,true))
+				{
+					$.showErr("长度不能超过11位");
+					return false;
+				}
+			}
+ 			var sajaxurl = APP_ROOT+"/index.php?ctl=ajax&act=send_change_mobile_verify_code";
+ 			var squery = new Object();
+			squery.mobile = $.trim($("#settings-mobile").val());
+			squery.step =type;
+			$.ajax({ 
+				url: sajaxurl,
+				data:squery,
+				type: "POST",
+				dataType: "json",
+				success: function(sdata){
+					if(sdata.status==1)
+					{
+						code_lefttime = 60;
+						code_lefttime_func();
+						$.showSuccess(sdata.info);
+						return false;
+					}
+					else
+					{
+	 					$.showErr(sdata.info);
+						return false;
+					}
+				}
+			});
+		}
+	function code_lefttime_func(){
+		
+		clearTimeout(code_timeer);
+		$("#J_send_sms_verify").val(code_lefttime+"秒后重新发送");
+		$("#J_send_sms_verify").css({"color":"#f1f1f1"});
+		code_lefttime--;
+		if(code_lefttime >0){
+			//$("#J_send_sms_verify").attr("disabled","true");
+			code_timeer = setTimeout(code_lefttime_func,1000);
+		}
+		else{
+			code_lefttime = 60;
+			$("#J_send_sms_verify").val("发送验证码");
+ 			$("#J_send_sms_verify").css({"color":"#fff"});
+			$("#J_send_sms_verify").bind("click",function(){
+				send_mobile_verify_sms();
+			});
+		}
+		
+	}
+	
+</script>
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight+140);
+};
+
+</script>
+{include file="inc/footer.html"}

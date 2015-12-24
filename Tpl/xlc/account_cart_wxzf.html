@@ -1,0 +1,83 @@
+{include file="inc/header.html"} 
+<script type="text/javascript" src="{$TMPL}/js/cart_pay.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>我的资金</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;我的全部资金</span>
+		   
+	 </div>
+    <div class="about_b_c">
+    <div class="set_bottom" style="padding-bottom:0px;">
+	<div class="setpay">
+	   <ul>
+	   	{if $deal_info.type eq 1}
+	    <li><a href="{url r="account#mine_investor_status"}" class="setpaya">投资的项目</a></li>
+	    {else}
+	    <li><a href="{url r="account#index"}" class="setpaya">支持的项目</a></li>
+	    {/if}
+			<li><a href="{url r="account#project"}" >我的项目</a></li>
+			<li><a href="{url r="account#focus"}" >关注的项目</a></li>
+			
+	   </ul>
+	
+	 </div>
+    </div>
+         <table style="width:100%;border:1px solid #dddada;font-size:14px;" cellpadding=0 cellspacing=0>
+
+			<tr style="line-height:40px;border-bottom:1px solid #dddada">
+			    <td id="showname" style=" margin-left:4px; color:#556B2F;font-size:30px;font-weight: bolder;">请用手机扫描支付</td>
+			</tr>
+	        <tr style="line-height:40px;border-bottom:1px solid #dddada">
+			    <td><img alt="请扫码支付" src="http://paysdk.weixin.qq.com/example/qrcode.php?data={$picurl}" style="width:250px;height:250px;"/></td>
+					
+			</tr>
+		 </table>
+			
+	 </div>
+
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

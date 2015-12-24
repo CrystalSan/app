@@ -1,0 +1,96 @@
+{include file="inc/header.html"}
+<script type="text/javascript" src="{$TMPL}/js/refund.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>我的资金</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;我的全部资金</span>
+		   
+	 </div>
+    <div class="about_b_c">
+    <div class="set_bottom" style="padding-bottom:0px;">
+	<div class="setpay">
+	   <ul>
+	    <li><a href="{url r="account#money_index"}" {if $module eq 'account'&& $action eq 'money_index'}class="setpaya"{/if}>账户主页</a></li>
+			<li><a href="{url r="account#money_carry_bank"}" {if $module eq 'account'&& ($action eq 'money_carry_bank'|| $action eq 'money_carry')}class="setpaya"{/if}>会员提现</a></li>
+			<li><a href="{url r="account#refund"}" {if $module eq 'account'&& $action eq 'refund'}class="setpaya"{/if}>提现日志</a></li>
+			<li><a href="{url r="account#credit"}" {if $module eq 'account'&& $action eq 'credit'}class="setpaya"{/if}>收支明细</a></li>
+	   </ul>
+	 </div>
+    </div>
+     {if $log_list}
+     <table style="width:100%;border:1px solid #dddada;" cellpadding=0 cellspacing=0>
+			 <tr style="height:50px;line-height:50px;background:#ff7800;color:#fff;">
+			  <td >日志内容</td>
+				<td >类型</td>
+				<td>金额</td>
+				<td>时间</td>
+			 </tr>
+			 {foreach from=$log_list item=log_item}
+			 <tr style="border-bottom:#dddada solid 1px;line-height:70px;">
+			  <td width=50%>{$log_item.log_info}</td>
+				<td width=20%>{if $log_item.money gt 0}增加{else}减少{/if}</td>
+				<td width=15%>{function name="format_price" v=$log_item.money}</td>
+				<td width=15%>{function name="to_date" v=$log_item.log_time}</td>
+			 </tr>
+			 {/foreach}
+		 </table>
+        <div style="clear:both;"></div>
+			  <div class="fy2" style="width:100%;padding-top:30px;"> 
+			  	<ul>
+            {$pages}
+            </ul>
+        </div>
+        {else}
+        <div class="empty_tip">
+					还没有资金记录
+				</div>
+				<div class="blank20"></div>
+				{/if}
+
+	 </div>
+
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

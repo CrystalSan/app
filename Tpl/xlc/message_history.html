@@ -1,0 +1,51 @@
+{include file="inc/header.html"} 
+    <script type="text/javascript" src="{$TMPL}/js/message.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a" style="padding:0 20px;min-height:495px;" >
+     <div class="about_a_right_a">
+	      <span>与 <a href="{url r="home" p="id=$dest_user_info.id"}" class="linkgreen">{$dest_user_info.user_name}</a> 的私信记录</span>
+	</div>
+    <div class="about_r_a">
+    	{if $message_list}
+    	{foreach from=$message_list item=message_item}
+	     <div class="about_r_a_a">
+		      <div class="about_r_a_b" style="padding:15px 0;">
+			     {function name="show_avatar" p="$message_item.dest_user_id" t="small"}
+			  </div>
+		      <div class="about_r_a_c" style="padding:15px 0;">
+			    {if $message_item.message_type eq 'inbox'}
+						<a href="{url r="home" p="id=$message_item.dest_user_id"}" class="linkgreen">{$message_item.dest_user_name}</a> : {function name="nl2br" v=$message_item.message}
+						{/if}
+						{if $message_item.message_type eq 'outbox'}
+						发送给 <a href="{url r="home" p="id=$message_item.dest_user_id"}" class="linkgreen">{$message_item.dest_user_name}</a> : {function name="nl2br" v=$message_item.message}
+						{/if}
+				<p>{function name="pass_date" v=$message_item.create_time}</p>
+			  </div>
+		      <div class="about_r_a_d">
+			    <a href="javascript:void(0);" onclick="send_message({$message_item.dest_user_id});" class="linkgreen">回复</a> | <a href="{url r="message#delmessage" p="id=$message_item.id"}" class="linkgreen delmessage">删除</a>
+			  </div>			  
+		 </div>
+				{/foreach}
+				{else}
+				<div class="empty_tip">没有任何私信记录</div>
+				{/if}	 
+	</div>
+           <div style="clear:both;"></div>
+			  <div class="fy2" style="width:100%;padding-top:30px;"> 
+                <ul>
+                   {$pages}
+                 </ul>
+           </div>
+	
+
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+{include file="inc/footer.html"}

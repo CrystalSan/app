@@ -1,0 +1,420 @@
+{include file="inc/header.html"}
+<script type="text/javascript" src="{$TMPL}/js/avatar.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/ajaxupload.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/switch_city.js"></script>
+<script type="text/javascript" src="{$APP_ROOT}/system/region.js"></script>
+<script type="text/javascript">
+    var ROOT = '{$APP_ROOT}/xlc.php';
+    var VAR_MODULE = "m";
+    var VAR_ACTION = "a";
+    var WEB_SESSION_ID = '<?php echo es_session::id(); ?>';
+    var EMOT_URL = '{$APP_ROOT}/public/emoticons/';
+    var MAX_FILE_SIZE = "<?php echo (app_conf("MAX_IMAGE_SIZE")/1000000)."MB"; ?>";
+    var UPLOAD_URL ='{$APP_ROOT}/xlc.php?m=File&a=do_upload&upload_type=0&dir=image' ;
+	var UPLOAD_SWF='{$TMPL}/js/plupload/Moxie.swf';
+	var UPLOAD_XAP='{$TMPL}/js/plupload//Moxie.xap';
+	var ALLOW_IMAGE_EXT= "gif,jpg,jpeg,png,bmp";
+	var MAX_IMAGE_SIZE= "<?php echo (app_conf("MAX_IMAGE_SIZE")/1000000)."MB"; ?>";
+	function get_file_fun(str){
+  		$(str).ui_upload({multi:false,
+		FileUploaded:function(ajaxobj){
+ 				if(ajaxobj.error==1)
+				{
+					$.showErr(ajaxobj.info);
+				}else{
+					$(str).attr('src',ajaxobj.url);
+					$(str+"_image").val(ajaxobj.url);
+ 				}
+			},Error:function(error){
+			$.showErr(error.message);
+ 		}});
+	}
+</script>
+<style>
+	.setlist_new {
+		padding: 5px 0;
+		width: 100%;
+	}
+	.tip_box{
+		height:41px;
+		line-height:41px;
+		
+	}
+	.tip_box .form_tip{ color:red;}
+	.tip_box .form_success{ color:green;}
+	.control-group a{height:37px;line-height:37px}
+	.btn_select{_margin-top:10px;}
+	.textareabox{width:300px}
+
+	.security-ul{
+		padding:0 20px;
+		overflow:hidden;
+		font-size:14px;
+	}
+	.security-ul li {
+		clear: both;
+		border-bottom: 1px solid #eee;
+		margin: 0px;
+		padding: 20px 0;
+		overflow:hidden;
+	}
+	.security-ul li .it .nicheng {
+		background-position: 0 3px;
+	}
+	.security-ul li .it .icon {
+		background: url({$TMPL}/images/security_icon.png) no-repeat 0 0;
+		float: left;
+		margin-right: 30px;
+		height: 30px;
+		width: 34px;
+	}
+	.security-ul li .it h3 {
+		font-weight: bolder;
+		float: left;
+		width: 150px;
+		font-size: 18px;
+		font-weight: 500;
+	}
+	.security-ul li .it p {
+		float: left;
+		width: 250px;
+	}
+	.security-ul li .it .update {
+		float: right;
+		color: #ccc;
+	}
+	.setting_box{
+		padding:20px 0;
+		margin:0 100px;
+		display:block;
+	}
+	.security-ul li .it .reaname {
+		background-position: 0 -29px;
+	}
+	.security-ul li .it .pwd {
+		background-position: 0 -66px;
+	}
+	.security-ul li .it .email {
+		background-position: 0px -103px;
+	}
+	.security-ul li .it .mobile {
+		background-position: 0px -138px;
+	}
+	.security-ul li .it .paypwd {
+		background-position: 0px -182px;
+	}
+	.security-ul li .it .verified {
+		background-position: 0px -32px;
+	}
+	.form_lable{width:105px;}
+	.button{
+	background:#5AAD45;
+	background-image: -webkit-linear-gradient(top,#8DC03C 0%,#69902a 100%);
+	background-image: -moz-linear-gradient(top,#8DC03C 0%,#69902a 100%);
+	background-image: linear-gradient(top,#8DC03C 0%,#69902a 100%);
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, EndColorStr='#ff8DC03C', StartColorStr='#ff69902a');
+	border: 1px solid #70992f;
+	color:#FFFFFF;
+	cursor:pointer;
+	letter-spacing:0.1em;
+	overflow:visible;
+	padding:4px 15px;
+	width:auto;
+	cursor:pointer;
+	-moz-border-radius: 5px;      /* Gecko browsers */
+	-webkit-border-radius: 5px;   /* Webkit browsers */
+	border-radius:5px;            /* W3C syntax */
+	height:26px;
+	}
+</style>
+<style type="text/css">
+	.weedialog .dialog-content{text-align:left}
+	.weedialog .dialog-button{padding-top:20px;}
+	.pic_box{
+		position:relative;
+		width:158px;
+		height:158px;
+		overflow:hidden;
+		margin-bottom:0;
+	}
+	.pic_show {
+		width: 150px;
+		height: 150px;
+		line-height: 18px;
+		background: url({$TMPL}/images/upload_bg.png) no-repeat;
+		color: #666;
+		cursor:pointer;
+		font-family: "SimSun";
+		font-size: 12px;
+		margin-top:8px;
+		overflow:hidden;
+	}
+	.pic_box i{
+		width:16px;
+		height:16px;
+		cursor:pointer;
+		background:url({$TMPL}/images/del_icon.png) no-repeat;
+		display:none;
+		position:absolute;
+		top:0;
+		right:0;
+		z-index:99;
+	}
+	.pic_show img {
+		position: absolute;
+		top:0;
+		left:0;
+		font-size: 0;
+		width: 150px;
+		height: 150px;
+	}
+	.fileupload1 , .filebox{
+		cursor:pointer;
+		padding:0;
+		height: 150px;
+		width:150px;
+		filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;
+	}
+	.fileupload1 {
+		position:absolute;
+		top:0;
+		left:0;
+	}
+	.pic_text{
+		font-family:"Microsoft YaHei";
+		color:#999;
+	}
+	.add_pic{
+		font-size:80px;
+		line-height:80px;
+		cursor:pointer;
+		display:block;
+		margin-top:30px;
+		float:left;
+	}
+	.holder_tip{
+		top:0;
+		left:0;
+		height:37px;
+		line-height:37px;
+	}
+	.group{
+		position:relative;
+	}
+	.control-group .small_form_lable {
+		height: 37px;
+		line-height: 37px;
+		color: #666;
+		font-size: 14px;
+	}
+	.control-group .smaller_form_lable {
+		height: 26px;
+		line-height: 26px;
+		color: #666;
+		font-size: 14px;
+	}
+	.control-group .fail_form_lable {
+		color:#ff5500;
+		position:relative;
+	}
+	.control-group .fail_form_lable i{
+		position:absolute;
+		top:4px;
+		left:24px;
+		width:17px;
+		height:17px;
+		background:url({$TMPL}/images/all.png) -133px -75px no-repeat;
+		display:block;
+	}
+	.control-group .small_form_cont {
+		height: 37px;
+		line-height: 37px;
+		color:#333;
+		font-size: 14px;
+		float:left;
+	}
+	.control-group .smaller_form_cont {
+		height: 26px;
+		line-height: 26px;
+		color:#333;
+		font-size: 14px;
+		float:left;
+	}
+	.pic_box{z-index:2;}
+	.pic_show{z-index:1;}
+	.control-group{float:left}
+	#qy_div{border-top:1px dashed #d4d4d4}
+</style>
+<script type="text/javascript" src="/admin/Tpl/default/Common/js/calendar/calendar.php?lang=zh-cn" ></script>
+<link rel="stylesheet" type="text/css" href="/admin/Tpl/default/Common/js/calendar/calendar.css" />
+<script type="text/javascript" src="/admin/Tpl/default/Common/js/calendar/calendar.js" ></script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+	{include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>放款记录</span>
+		   
+	 </div>
+    <div class="about_b_c">
+              
+		 <form class="ajax_form_identify" action="{url r="account#save_to_pay"}" id="save_to_pay_form" name="save_to_pay_form" method="post">
+							<input type="hidden" value="{$deal_id}" class="textbox" name="deal_id" id="deal_id"/>
+            <div class="form-group logo_table" style="width:600px;">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">项目执行时间:</label>
+             <input type="text" class="small_textbox" name="do_time" id="do_time" value="" onfocus="this.blur(); return showCalendar('do_time', '%Y-%m-%d', false, false, 'btn_do_time');" />
+								<input type="button" class="button" id="btn_do_time" value="选择时间" onclick="return showCalendar('do_time', '%Y-%m-%d', false, false, 'btn_do_time');" />	
+								<input type="button" class="button" value="清空时间" onclick="$('#do_time').val('');" />
+           </div>
+	
+			 <div style="clear:both; "></div>
+            <div class="form-group logo_table" style="width:600px;">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">所在地:</label>
+                 <span style="float:left;margin-top:15px;">
+								  <select name="province" class="select-h" id="province">
+										<option value="" rel="0">请选择省份</option>			
+										{foreach from=$region_lv2 item=region}
+											<option value="{$region.name}" rel="{$region.id}" {if $region.selected}selected="selected"{/if}>{$region.name}</option>
+										{/foreach}
+									</select>
+              		<select name="city" class="select-h" id="city">
+										<option value="" rel="0">请选择城市</option>
+										{foreach from=$region_lv3 item=region}
+											<option value="{$region.name}" rel="{$region.id}" {if $region.selected}selected="selected"{/if}>{$region.name}</option>
+										{/foreach}
+									</select>
+              </span>	
+			   
+            </div>
+		    <div style="clear:both; "></div>
+            <div class="form-group logo_table" style="width:600px;">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">详细地址:</label>
+              <input type="text" id="" value="" class="small_textbox" name="address"  style="width:310px;"/>
+			   
+            </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table" style="width:600px;">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">项目执行资料一:</label>
+			       <div style="clear:both;"></div>
+			     <div class="admin_img">
+				    <img id="images_1" src="" />
+						<input type="hidden" name="images_1_image" id="images_1_image"  value="" rel="num" />
+				 </div>
+			   
+            </div>		
+		    <div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table" style="width:600px;">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">项目执行资料二:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img">
+				    <img id="images_2" src="" />
+										<input type="hidden" name="images_2_image" id="images_2_image"  value="" rel="num" />
+				 </div>
+			   
+            </div>
+		    <div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table" style="width:600px;">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">项目执行资料三:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img">
+				    <img id="images_3" src="" />
+										<input type="hidden" name="images_3_image" id="images_3_image"  value="" rel="num" />
+				 </div>
+			   
+            </div>			
+			<div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table" style="width:600px;">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">项目执行资料四:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img">
+				    <img id="images_4" src="" />
+										<input type="hidden" name="images_4_image" id="images_4_image"  value="" rel="num" />
+				 </div>
+			   
+            </div>	
+		    <div style="clear:both;height:150px;"></div>
+             <div class="form-group logo_table" style="width:600px;">
+             <label for="name" class="logo_tex" style="font-size:16px;width:120px;">项目执行资料五:</label>
+			    <div style="clear:both;"></div>
+                 <div class="admin_img">
+				    <img id="images_5" src="" />
+										<input type="hidden" name="images_5_image" id="images_5_image"  value="" rel="num" />
+				 </div>
+			   
+            </div>	
+			<div style="clear:both;height:150px;"></div>
+            <div class="form-group logo_table">
+                <a href="#" class="ui-button button_login">提交</a>
+			    
+			
+            </div>
+           
+          </form>	 
+	
+     
+		   
+
+	 </div>
+
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+<script>
+	var code_timeer = null;
+	var code_lefttime = 0 ;
+	$(document).ready(function(){
+		get_file_fun("#images_1");
+		get_file_fun("#images_2");
+		get_file_fun("#images_3");
+		get_file_fun("#images_4");
+		get_file_fun("#images_5");
+		
+		$(".ui-button").bind("click",function(){
+			$("#save_to_pay_form").submit();
+		});
+		
+		funSelect("#sex_select","#sex_cur",'#sex_select option:selected');
+		funSelect("#province_select","#province_cur",'#province_select option:selected');
+		funSelect("#city_select","#city_cur",'#city_select option:selected');
+	})
+	
+</script>
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

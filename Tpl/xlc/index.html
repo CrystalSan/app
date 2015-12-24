@@ -1,0 +1,742 @@
+{include file="inc/header.html"} 
+
+ 	 <!--焦点图js开始-->
+	<link href="{$TMPL}/css/jquery.sliderTabs.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="{$TMPL}/js/jquery.sliderTabs.min.js"></script>
+    <script type="text/javascript" src="{$TMPL}/js/deal.js"></script>
+    <script type="text/javascript" src="{$TMPL}/js/deal_comment.js"></script>
+  
+    <script type="text/javascript">
+	 $(function(){
+		$("#xzdq1").bind('click',function(){
+			$("#xzdq").toggle(100);
+		});
+		$("#xzdq1_hide").bind('click',function(){
+			$("#xzdq").hide();
+		});
+	 });
+	 function setTab(name,cursel,n){
+	 	
+		 for(i=1;i<=n;i++){
+		  var menu=document.getElementById(name+i);
+		  var con=document.getElementById("con_"+name+"_"+i);
+		  menu.className=i==cursel?"hover":"";
+		  
+		  if(i==cursel){
+		  	$("#"+"con_"+name+"_"+i).show();
+		  	//con.style.display="block";
+		  }else{
+		  		$("#"+"con_"+name+"_"+i).hide();
+		  	//con.style.display="none";
+		  }
+ 		 }
+	}
+	
+	function addTopic()
+	{
+	var topic_p = $("#topic_p").val();
+	var ajaxurl = APP_ROOT+"/index.php?ctl=deal&act=getTopicList&p="+topic_p;
+	$.ajax({
+		url: ajaxurl,
+		dataType: "json",
+		type: "POST",
+		success: function(ajaxobj){
+			if(ajaxobj.status==1)
+			{
+				var topic_list_array = JSON.parse(ajaxobj.info);
+				for(var i=0;i<topic_list_array.length;i++){
+					$("#topic_ul").append('<li><a href="'+topic_list_array[i].url+'"><img src="'+topic_list_array[i].pic+'" width="1200" border="0"></a></li>');
+				}
+				if(ajaxobj.more==1){
+					var newTopicP = topic_p + 1;
+					$("#topic_p").val(newTopicP);
+				}else{
+					$("#topic_more_div").hide();
+				}
+			}
+			else if(ajaxobj.status==3)
+			{
+				$.showErr(ajaxobj.info);							
+			}
+			else
+			{
+				show_pop_login();
+			}
+		},
+		error:function(ajaxobj)
+		{
+//			if(ajaxobj.responseText!='')
+//			alert(ajaxobj.responseText);
+		}
+	});
+}
+</script>
+<style type="text/css">
+
+#box{width:100%;height:602px;
+float:left;
+/*background:url(img/banna.jpg) no-repeat center;*/
+overflow:hidden;position:relative;}
+#box .bg{width:100%;height:340px;background:#000;filter:alpha(opacity=70); opacity:0.7; position:absolute; top:132px; left:0px;}
+#list{width:1004px;height:446px;position:absolute;top:145px;left:50%;display:inline;margin-left:-502px;}
+#list ul {margin:0px;padding:0px; float:left;}
+#list li{width:100px;border:3px solid #000;position:absolute;list-style-type:none;overflow:hidden;cursor:pointer;}
+#list li img{width:100%;height:100%;vertical-align:top;}
+#list li div.b_tit_a{width:100%;height:100%;background:#000;filter:alpha(opacity=70); opacity:0.7; position:absolute; z-index:1; top:0px; left:0px;}
+#list li .b_tit{width:100%;height:150px;position:absolute; z-index:2;left:0px;margin:0px;padding:0px;}
+#list li .opacity{width:100%;height:150px;background:#000;filter:alpha(opacity=80); opacity:0.8; position:absolute; z-index:1; bottom:0px; left:0px;}
+#list li .tit{width:324px;height:50px;padding:0 10px;position:absolute; z-index:2; bottom:100px; left:0px;}
+#list li .tit span{width:100%;height:30px;font-weight:normal;float:left;text-align:left;line-height:30px;color:#fff;border-bottom:1px solid #2f2f2c;margin:0px;padding:0px;}
+#list li .tit span em{color:#ba0707;font-style:normal;float:none;}
+#list li .tit em{color:#fff;line-height:25px;float:left;margin:0px;padding:5px 0;font-style:normal;}
+#prev{width:39px;height:80px;background:url({$TMPL}/images/btn2.png) no-repeat;text-decoration:none;position:absolute;z-index:20;top:190px;background-position:0 0; left:-54px;}
+#next{width:39px;height:80px;background:url({$TMPL}/images/btn2.png) no-repeat;text-decoration:none;position:absolute;z-index:20;top:190px;background-position:-39px 0; right:-100px;}
+#bottom{width:100%;height:200px;float:left;background:url({$TMPL}/images/bottom.jpg) no-repeat center;position:relative;}
+#bottom .title{width:100%;height:60px;line-height:60px;color:#fff;text-align:center;position:absolute;left:0px;bottom:0px;font-family:Verdana;}
+#bottom .title a{background:#666666;text-decoration:none;color:#fff; padding:3px 5px;}
+.ptitle{width:324px;height:120px;background:red;position:abslute;z-index:1;bottom:-100%;
+left:0px;
+	 
+}
+
+#list li div.banner_d_b_a{width:100%;overflow:hidden;background:#ffffff;height:110px;padding:0 10px;position: relative; top:70px;opacity:1;}
+#list li div.progress_a{height:10px;margin-bottom:20px;overflow:hidden;background-color:#dee0e0;border-radius:4px;-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);box-shadow:inset 0 1px 2px rgba(0,0,0,0.1); float:left;opacity:1;}
+
+.banner_d_a{
+	width:100%;
+	height:70px;
+	overflow:hidden;
+	position:absolute;
+	top:0; 
+	left:0;
+	/*background:rgba(0,0,0,0.5);
+	-webkit-opacity: 0.5;  
+	  -moz-opacity: 0.5;  
+	   -khtml-opacity: 0.5;  
+	   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; 
+filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=50);  	   
+	filter:alpha(opacity=50);*/
+	background:url({$TMPL}/images/bg_2.png) repeat-x; 
+}
+.banner_d_a_left{
+	float:left;
+	text-align:left;
+	
+}
+.banner_d_a_left a{
+	text-decoration:none;
+	font-size:18px;
+	font-weight:bold;
+	color:#fff;
+	line-height:70px;
+}
+.banner_d_a_right_index{
+	float:right;
+	width:88px;
+	height:70px;
+	
+	/*background:url({$TMPL}/images/banner_bg1.png) no-repeat right center;*/
+	background:url({$TMPL}/images/banner_bg4.png) no-repeat right center;
+		color:#fff;
+	font-size:16px;
+	text-decoration:none;
+
+	display:block; line-height:55px; text-align:center;
+	
+}
+td{ text-align:center;}
+
+</style>
+<script type="text/javascript">
+window.onload = function(){
+	var oBut = document.getElementById('list');
+
+//	var oTop = document.getElementById('top');
+//	var oTli = oTop.getElementsByTagName('li');
+
+	var aLi = oBut.getElementsByTagName('li');
+	var aA = new Array();
+	aA[0] = document.getElementById('prev');
+	aA[1] = document.getElementById('next');
+	var aP = getClass(oBut, 'b_tit');
+
+//	var oSmall = getClass(oTop, 'small')[0];
+
+	var i = iNow = 0;
+	var timer = null;
+	var aSort = [];
+	var aPosition = [
+					{width:344,height:440,top:0,left:352,zIndex:10},
+					{width:260,height:332,top:56,left:148,zIndex:8},
+					{width:204,height:260,top:92,left:0,zIndex:6},
+					{width:204,height:260,top:92,left:844,zIndex:6},
+					{width:260,height:332,top:56,left:640,zIndex:8}
+		]
+//	for(i=0;i<oTli.length;i++){
+//		oTli[i].index = i;
+//		myAddEvent(oTli[i], 'mouseover', function(){
+//			startMove(this, {opacity:100});
+//		})
+//		myAddEvent(oTli[i], 'mouseout', function(){
+//			if(this.className != 'hove')startMove(this, {opacity:40});
+//		})
+//		myAddEvent(oTli[i], 'click', function(){
+//			iNow = this.index;
+//			tab();
+//		})
+//	}
+	for(i=0;i<aLi.length;i++){
+		aLi[i].index = i;
+		aLi[i].style.width = aPosition[i].width +'px';
+		aLi[i].style.height = aPosition[i].height +'px';
+		aLi[i].style.top = aPosition[i].top +'px';
+		aLi[i].style.left = aPosition[i].left +'px';
+		aLi[i].style.zIndex = aPosition[i].zIndex;
+		aSort[i] = aPosition[i];
+		myAddEvent(aLi[i], 'mouseover', function(){
+			var oDiv = this.getElementsByClassName('b_tit_a')[0];
+			startMove(oDiv, {opacity:0});
+			if(this.style.width == '344px'){
+				startMove(aP[this.index], {bottom:0});
+			}
+		});
+		myAddEvent(aLi[i], 'mouseout', function(){
+			if(this.style.width == '344px'){
+				startMove(aP[this.index], {bottom:-110});
+			}else{
+				var oDiv = this.getElementsByClassName('b_tit_a')[0];
+				startMove(oDiv, {opacity:75});
+			}
+		});
+		myAddEvent(aLi[i], 'click', function(){
+			if(this.style.width == '344px'){
+					window.open($(this).attr("url"));
+			}else{
+				var iSort = this.index;
+				iNow = this.index;
+				Sort();
+				for(i=0;i<iSort;i++){
+					aSort.unshift(aSort.pop());
+				}
+				sMove();
+			}
+		});
+	}
+	myAddEvent(aA[0], 'click', function(){
+		aSort.unshift(aSort.pop());
+		sMove();
+		setInter();
+	});
+	myAddEvent(aA[1], 'click', function(){
+		aSort.push(aSort.shift());
+		sMove();
+		iNow--;
+		if(iNow<0)iNow = aLi.length - 1;
+		tab();
+	});
+//	oSmall.onmouseover = oBut.onmouseover = function(){
+//		clearInterval(timer);
+//	};
+	oBut.onmouseover = function(){
+		clearInterval(timer);
+	};
+//	oSmall.onmouseout = oBut.onmouseout = function(){
+//		clearInterval(timer);
+//		timer = setInterval(setInter,5000);
+//	};
+	oBut.onmouseout = function(){
+		clearInterval(timer);
+		timer = setInterval(setInter,5000);
+	};
+	timer = setInterval(setInter,5000);
+	function setInter(){
+		iNow++;
+		if(iNow>aLi.length-1)iNow = 0;
+		tab();
+	}
+	function tab(){
+//		for(i=0;i<oTli.length;i++)oTli[i].className = '',startMove(oTli[i], {opacity:40});
+//		oTli[iNow].className = 'hove';
+//		startMove(oTli[iNow], {opacity:100})
+		var iSort = iNow;
+		Sort();
+		for(i=0;i<iSort;i++){
+			aSort.unshift(aSort.pop());
+		}
+		sMove();
+	}
+	function Sort(){
+		for(i=0;i<aLi.length;i++){
+			aSort[i] = aPosition[i];
+		}
+	}
+	function sMove(){
+		for(i=0;i<aLi.length;i++){
+			var oDiv = aLi[i].getElementsByClassName('b_tit_a')[0];
+			startMove(oDiv, {opacity:75});
+			startMove(aLi[i], aSort[i], function(){one();});
+			aLi[i].className = '';
+		}
+		aLi[iNow].className = 'hove';
+	}
+	function one(){
+		for(i=0;i<aLi.length;i++){
+			if(aLi[i].style.width == '344px'){
+				var oDiv = aLi[i].getElementsByTagName('div')[0];
+				startMove(oDiv, {opacity:0});
+			}
+		}
+	}
+	one();
+};
+function getClass(oParent, sClass){
+	var aElem = document.getElementsByTagName('*');
+	var aClass = [];
+	var i = 0;
+	for(i=0;i<aElem.length;i++)if(aElem[i].className == sClass)aClass.push(aElem[i]);
+	return aClass;
+}
+function myAddEvent(obj, sEvent, fn){
+	if(obj.attachEvent){
+		obj.attachEvent('on' + sEvent, function(){
+			fn.call(obj);
+		});
+	}else{
+		obj.addEventListener(sEvent, fn, false);
+	}
+}
+function startMove(obj, json, fnEnd){
+	if(obj.timer)clearInterval(obj.timer);
+	obj.timer = setInterval(function (){
+		doMove(obj, json, fnEnd);
+	}, 30);
+}
+function getStyle(obj, attr){
+	return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj, false)[attr];
+}
+function doMove(obj, json, fnEnd){
+	var iCur = 0;
+	var attr = '';
+	var bStop = true;
+	for(attr in json){
+		attr == 'opacity' ? iCur = parseInt(100*parseFloat(getStyle(obj, 'opacity'))) : iCur = parseInt(getStyle(obj, attr));
+		if(isNaN(iCur))iCur = 0;
+		if(navigator.userAgent.indexOf("MSIE 8.0") > 0){
+			var iSpeed = (json[attr]-iCur) / 3;
+		}else{
+			var iSpeed = (json[attr]-iCur) / 5;
+		}
+		iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+		if(parseInt(json[attr])!=iCur)bStop = false;
+		if(attr=='opacity'){
+			obj.style.filter = "alpha(opacity:"+(iCur+iSpeed)+")";
+			obj.style.opacity = (iCur + iSpeed) / 100;
+		}else{
+			attr == 'zIndex' ? obj.style[attr] = iCur + iSpeed : obj.style[attr] = iCur + iSpeed +'px';
+		}
+	}
+	if(bStop){
+		clearInterval(obj.timer);
+		obj.timer = null;		
+		if(fnEnd)fnEnd();
+	}
+}
+</script>
+  <div style="clear:both;"></div>
+  <!--banner图-->
+  <!--大图轮播开始-->
+
+  <div class="banner">
+      <div style="clear:both;"></div>
+     <div id="list">
+        <ul>
+        		{foreach from=$deal_list item=deal_item key=key name="deal_items"}
+        		<li style="width: 204px; height: 260px; top: 92px; left: 844px; z-index: 6;cursor:pointer;" url="{url r="deal#show" p="id=$deal_item.id"}" >
+                <img src="{if $deal_item.topic_image eq ''}{$TMPL}/images/empty_thumb.gif{else}{function name="get_spec_image" v=$deal_item.topic_image w="360" h="540"}{/if}"></a>
+                <div class="b_tit_a" style="{if $key eq 0}opacity: 0.71;{else}opacity: 0.35;{/if}"></div>
+                <div class="b_tit" style="bottom:-110px;position:relative;margin-top:-180px;">
+                   <div class="banner_d_a">
+									     <span class="banner_d_a_left"><a>&nbsp;&nbsp;{function name="msubstr" v=$deal_item.name b=0 e=10}</a></span>
+										 <span class="banner_d_a_right_index">
+										 	{if $deal_item.begin_time > $now}
+                    		即将开始
+                    	{elseif $deal_item.end_time < $now and $deal_item.end_time neq 0}
+													{if $deal_item.percent gte 100}已成功{else $deal_item.percent gt 0}筹资失败{/if}
+											{else}
+												{if $deal_item.percent gte 100}
+													已成功
+												{else}
+														{if $deal_item.end_time eq 0}
+														长期项目
+														{else}
+															{if $deal_item.type eq 1}
+															融资中
+															{else}
+															筹资中
+															{/if}
+									 					{/if}
+												{/if}
+											{/if}
+											</span>
+									 </div>
+									 <div class="banner_d_b_a">
+									    <div style="width:100%;margin-left:2%;position:relative;">
+						                   <div class="progress_a" style="width:240px;margin-top:5%;">
+				                           {if $deal_item.begin_time > $now}
+						                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_item.percent}%;background:#ffae00;">
+						                            </div>
+						                        {elseif $deal_item.end_time < $now and $deal_item.end_time neq 0}
+						                        	{if $deal_item.percent gte 100}
+						                        		<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:100%;">
+						                            </div>
+						                        	{else $deal_item.percent gt 0}
+						                        		<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_item.percent}%;background:#4d4d4f;">
+						                            </div>
+						                        	{/if}
+																		{else}
+																			{if $deal_item.percent gte 100}
+																				<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:100%;">
+						                            </div>
+																			{else}
+																				{if $deal_item.end_time eq 0}
+																					<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_item.percent}%;">
+						                            </div>
+																				{else}
+																					<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_item.percent}%;">
+						                            </div>
+																				{/if}	
+																			{/if}
+																		{/if}
+								 
+								          </div>
+								          <span style="color:#666666;font-size:14px;position: relative;top:11px;right:-20px;padding-right:5%;color:#ff7800">{$deal_item.percent}%</span>
+								        </div>
+								        {if $deal_item.begin_time > $now}
+						              <table width="100%">
+												     <tr>
+													    <td style="font-size:18px;color:#ff7800;">距开始时间还剩<font>{$deal_item.left_begin_days}</font>天</td>
+													 </tr>
+												 </table>
+												{else}
+				                  <table width="100%">
+														     <tr>
+															    <td style="font-size:18px;color:#ff7800;">￥{function name="round" v=$deal_item.limit_price e=2}</td>
+																<td style="font-size:18px;color:#333333">￥{function name="round" v=$deal_item.support_amount e=2}</td>
+																<td style="font-size:18px;color:#333333">
+																	{if $deal_item.begin_time > $now}
+																		<font>{$deal_item.left_begin_days}</font>天
+																	{elseif $deal_item.end_time < $now and $deal_item.end_time neq 0}
+																		{if $deal_item.percent gt 100}{function name="to_date" v="$deal_item.success_time" f="Y/m/d"}{else}{function name="to_date" v="$deal_item.end_time" f="Y/m/d"}{/if}
+																	{else}
+																		{if $deal_item.end_time eq 0}
+																		长期项目
+																		{else}
+																		<font>{$deal_item.remain_days}</font>天
+																		{/if}
+																	{/if}
+																	</td>
+															 </tr>
+															 <tr>
+															  <td style="color:#999999;font-size:14px;">目标</td>
+																<td style="color:#999999;font-size:14px;">已筹</td>
+																<td style="color:#999999;font-size:14px;">
+																		{if $deal_item.begin_time > $now}
+																			已经预热
+																		{elseif ($deal_item.end_time < $now and $deal_item.end_time neq 0) }
+																			结束时间
+																		{else}
+																			{if $deal_item.end_time eq 0}
+																				长期项目
+																			{else}
+																				剩余时间
+																			{/if}
+																		{/if}
+																	</td>
+															 </tr>
+														 </table>	
+												 {/if}				
+									 </div>
+                </div>
+            </li>
+            {/foreach}
+        </ul>
+        <a href="javascript:;" id="prev" class="prev"></a>
+        <a href="javascript:;" id="next" class="next"></a>
+    </div>
+  </div>
+  <!--大图轮播结束-->
+<div style="clear:both;"></div>
+  <!--字体图标开始-->
+<div class="fonta">  
+ <div class="fontimg">
+ 	{foreach from=$virtual_person item=virtual_person}
+  <dl>
+     <dt><img src="{$TMPL}/images/canyu.png" border=0></dt>
+	 <dd><span>{$virtual_person}</span><br><p>参与次数</p></dd>
+  </dl>
+	 {/foreach}
+    	{foreach from=$zhuce_num item=zhuce_num}
+    <dl>
+     <dt><img src="{$TMPL}/images/zhuce.png" border=0></dt>
+	 <dd><span>{$zhuce_num}</span><br><p>注册人数</p></dd>
+  </dl>
+  {/foreach}
+  {foreach from=$virtual_money item=virtual_money}
+    <dl>
+     <dt><img src="{$TMPL}/images/zong.png" border=0></dt>
+	 <dd><span>{$virtual_money}</span><br><p>总众筹金额</p></dd>
+  </dl>
+  {/foreach}
+ </div>
+</div> 
+<!--字体图标结束-->
+
+
+<div class="tip">
+      <!--专题开始-->
+     <ul id="topic_ul" class="tip_a">
+     	 {foreach from=$topic_list item=topic key=key}
+	     	 <li><a href="{$topic.url}" target="_blank"><img src="{$topic.pic}" width=1200 border=0></a></li>
+	     {/foreach}
+	 	 </ul>
+	 <div style="clear:both;"></div>
+	 {if $topic_num>3}
+	 <div id="topic_more_div" class="tip_b">
+	 		<input type="hidden" id="topic_p" value="1"/>
+	    <a href="javascript:void(0);" onClick="addTopic();">查看更多专题</a>
+	 </div>
+	 {/if}
+	 <!--专题结束-->
+	 <div style="clear:both;"></div>
+         <!--项目分类
+      <div class="pro">
+	     <div style="clear:both;"></div>
+	     <div class="proa">
+		     <div class="proa_left">
+			     <img src="../images/xm_bg.png" border=0>
+			 </div>
+			 <div class="proa_right">
+			   <a href="#">查看全部</a>
+			 </div>
+		 </div>
+		  <div style="clear:both;"></div>
+		 <div class="prob">
+		     <ul>
+			    <li><a href="#" class="actc">影视</a></li>
+				<li><a href="#">旅行</a></li>
+				<li><a href="#">房产</a></li>
+				<li><a href="#">金融</a></li>
+				<li><a href="#">饮食</a></li>
+				<li><a href="#" style="background:none;">时尚</a></li>
+			 </ul>
+		 </div>
+		 <div style="clear:both;"></div>
+		 <div class="proc">
+		      <div class="proc_a">
+			     <div class="proc_a_a">
+				    <a href="#"><img src="../images/suport_hover.png"/></a>
+				 </div>
+				 <div class="proc_a_b">
+				     <img src="../images/3.png">
+					  <span class="going">筹资中</span>
+				 </div>
+				 <div class="proc_a_c">
+				   <h4 style="font-weight:bold;">周三，一起“新”享“乐筹”周三</h4>
+				   <ul>
+				      <li><a href="#"><img src="../images/sur.png" border=0></a><span>156</span></li>
+					  <li><a href="#"><img src="../images/view.png" border=0></a><span>23</span></li>
+				   </ul>
+				 </div>
+				 <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:18px;color:#ff7800;font-weight:bold;">￥550</li>
+					   <li style="font-size:14px;color:#999999;">目标</li>
+					</ul>
+				 </div>
+				 <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:18px;font-weight:bold;">￥550</li>
+					   <li style="font-size:14px;color:#999999;">已筹</li>
+					</ul>
+				 </div>	
+                <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:18px;font-weight:bold;text-align:left;padding-left:15px;">4天</li>
+					   <li style="font-size:14px;color:#999999;">剩余时间</li>
+					</ul>
+				 </div>					 
+				 <div class="proc_a_f">
+				     <span class="wancheng"></span>
+					 <canvas id="myCanvas" class="circle" width="60" height="60"></canvas>   
+				 </div>
+			  </div>
+			  		      <div class="proc_a">
+			     <div class="proc_a_a">
+				    <a href="#"><img src="../images/suport.png"/></a>
+				 </div>
+				 <div class="proc_a_b">
+				     <img src="../images/3.png">
+					  <span class="suess">已成功</span>
+				 </div>
+				 <div class="proc_a_c">
+				   <h4 style="font-weight:bold;">周三，一起“新”享“乐筹”周三</h4>
+				   <ul>
+				      <li><a href="#"><img src="../images/sur.png" border=0></a><span>156</span></li>
+					  <li><a href="#"><img src="../images/view.png" border=0></a><span>23</span></li>
+				   </ul>
+				 </div>
+				 <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:18px;color:#ff7800;font-weight:bold;">￥550</li>
+					   <li style="font-size:14px;color:#999999;">目标</li>
+					</ul>
+				 </div>
+				 <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:18px;font-weight:bold;">￥550</li>
+					   <li style="font-size:14px;color:#999999;">已筹</li>
+					</ul>
+				 </div>	
+                <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:18px;font-weight:bold;text-align:left;padding-left:15px;">4天</li>
+					   <li style="font-size:14px;color:#999999;">剩余时间</li>
+					</ul>
+				 </div>					 
+				 <div class="proc_a_f">
+				    <span class="jieshu"></span>
+					 <canvas id="myCanvas" class="circle" width="60" height="60"></canvas>   
+				 </div>
+			  </div>
+			  	<div class="proc_a">
+			     <div class="proc_a_a">
+				    <a href="#"><img src="../images/suport.png"/></a>
+				 </div>
+				 <div class="proc_a_b">
+				     <img src="../images/3.png">
+					  <span class="fali">筹资失败</span>
+				 </div>
+				 <div class="proc_a_c">
+				   <h4 style="font-weight:bold;">周三，一起“新”享“乐筹”周三</h4>
+				   <ul>
+				      <li><a href="#"><img src="../images/sur.png" border=0></a><span>156</span></li>
+					  <li><a href="#"><img src="../images/view.png" border=0></a><span>23</span></li>
+				   </ul>
+				 </div>
+				 <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:18px;color:#ff7800;font-weight:bold;">￥550</li>
+					   <li style="font-size:14px;color:#999999;">目标</li>
+					</ul>
+				 </div>
+				 <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:18px;font-weight:bold;">￥550</li>
+					   <li style="font-size:14px;color:#999999;">已筹</li>
+					</ul>
+				 </div>	
+                <div class="proc_a_d">
+				    <ul>
+					   <li style="font-size:18px;font-weight:bold;text-align:left;padding-left:15px;">4天</li>
+					   <li style="font-size:14px;color:#999999;">剩余时间</li>
+					</ul>
+				 </div>					 
+				 <div class="proc_a_f">
+				      <span class="jieshu"></span>
+					 <canvas id="myCanvas" class="circle" width="60" height="60"></canvas>   
+				 </div>
+			  </div>
+		 </div>
+	  </div>
+        项目分类-->
+	  <!---->
+</div>
+<div style="clear:both;height:40px;"></div>
+<div style="clear:both;"></div>
+<!--结尾-->
+<!--
+返回顶部代码
+-->
+<!--圆形进度条-->
+<script type="text/javascript">
+//x,y 坐标,radius 半径,process 百分比,backColor 中心颜色, proColor 进度颜色, fontColor 中心文字颜色
+function DrowProcess(x,y,radius,process,backColor,proColor,fontColor){
+	var canvas = document.getElementById('myCanvas');
+
+	if (canvas.getContext) {
+		var cts = canvas.getContext('2d');
+	}else{
+		return;
+	}
+	
+	cts.beginPath();  
+	// 坐标移动到圆心  
+	cts.moveTo(x, y);  
+	// 画圆,圆心是24,24,半径24,从角度0开始,画到2PI结束,最后一个参数是方向顺时针还是逆时针  
+	cts.arc(x, y, radius, 0, Math.PI * 2, false);  
+	cts.closePath();  
+	// 填充颜色  
+	cts.fillStyle = backColor;  
+	cts.fill();
+
+	cts.beginPath();  
+	// 画扇形的时候这步很重要,画笔不在圆心画出来的不是扇形  
+	cts.moveTo(x, y);  
+	// 跟上面的圆唯一的区别在这里,不画满圆,画个扇形  
+	cts.arc(x, y, radius, Math.PI * 1.5, Math.PI * 1.5 -  Math.PI * 2 * process / 100, true);  
+	cts.closePath();  
+	cts.fillStyle = proColor;  
+	cts.fill(); 
+	
+	//填充背景白色
+	cts.beginPath();  
+	cts.moveTo(x, y); 
+	cts.arc(x, y, radius - (radius * 0.26), 0, Math.PI * 2, true);  
+	cts.closePath();
+	cts.fillStyle = 'rgba(255,255,255,1)';  
+	cts.fill(); 
+
+	// 画一条线  
+	cts.beginPath();  
+	cts.arc(x, y, radius-(radius*0.30), 0, Math.PI * 2, true);  
+	cts.closePath();  
+	// 与画实心圆的区别,fill是填充,stroke是画线  
+	cts.strokeStyle = backColor;  
+	cts.stroke();  
+	  
+	//在中间写字 
+	cts.font = "bold 9pt Arial";  
+	cts.fillStyle = fontColor;  
+	cts.textAlign = 'center';  
+	cts.textBaseline = 'middle';  
+	cts.moveTo(x, y);  
+	cts.fillText(process+"%", x, y);  
+	
+}
+bfb = 0;
+time=0;
+function Start(){
+	//DrowProcess(60,60,55,bfb,'#ddd','#6495ED','#6495ED');
+	//DrowProcess(180,60,55,bfb,'#ddd','#e74c3c','#e74c3c');
+	//DrowProcess(300,60,55,bfb,'#ddd','#FF7F50','#FF7F50');
+	
+	DrowProcess(30,30,30,55,'#ddd','#32CD32','#32CD32');
+
+	t = setTimeout(Start,5);
+	if(bfb>=35){
+		clearTimeout(t);
+		bfb=0;
+		return;
+	}
+	bfb+=1;
+}
+
+function Create(){
+	
+	//DrowProcess(420,60,55,25,'#ddd','#32CD32','#32CD32');
+}
+
+//Start();
+//Create();
+</script>
+{include file="inc/footer.html"}

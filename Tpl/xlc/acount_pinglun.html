@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+{include file="inc/header.html"}
+<style>
+.zuodao{
+	width:20%; height:1200px; float:left;}
+.zhichi{
+	width:80%; height:auto; float:right;}
+</style>
+<div style="width:50%; height:auto; margin:0 auto; margin-top:50px;">
+	<div class="zuodao">
+{include file="inc/account_left.html"}
+	</div>
+<div class="zhiyi">
+<table class="tableborder" border="0">
+  <tr class="tr_title">
+    <td >项目名称：</td>
+    <td >支持金额：</td>
+    <td >状态：</td>
+  </tr>
+  {foreach from=$xiangmu item=vo}
+  <tr class="tr_height">
+    <td class="td_left">{$vo.name}</td>
+    <td class="td_left">{$vo.support_amount}</td>
+    <td class="td_left">{$vo.is_success}</td>
+  </tr>
+  <tr>
+   {foreach from=$pinglun item=ping}
+    <td class="td_left" colspan="3" >{$ping.content}</td>
+  {/foreach}
+    </tr>
+  
+  {/foreach}
+</table>
+  </div>
+
+</div>
+
+{include file="inc/footer.html"}
+</body>
+</html>

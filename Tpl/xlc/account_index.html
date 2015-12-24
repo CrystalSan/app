@@ -1,0 +1,136 @@
+﻿{include file="inc/header.html"} 
+<script type="text/javascript" src="{$TMPL}/js/order_list.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height:100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>我的项目</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;支持项目列表</span>
+		   
+	 </div>
+
+   
+     {if $order_list}
+     <div class="about_b_c">
+         <table class="tableborder" cellpadding=0 cellspacing=0>
+
+			 <tr class="tr_title">
+			 
+			    <td >项目名称</td>
+				<td >金额</td>
+				<td >运费</td>
+				<td>状态</td>
+				<td>操作</td>
+			
+			 </tr>
+			 {foreach from=$order_list item=order_item}
+			 <tr class="tr_height">
+			 	<td width=40% class="td_left">
+				  {if $order_item.deal_info}
+						<a href="{if $order_item.is_ap eq 1}{url r="ap#show" p="id=$order_item.deal_id"}{else}{url r="deal#show" p="id=$order_item.deal_id"}{/if}" target="_blank" title="{$order_item.deal_name}"><img src="{function name="get_spec_image" v=$order_item.deal_info.image w=60 h=60 g=1}"  alt="{$order_item.deal_name}" border=0 width=60 height=60/></a> &nbsp;&nbsp;
+						<a href="{if $order_item.is_ap eq 1}{url r="ap#show" p="id=$order_item.deal_id"}{else}{url r="deal#show" p="id=$order_item.deal_id"}{/if}" target="_blank" title="{$order_item.deal_name}">{function name="msubstr" v=$order_item.deal_name b=0 e=12}</a>
+					{else}
+						<div><span title="{$order_item.deal_name}">{function name="msubstr" v=$order_item.deal_name b=0 e=10}</span></div>	
+					{/if}
+				</td>
+				<td width=10%>{if $order_item.is_ap eq 1}{$order_item.ap_price}{else}{function name="format_price" v=$order_item.deal_price}{/if}</td>
+				<td width=10%>
+					{if $order_item.delivery_fee eq 0}
+						--
+					{else}
+						{if $order_item.is_ap eq 1}
+						{$order_item.delivery_ap}
+						{else}
+						{function name="format_price" v=$order_item.delivery_fee}
+						{/if}
+					{/if}
+				</td>
+				<td width=25%>
+					{if $order_item.order_status eq 0}支付未完成
+					{else}
+					{if $order_item.deal_info}
+							{if $order_item.deal_info.is_success eq 1}
+								{if $order_item.deal_info.begin_time > $now}未开始{/if}
+								{if $order_item.deal_info.end_time < $now and $order_item.deal_info.end_time neq 0}已成功&nbsp;{if $order_item.repay_time gt 0}回报已发放{if $order_item.repay_make_time gt 0} <br /> 确认收到{else} <br /> 未确认收到{/if} {else}等待发放回报{/if}{/if}
+								{if $order_item.deal_info.begin_time < $now and ($order_item.deal_info.end_time > $now or $order_item.deal_info.end_time eq 0)}已成功&nbsp;{if $order_item.repay_time gt 0}回报已发放{if $order_item.repay_make_time gt 0} 确认收到{else} 未确认收到{/if}{else}等待发放回报{/if}{/if}
+							{else}
+								{if $order_item.deal_info.begin_time > $now}未开始{/if}
+								{if $order_item.deal_info.end_time < $now and $order_item.deal_info.end_time neq 0}未成功&nbsp;{if $order_item.is_refund eq 1}已退款{else}等待退款{/if}{/if}
+								{if $order_item.deal_info.begin_time < $now and ($order_item.deal_info.end_time > $now or $order_item.deal_info.end_time eq 0)}未结束{/if}
+							{/if}
+					{else}
+						{if $order_item.is_success eq 0}
+						未成功&nbsp;{if $order_item.repay_time gt 0}回报已发放{if $order_item.repay_make_time gt 0}<br /> 确认收到{else} <br /> 未确认收到{/if}{else}等待发放回报{/if}
+						{else}
+						已成功&nbsp;{if $order_item.is_refund eq 1}已退款{else}等待退款{/if}
+						{/if}
+					{/if}
+					{/if}
+				</td>
+				<td width=15%>
+					{if $order_item.order_status eq 0}
+						<a href="{if $order_item.is_ap eq 1}{url r="account#apview_order" p="id=$order_item.id"}{else}{url r="account#view_order" p="id=$order_item.id"}{/if}" style="text-decoration:none;float:none;display:inline-block">继续支付</a><br />
+						<a href="{url r="account#del_order" p="id=$order_item.id"}" style="text-decoration:none;">删除</a>
+					{else}
+						<a href="{if $order_item.is_ap eq 1}{url r="account#apview_order" p="id=$order_item.id"}{else}{url r="account#view_order" p="id=$order_item.id"}{/if}" target="_blank" style="text-decoration:none;">查看详情</a>
+					{/if}
+				</td>
+			 </tr>
+			 {/foreach}
+		 </table>
+        <div style="clear:both;"></div>
+			  <div class="fy2" style="width:100%;padding-top:30px;"> 
+			  	<ul>
+          {$pages}
+          </ul>
+       </div>
+	 </div>
+	 {else}
+	 	<div class="about_b_c">
+			还没有任何支持记录
+		</div>
+	 {/if}
+
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

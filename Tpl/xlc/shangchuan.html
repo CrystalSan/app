@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+<!--多文件上传-->
+<link href="http://www.zoneym.com/Public/duo_uploads/css/default.css" rel="stylesheet" type="text/css" />
+<link href="http://www.zoneym.com/Public/duo_uploads/css/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://www.zoneym.com/Public/duo_uploads/scripts/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="http://www.zoneym.com/Public/duo_uploads/scripts/swfobject.js"></script>
+<script type="text/javascript" src="http://www.zoneym.com/Public/duo_uploads/scripts/jquery.uploadify.v2.1.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#uploadify").uploadify({
+        'uploader'       : 'http://www.zoneym.com/Public/duo_uploads/scripts/uploadify.swf',  //上传按钮
+        'script'         : '/index.php/article/upload',                //ajax请求文件
+        'cancelImg'      : '/Public/images/cancel.png',                    //关闭按钮图片地址
+        'folder'         : "../uploads/<{$time}>/",                            //时间
+        'queueID'        : 'fileQueue',
+        'fileExt'        : '*.jpg;*.gif;*.bmp;',                              //允许文件上传类型,和fileDesc一起使用.
+        'fileDesc'       : '*.jpg;*.gif;*.bmp;',                              //将不允许文件类型,不在浏览对话框的出现.
+        'auto'           : false,
+        'multi'          : true,                                            //是否支持多文件上传
+        'onComplete':function(event,queueId,fileObj,response,data){
+            $('#info').html($('#info').html() + '<div class="img_box" ><img name="'+ response +'" src="/Public/Uploads/'+response+'" width="50" height="50"> <p onclick=del_img(this); >删除</p><input type="hidden" name="imgs[]" value="'+ response +'"></div>');//在页面上显示文件相对路径
+            
+        }
+    });
+});
+
+//删除文件
+function  del_img(whichSong)
+{
+    //盒子对象
+    var info = document.getElementById('info');
+    //当前图片对象
+    var zi = whichSong.parentElement;
+    //图片名称
+    var path = zi.firstChild.name
+    //产生对象
+    var ajax=new XMLHttpRequest;
+    //生成事件处理器
+    ajax.onreadystatechange=function(){
+        if (ajax.readyState==4) {             //判断请求状态为4完成的时候
+            if (ajax.status==200) {         //判断服务器的http状态码等于200
+                //alert(ajax.responseText); //弹出服务器的响应
+                if(ajax.responseText)
+                {
+                    //删除当前
+                    info.removeChild(zi);
+                }
+            }
+        }
+    }
+    //打开链接
+    ajax.open('post','/index.php/article/img');
+    //设置http传输
+    ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    //发送
+    ajax.send('action=del_img&path=' + path);
+}
+
+</script>
+
+<!--判断要修改的图片文章是否有上传多图片-->
+<{if $info }>
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+        //所有的图片
+        var imgs = $('#imgs').val();
+        var str = '';
+        //分割图片
+        arr = imgs.split(',');
+        
+        //组合每个图片html
+        for(var i = 0; i < arr.length; i++)
+        {
+            if(arr[i])
+            {
+                str += '<div class="img_box" ><img name="'+ arr[i] +'" src="/Public/Uploads/'+arr[i]+'" width="50" height="50"> <p onclick=del_img(this); >删除</p><input type="hidden" name="imgs[]" value="'+ arr[i] +'"></div>';
+            }
+        }
+        
+        //所有图片html添加到已上传的图片盒子里
+        $('#info').html(str);
+    });
+</script>
+<{/if}>
+
+<div class="main_right">
+            <!-- main_right_title -->
+    <div class="main_right_title">
+        <em class="em eml"></em>
+        <em class="em emr"></em>
+        <div class="main_right_title_con">
+            <a class="righttitlea" href="/index.php/class/add/p_id/0">内容列表</a>
+            <a class="righttitlea1" href="#">内容管理/</a>
+            <a class="righttitlea2" href="#">图片发布</a>
+        </div>
+    </div>
+    <!-- main_right_title end -->
+    <div class="linetab">
+        <div class="linetab_title">
+            <a class="hover" href="javascript:void(0)" style="float:left"><{if $info }>图片编辑<{else}>图片发布<{/if}></a>
+        </div>
+        <div class="linetab_con">
+            <em class="emlf"></em>
+            <em class="emrf"></em>
+            <div class="linetab_con_neir">
+                <form  action="" method="post" name="example" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="<{if $info }>edit<{else}>add<{/if}>"/>
+                <{if $info }>
+                    <input type="hidden" name="bak_img" value="<{$info['simg']}>"/>
+                    <input type="hidden" name="id" value="<{$info['id']}>"/>
+                    <input type="hidden" id="imgs" value="<{$info['img']}>"/>
+                <{/if}>
+                <!--case 1: $type = '文章'; break;
+                case 2: $type = '产品'; break;
+                case 3: $type = '图片'; break;
+                case 4: $type = '下载'; break;-->
+                <input type="hidden" name="type" value="3"/>
+                <div class="linetab_con_line" style="display:block">
+                    <table class="brand_table" cellspacing="0" cellpadding="0">
+    
+                        
+                        <tr>
+                            <th>相片：</th>
+                            
+                            <td>
+                                <div id="container">
+                                    <div id="fileQueue"></div>
+                                    <div class="btn-group">
+                                        <input type="file" name="uploadify" id="uploadify" />
+                                        <a href="javascript:jQuery('#uploadify').uploadifyUpload()" class="btn">上传</a>
+                                        <a href="javascript:jQuery('#uploadify').uploadifyClearQueue()"class="btn">取消上传</a>
+                                        <p id="text_anniu">提示:只能上传<br />(jpg,gif,bmp)<br />格式图片</p>
+                                    </div>
+
+                                    <div id="info" ></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="list"> </th>
+                            <td class="list">
+                                <input type="submit" value="确定" class="btn"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+</body>
+</html>

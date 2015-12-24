@@ -1,0 +1,205 @@
+<?php
+$this->_var['dpagejs'][] = $this->_var['TMPL_REAL']."/js/avatar.js";
+$this->_var['dcpagejs'][] = $this->_var['TMPL_REAL']."/js/avatar.js";
+$this->_var['dpagejs'][] = $this->_var['TMPL_REAL']."/js/ajaxupload.js";
+$this->_var['dpagejs'][] = $this->_var['TMPL_REAL']."/js/switch_city.js";
+$this->_var['dcpagejs'][] = $this->_var['TMPL_REAL']."/js/switch_city.js";
+$this->_var['dpagejs'][] = APP_ROOT_PATH."/system/region.js";
+$this->_var['dcpagejs'][] = APP_ROOT_PATH."/system/region.js";
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/user_register.css";
+?>
+<script type="text/javascript" src="{function name="parse_script" v="$dpagejs" c="$dcpagejs"}"></script>
+<style>
+	.setlist_new {
+		padding: 5px 0;
+		width: 100%;
+	}
+	.tip_box{
+		height:41px;
+		line-height:41px;
+		
+	}
+	.tip_box .form_tip{ color:red;}
+	.tip_box .form_success{ color:green;}
+	.control-group a{height:37px;line-height:37px}
+	.btn_select{_margin-top:10px;}
+	.textareabox{width:300px}
+</style>
+<div class="blank"></div>
+<!--中间开始-->
+<style>
+.shangmian{
+	width:90%;  height:200px; float:right; margin-right:5%; border:1px solid #CCC;}
+.shangmian .toutu{
+	width:30%; margin:0 auto; height:150px; float:left; margin-left:2%; margin-top:25px; border:1px solid #ccc;}
+.shangmian .yong{
+	width:66%; height:150px; float:right; margin-top:25px; margin-left:1%;}
+.shangmian .yong li{
+	line-height:40px;}
+.xiamian{
+	width:100%; height:300px; margin-top:50px;}
+</style>
+<div class="dlmain Myhomepage">
+		 {include file="inc/account_left.html"} 
+		<div class="homeright pageright f_r">
+        	<div class="shangmian">
+               <div class="toutu"><img id="avatar" src="{function name="get_user_avatar" uid=$user_info.id type="middle"}" width="100%" height="150" /></div>
+               <div class="yong">
+               		<ul>
+                    	<li>用户名：{$home_user_info.user_name}</li>
+                        <li>注册时间：{function name="to_date" v=$home_user_info.create_time f="Y年m月d日"}</li>
+                        <li>最近登录时间：：{function name="to_date" v=$home_user_info.login_time f="Y年m月d日"}</li>
+                        <li>登录IP：{$home_user_info.login_ip}</li>
+                    </ul>
+               </div>
+               
+            </div>
+            <div style="clear:both;"></div>
+    <style type="text/css">
+    #xia_nav
+    {
+    width: 90%;
+    height: 40px;
+    clear: both;
+    }
+    a.nav_button
+    {
+    color: #2929b8;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    width: 20%;
+    height: 30px;
+    float: left;
+    padding-top: 4px;
+    padding-left: 4px;
+    border-color: #c9c9e9 #c9c9e9 #2929b8;
+    border-style: solid;
+    border-width: 1px 1px 4px;
+    display: block;
+    }
+    a.nav_button_msout
+    {
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #2929b8;
+    text-decoration: none;
+    display: block;
+    padding-top: 4px;
+    padding-left: 4px;
+    width: 20%;
+    height: 30px;
+    float: left;
+    border-style: solid;
+    border-width: 1px 1px 4px;
+    border-color: #c9c9e9 #c9c9e9 #2929b8;
+    }
+    a.nav_button:link
+    {
+    color: #2929b8;
+    }
+    a.nav_button:hover
+    {
+    color: #fff;
+    background-color: #2929b8;
+    }
+    #main
+    {
+    text-align: left;
+    width: 90%;
+    height: 300px;
+    clear: both;
+    border: solid 1px #2929b8;
+    }
+    #main1 { }
+    #main2 { }
+    #main3 { }
+    </style>
+    <div class="xiamian">
+    <div id="xia_nav">
+    <a href="#" class="nav_button" id="button1" onmouseover="main2.style.display='none';main3.style.display='none';main1.style.display='block';button2.className='nav_button';button3.className='nav_button';" onmouseout="this.className='nav_button_msout'">关注({$shulian})</a>
+    <a href="#" class="nav_button" id="button2" onmouseover="main1.style.display='none';main3.style.display='none';main2.style.display='block';button1.className='nav_button';button3.className='nav_button';" onmouseout="this.className='nav_button_msout'">支持({$zshu})</a>
+    </div>
+    <div id="main">
+    <div id="main1" style="display: none">
+    <table width="100%" border="0">
+  <tr>
+    <td height="40" align="center" bgcolor="#F1FFE3">项目名称：</td>
+    <td height="40" align="center" bgcolor="#F1FFE3">金额：</td>
+    <td height="40" align="center" bgcolor="#F1FFE3">状态：</td>
+  </tr>
+  {foreach from=$guanzhu item=guanzhu}
+  <tr>
+    <td height="40"><img src="{$guanzhu.image}" width="40" height="40" />{$guanzhu.deal_name}</td>
+    <td height="40">{$guanzhu.deal_price}</td>
+    <td height="40">{$guanzhu.is_success}</td>
+  </tr>
+  {/foreach}
+</table>
+    </div>
+    <div id="main2" style="display: none">
+    <table width="100%" border="0">
+  <tr>
+    <td height="40" align="center" bgcolor="#F1FFE3">项目名称：</td>
+    <td height="40" align="center" bgcolor="#F1FFE3">金额：</td>
+    <td height="40" align="center" bgcolor="#F1FFE3">获得支持：</td>
+  </tr>
+  {foreach from=$zhichi item=vo}
+  <tr>
+    <td height="40"><img src="{$vo.image}" width="40" height="40" />{$vo.deal_name}</td>
+    <td height="40">{$vo.deal_price}</td>
+    <td height="40">{$vo.is_success}</td>
+  </tr>
+  {/foreach}
+</table>
+    </div>
+    <div id="main3" style="display: none">
+      <table width="100%" border="0">
+  <tr>
+    <td height="40" align="center" bgcolor="#F1FFE3">项目名称：</td>
+    <td height="40" align="center" bgcolor="#F1FFE3">金额：</td>
+    <td height="40" align="center" bgcolor="#F1FFE3">状态：</td>
+  </tr>
+  {foreach from=$guanzhu item=guanzhu}
+  <tr>
+    <td height="40"><img src="{$guanzhu.image}" width="40" height="40" />{$guanzhu.deal_name}</td>
+    <td height="40">{$guanzhu.deal_price}</td>
+    <td height="40">{$guanzhu.is_success}</td>
+  </tr>
+  {/foreach}
+</table>
+    </div>
+    </div>
+    </div>
+		</div>
+<!--中间结束-->
+<div class="blank"></div>
+</div>
+<div class="blank"></div>
+
+
+
+<!--<div class="userhomehd">
+	<div class="wrap userhomehd1">
+		<div class="userbox1img f_l">{function name="show_avatar" p="$home_user_info.id" t="big"}</div>
+		<div class="homebox1main f_l">
+			<span class="username">{$home_user_info.user_name}</span>
+			<a class="sentmail" href="javascript:void(0);" style="font-size:12px; margin-left:5px;"  onclick="send_message({$home_user_info.id});"></a>	
+			<div class="blank10"></div>
+			<div class="home_user_join" style="color: #404040">
+				{function name="to_date" v=$home_user_info.create_time f="Y年m月d日"} 加入 {function name="app_conf" v="SITE_NAME"}
+			</div>
+			<div class="home_user_weibo">
+				<div class="title" style="float:left;">博客或微博</div>
+				<div class="blank"></div>
+				<ul>
+					{foreach from=$home_user_info.weibo_list item=weibo_item}
+					<li><a href="{$weibo_item.weibo_url}" target="_blank" class="linkgreen">{$weibo_item.weibo_url}</a></li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="blank"></div>
+</div>-->

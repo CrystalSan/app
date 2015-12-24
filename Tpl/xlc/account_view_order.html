@@ -1,0 +1,242 @@
+{include file="inc/header.html"} 
+<script type="text/javascript" src="{$TMPL}/js/cart_pay.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>我的资金</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;我的全部资金</span>
+		   
+	 </div>
+    <div class="about_b_c">
+    <div class="set_bottom" style="padding-bottom:0px;">
+	<div class="setpay">
+	   <ul>
+	   	{if $deal_info.type eq 1}
+	    <li><a href="{url r="account#mine_investor_status"}" class="setpaya">投资的项目</a></li>
+	    {else}
+	    <li><a href="{url r="account#index"}" class="setpaya">支持的项目</a></li>
+	    {/if}
+			<li><a href="{url r="account#project"}" >我的项目</a></li>
+			<li><a href="{url r="account#focus"}" >关注的项目</a></li>
+			
+	   </ul>
+	
+	 </div>
+    </div>
+         <table style="width:100%;border:1px solid #dddada;font-size:14px;" cellpadding=0 cellspacing=0>
+
+			<tr style="line-height:40px;border-bottom:1px solid #dddada">
+			    <td align="left" style="padding-left:20px;border-right:1px solid #dddada;width:15%">项目名称</td>
+				<td>
+						{if $deal_info}
+						<a href="{url r="deal#show" p="id=$deal_info.id"}" target="_blank" style="text-decoration:none;">{$order_info.deal_name}</a>
+						{else}
+						{$order_info.deal_name}
+						{/if}
+				</td>
+			</tr>
+				{if $order_info.consignee neq ''}
+	        <tr style="line-height:40px;border-bottom:1px solid #dddada">
+			    <td align="left" style="padding-left:20px;border-right:1px solid #dddada;width:20%">配送信息</td>
+				<td align="left" style="padding-left:20px;">地址：{$order_info.province}{$order_info.city}{$order_info.address} <br> 邮编：{$order_info.zip} <br>  收件人：{$order_info.consignee} <br> 电话：{$order_info.mobile}</td>
+			</tr>
+				{/if}
+				{if $order_info.support_memo neq ''}
+				<tr style="line-height:40px;border-bottom:1px solid #dddada">
+					<td align="left" style="padding-left:20px;border-right:1px solid #dddada;width:20%">备注信息</td>
+					<td>
+						{$order_info.support_memo}
+					</td>
+				</tr>
+				{/if}
+	        <tr style="line-height:40px;border-bottom:1px solid #dddada">
+			    <td align="left" style="padding-left:20px;border-right:1px solid #dddada;width:20%">应付金额</td>
+					<td>
+						{if $order_info.delivery_fee gt 0}
+						项目金额：{function name="format_price" v=$order_info.deal_price}<br>&nbsp;&nbsp;
+						运费：{function name="format_price" v=$order_info.delivery_fee}<br>&nbsp;&nbsp;
+						总额：{function name="format_price" v=$order_info.total_price}
+						{else}
+						{function name="format_price" v=$order_info.total_price}
+						{/if}	
+					</td>
+			</tr>
+	        <tr style="line-height:40px;border-bottom:1px solid #dddada">
+			    <td align="left" style="padding-left:20px;border-right:1px solid #dddada;width:20%">收款情况</td>
+					<td>
+						{if $order_info.order_status eq 1}
+						因项目过期，资金已退到个人帐户
+						{/if}
+						{if $order_info.order_status eq 2}
+						因项目限额已满，资金已退到个人帐户
+						{/if}	
+						{if $order_info.order_status eq 3}
+						支付成功
+						{/if}	
+						{if $order_info.order_status eq 0}
+						支付未完成&nbsp;&nbsp;
+							{if $order_info.credit_pay gt 0}
+							已用余额支付：{function name="format_price" v=$order_info.credit_pay}
+							{/if}
+						{/if}		
+					</td>
+			</tr>
+			
+             <tr style="line-height:40px;border-bottom:1px solid #dddada">
+			    <td align="left" style="padding-left:20px;border-right:1px solid #dddada;width:20%">支付时间</td>
+				<td>{function name="to_date" v=$order_info.pay_time}</td>
+			</tr>
+			{if $order_info.order_status eq 3}
+				<tr>
+					<td align="left" style="padding-left:20px;border-right:1px solid #dddada;width:20%">回报情况</td>
+					<td>
+						{if $order_info.is_success eq 0}
+							{if $order_info.is_refund eq 1}
+							项目失败，金额已退回会员帐户
+							{else}
+							项目未成功
+							{/if}
+						{else}
+							{if $order_info.repay_time eq 0}
+							项目成功，回报未发放
+							{else}
+							{$order_info.repay_memo}
+							{/if}
+						{/if}
+					</td>
+				</tr>
+				{if $deal_info.type eq 1}
+				{else}
+					{if $order_info.repay_memo }
+						<tr>
+							<td  align="left" style="padding-left:20px;border-right:1px solid #dddada;width:20%"> </td>
+							<td>
+								{if $order_info.repay_make_time==0}
+									<p>还有 <span id="left_time"></span> 来确认收到回报,超时订单自动确认收到回报</p>
+									<a class=" ui-btn-m" id="J_detail_panel"  href="javascript:void();"  >确认收到</a>
+								{else}
+									确认收到
+								{/if}
+							</td>
+						</tr>
+						<script>
+							var interval = 1000; 
+							function ShowCountDown(divname) 
+							{ 
+								var now = new Date(); 
+								var endDate =   new   Date('{$order_info.repay_make_date}'); 
+								var leftTime=endDate.getTime()-now.getTime(); 
+								var leftsecond = parseInt(leftTime/1000); 
+								//var day1=parseInt(leftsecond/(24*60*60*6)); 
+								var day1=Math.floor(leftsecond/(60*60*24)); 
+								var hour=Math.floor((leftsecond-day1*24*60*60)/3600); 
+								var minute=Math.floor((leftsecond-day1*24*60*60-hour*3600)/60); 
+								var second=Math.floor(leftsecond-day1*24*60*60-hour*3600-minute*60); 
+								var cc = document.getElementById(divname); 
+								cc.innerHTML = day1+"天"+hour+"小时"+minute+"分"+second+"秒"; 
+							} 
+							window.setInterval(function(){ShowCountDown('left_time');}, interval); 
+									
+						</script>
+						<script>
+							$(function(){
+								$("#J_detail_panel").bind("click",function(){
+									var ajaxurl = APP_ROOT+"/index.php?ctl=ajax&act=set_repay_make";
+				   
+									var query = new Object();
+									query.id = {$order_info.id};
+									$.ajax({ 
+										url: ajaxurl,
+										data:query,
+										type: "POST",
+										dataType: "json",
+										success: function(data){
+											if(data.status==1){
+												$.showSuccess(data.info,function(){
+			 									 	window.location.reload();
+			 									});
+											}else{
+												$.showErr(data.info);
+											}
+											
+											
+										}
+									});	
+								});
+							});	
+						</script>
+					{/if}
+				{/if}
+				
+				{/if}
+			
+		 </table>
+		 {if $order_info.order_status eq 0}
+		 	<form class="pay_form" action="{url r="account#go_order_pay"}" target="_blank" method="post">		
+		 		{if $user_info.money gt 0}
+					<div class="form_row">
+						<div class="blank15"></div>
+						<div class="blank10"></div>
+						<input type="hidden" name="max_credit" value="{$user_info.money}" />
+						<input type="hidden" name="max_pay" value="{$max_pay}" />
+						<div class="blank15"></div>
+					</div>
+				{/if}
+       <p style="margin-top:20px;float:left;"><input type="radio" value="35" name="payment" class="mt mt10" check="checked"/>微信扫码支付</p>
+		   <div class="form-group logo_table" style="margin-top:90px;">
+                <a href="javascript:void(0);" class="ui-button button_login" >确定，去付款</a>
+					<input type="hidden" id="back_url" value="{url r="account#view_order" p="id=$order_info.id"}" />	
+					<input type="hidden" value="{$order_info.id}" name="order_id" />	
+					<input type="hidden" value="1" name="ajax" />
+			   
+       </div>
+			</form>
+			{/if}
+			
+	 </div>
+
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

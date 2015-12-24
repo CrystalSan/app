@@ -1,0 +1,61 @@
+{include file="inc/header.html"} 
+    <script type="text/javascript" src="{$TMPL}/js/notify.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a" style="padding:0 20px;min-height:495px;">
+      <div class="about_a_right_a" style="margin-top:20px;">
+	      <span>
+	      {if $all eq 0}
+				未读通知
+				{else}
+				全部通知
+				{/if}	
+	      </span>
+	 </div>
+    <div class="about_b_c">
+    <div class="set_bottom" style="padding-bottom:0px;">
+	<div class="setpay">
+	   <ul>
+	    <li {if $all eq 0}class="current"{/if}><a href="{url r="notify#index"}">未读通知</a></li>
+		  <li {if $all eq 1}class="current"{/if}><a href="{url r="notify#index" p="all=1"}">全部通知</a></li>			
+	   </ul>
+	 </div>
+    </div>
+    </div>
+    	{if $notify_list}
+    <div class="about_r_g">
+    	{foreach from=$notify_list item=notify_item}
+	     <div class="about_r_a_h">
+		      <div class="about_r_a_f">
+			    <a href="{$notify_item.url}" target="_blank" class="linkgreen">{$notify_item.log_info}</a> <span>{function name="pass_date" v=$notify_item.log_time}</span>
+			  </div>
+		      <div class="about_r_a_g">
+		      	{if $notify_item.is_read eq 0}
+						<a href="{url r="notify#ignore" p="id=$notify_item.id"}" class="ui-small-button  mr10">忽略</a>
+						{/if}
+						<a href="{url r="notify#delnotify" p="id=$notify_item.id"}" class="ui-small-button ">删除</a>
+			  </div>			  
+			 </div>
+			 {/foreach} 
+	</div>
+				<a href="{url r="notify#ignoreall"}" class="ui-small-button " style="font-size:14px;">忽略全部通知</a>
+           <div style="clear:both;"></div>
+			  <div class="fy2" style="width:100%;padding-top:30px;"> 
+                <ul>
+                   {$pages}
+                 </ul>
+           </div>
+
+			{else}
+				<div class="empty_tip">{if $all eq 0}没有新通知{else}没有通知记录{/if}</div>
+			{/if}
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+{include file="inc/footer.html"}

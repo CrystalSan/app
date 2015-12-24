@@ -1,0 +1,133 @@
+{include file="inc/header.html"}
+
+<script type="text/javascript" src="{$TMPL}/js/avatar.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/ajaxupload.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/switch_city.js"></script>
+<script type="text/javascript" src="./system/region.js"></script>
+<script type="text/javascript">
+	$(function(){
+	$("#button1").click(function(){
+			$("#main2").hide();
+			$("#main1").show();
+			$("#page2").hide();
+			$("#page1").show();
+	});
+	$("#button2").click(function(){
+			$("#main1").hide();
+			$("#main2").show();
+			$("#page1").hide();
+			$("#page2").show();
+	});
+	$(".setpay ul li a").click(function(){
+	   if($(this).hasClass("setpaya")){
+	     $(this).removeClass("setpaya");
+	   }else{
+	     $(this).addClass("setpaya");
+	   }
+	});
+	
+	
+});
+	
+</script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div styel="clear:both;"></div>
+  <div class="about_a_right">
+	  <div styel="clear:both;"></div>
+ 	<div class="setpay">
+	   <ul>
+	    <li><a href="javascript:void(0);" id="button1" >关注({$shulian})</a></li>
+			<li><a href="javascript:void(0);"  id="button2" >支持({$zshu})</a></li>
+	   </ul>
+	 </div>
+	 <div style="clear:both;"></div>
+     <table class="tableborder" cellpadding=0 cellspacing=0 id="main1" >
+			 <tr class="tr_title">
+			  <td >项目名称</td>
+				<td >目标金额</td>
+				<td>状态</td>
+			 </tr>
+			 {foreach from=$guanzhu item=guan}
+			 <tr class="tr_height">
+			  <td width=50% class="td_left">
+				   <a href="#"><img src="{$guan.image}" width="40" height="40" />&nbsp;&nbsp;{$guan.name}</a>
+				</td>
+				<td width=25%>￥{$guan.limit_price}</td>
+				<td width=25%>{$guan.is_success}</td>
+			 </tr>
+			 {/foreach}
+		 </table>
+		 <div style="clear:both;"></div>
+			  <div id="page1" class="fy2" style="width:100%;padding-top:30px;"> 
+			  	<ul>
+           {$pages1}
+           </ul>
+        </div>
+      <table style="display:none;" class="tableborder" cellpadding=0 cellspacing=0 id="main2" >
+			 <tr class="tr_title">
+			    <td >项目名称</td>
+				<td >金额</td>
+				<td>获得支持</td>
+			 </tr>
+			 {foreach from=$zhichi item=vo}
+			 <tr class="tr_height">
+			  <td width=50% class="td_left">
+				   <a href="#"><img src="{$vo.image}" width="40" height="40" />&nbsp;&nbsp;{$vo.deal_name}</a>
+				</td>
+				<td width=25%>￥{$vo.deal_price}</td>
+				<td width=25%>{$vo.is_success}</td>
+			 </tr>		
+			 {/foreach}
+		 </table>
+		 <div style="clear:both;"></div>
+			  <div id="page2" class="fy2" style="width:100%;padding-top:30px;display:none;"> 
+			  	<ul>
+           {$pages2}
+           </ul>
+        </div>
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight+200);
+};
+</script>
+{include file="inc/footer.html"}

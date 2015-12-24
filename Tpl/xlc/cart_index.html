@@ -1,0 +1,177 @@
+{include file="inc/header.html"} 
+ 
+<script type="text/javascript" src="{$TMPL}/js/switch_city.js"></script>
+<script type="text/javascript" src="/system/region.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/consignee.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/cart.js"></script>
+<div style="clear:both;"></div>
+
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+<div class="sur_xm">
+ <div class="sur_xm_bar">
+    <dl style="margin-top:20px;">
+	    <dt>{$deal_info.name}</dt>
+	    <input name="is_delivery" id="is_delivery" type="hidden" value="{$deal_item.is_delivery}" />
+		<dd><r style="color:#ff7800;font-size:36px;">￥{$deal_item.price_format}</r> {if $deal_item.is_delivery eq 1}				
+					{if $deal_item.delivery_fee neq 0}
+					邮费:¥{$deal_item.delivery_fee_format}
+					{else}
+					包邮
+					{/if}
+				{/if}</dd>
+	</dl>
+ </div>
+ <div class="sur_xm_con">
+ 		<form id="cart_form" action="{url r="cart#check"}" method="post">
+      <div class="sur_xm_con_left">
+	      
+	      <div style="sur_xm_con_left_a">
+	      {if $deal_item.is_delivery}
+			     <dl class="sur_xm_can">
+				    <dt>收货地址</dt>
+				    {if $consignee_list}
+						<dd><a id="add_consignee" url="{url r="settings#add_consignee"}">+ 添加配送地址</a></dd>
+				 	 </dl>
+				 	{/if}
+				 {if $consignee_list}
+				 <div class="sur_address">
+	         <ul class="sur_address_ul" style="width:100%;text-align:left;">
+						{foreach from=$consignee_list item=consignee key=k}
+				      <li><input type="radio" name="consignee_id" {if $consignee.is_default} checked="checked"{else}{if $k eq 0}checked="checked"{/if}{/if} value="{$consignee.id}">{$consignee.province}{$consignee.city}{$consignee.address} {$consignee.zip} {$consignee.consignee} {$consignee.mobile}</li>
+	          {/foreach}
+				   </ul>			 
+				 </div>
+				 {else}
+				 <div class="direction">
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex sh_xq">收货人姓名:</label>
+              <input type="text" class="form-control input_width" value="{$consignee_info.consignee}" name="consignee">
+           </div>
+
+           <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex sh_xq" >地区:</label>
+              <span style="float:left;margin-top:15px;">
+			  			<select name="province" class="select-h" id="province">				
+								<option value="" rel="0">请选择省份</option>			
+								{foreach from=$region_lv2 item=region}
+								<option value="{$region.name}" rel="{$region.id}" {if $region.selected}selected="selected"{/if}>{$region.name}</option>
+								{/foreach}
+							</select>
+              <select name="city" class="select-h" id="city">				
+								<option value="" rel="0">请选择城市</option>
+								{foreach from=$region_lv3 item=region}
+								<option value="{$region.name}" rel="{$region.id}" {if $region.selected}selected="selected"{/if}>{$region.name}</option>
+								{/foreach}
+							</select>
+              </span>			  
+            </div>
+ 		    		<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex sh_xq" >详细地址:</label>
+              <span style="float:left;margin-top:15px;">
+			  			<textarea name="address"  colspan=5 style="width:280px;outline:none;">{$consignee_info.address}</textarea>
+              </span>
+		    		</div> 
+		     		<div style="clear:both;height:20px;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex sh_xq"   name="zip" value="{$consignee_info.zip}">邮编:</label>
+              <input type="email" class="form-control input_width" >
+			   
+            </div>
+						<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex sh_xq" >手机:</label>
+              <input type="text" class="form-control input_width" name="mobile" value="{$consignee_info.mobile}">
+			   
+            </div>
+			  		<div style="clear:both;"><br></div>
+			 </div>
+			 {/if}
+			{/if}
+		  </div>
+		  <div class="sur_xm_con_left_b">
+		     <p>回报内容</p>
+			  <div class="sur_xm_con_left_b_con">
+			    {function name="nl2br" v=$deal_item.description}
+			    </div>
+		  </div>
+		  	 <div class="sur_xm_con_left_b">
+		     <p>参与感言</p>
+			  <div class="sur_xm_con_left_b_con">
+			      <textarea name="memo" rows="3" cols=100% placeholder="支持！加油！" class="textarea_con" style="margin-bottom:20px;"></textarea> 
+			  </div>
+		  </div>
+		  	<div style="clear:both;"></div>
+		     <a id="stand_by" class="sub">提交</a>
+					<input type="hidden" name="id" value="{$deal_item.id}" />
+					<input type="hidden" name="ajax" value="1" />
+		  
+	  </div>
+	   <div class="sur_xm_con_right">
+           <div class="banner_c">
+		    <ul>
+			    <li style="box-shadow:0 0 5px #000"> 
+				   <div class="banner_d">
+				   	<a href="{url r="deal#show" p="id=$deal_info.id"}" title="{$deal_info.name}" target="_blank">
+						<img src="{if $deal_info.image eq ''}{$TMPL}/images/empty_thumb.gif{else}{function name="get_spec_image" v=$deal_info.image w="300" h="340" g="1"}{/if}"  border="0" width="300px" height="340px"/>
+						</a>
+					  <div class="banner_d_a">
+					     <span class="banner_d_a_left" style="float:none;"><a href="{url r="deal#show" p="id=$deal_info.id"}" title="{$deal_info.name}">{$deal_info.name}</a></span>
+					  </div>
+					</div>
+					 <div class="banner_d_b">
+					    <div style="width:100%;margin-left:2%;position:relative;">
+		                   <div class="progress" style="width:240px;margin-top:5%;">
+		                   			{if $deal_info.percent > 100}
+		                   			<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:100%;">
+                            </div>
+                            {else}
+                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_info.percent}%;">
+                            </div>
+                            {/if}
+				 
+				          </div>
+				          <span style="color:#666666;font-size:14px;position:absolute;top:5%;right:0;padding-right:5%;color:#ff7800">{$deal_info.percent}%</span>
+				        </div>
+                         <table width="100%">
+						     <tr>
+							    <td style="font-size:18px;color:#ff7800;">￥{function name="round" v=$deal_info.limit_price e=2}</td>
+								<td style="font-size:18px;color:#333333">￥{function name="round" v=$deal_info.support_amount e=2}</td>
+								<td style="font-size:18px;color:#333333">
+									{if $deal_info.begin_time > $now}
+										未上线
+									{elseif $deal_info.end_time < $now and $deal_info.end_time neq 0}
+										已过期
+									{else}
+										{if $deal_info.end_time eq 0}
+										长期项目
+										{else}
+										<font>{$deal_info.remain_days}</font>天
+										{/if}
+									{/if}
+									</td>
+							 </tr>
+							 <tr>
+							  <td style="color:#999999;font-size:14px;">目标</td>
+								<td style="color:#999999;font-size:14px;">已筹</td>
+								<td style="color:#999999;font-size:14px;">剩余时间</td>
+							 </tr>
+						 </table>						
+					 </div>
+				</li>
+				
+			
+			</ul>
+		  </div> 	   
+	   </div>
+		</form>
+ </div>
+</div>
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+{include file="inc/footer.html"}

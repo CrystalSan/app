@@ -1,0 +1,204 @@
+{include file="inc/header.html"} 
+<script type="text/javascript" src="{$TMPL}/js/news.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/discover.js"></script>
+<div style="clear:both;"></div>
+
+ <div class="xm_lista">
+   <div class="set_bottom" style="padding-bottom:0px;">
+	<div class="setpay">
+	   <ul>
+	   	<li {if ACTION_NAME eq 'index'}class="select"{/if}>
+				<a href="{url r="news"}">最新动态</a>
+			</li>
+			<li {if ACTION_NAME eq 'fav'}class="select"{/if}>
+				<a href="{url r="news#fav"}">我关注的项目动态</a>
+			</li>
+	   </ul>
+    </div>
+  </div>
+  <div class="set_bottom" style="padding-bottom:0px;">
+	 <div class="seta_a">
+	    <div class="seta_a_left">
+	    	{foreach from=$log_list item=log_item}
+	    	<div class="deal_update" id="post_{$log_item.id}">
+			    <div class="seta_a_left_a">
+				  <div class="banner_h" style="width:200px;float:left;">
+			        <ul>
+					 <li> 
+					   <div class="banner_d" style="width:200px;">
+					      <a href="{url r="deal#show" p="id=$log_item.deal_info.id"}" target="_blank" title="{$log_item.deal_info.name}"><img src="{function name="get_spec_image" v=$log_item.deal_info.image w=200 h=240 g=1}" border=0 width=200 height=240px></a>
+						  <div class="banner_d_a">
+						     <span class="banner_d_a_left" style="width:200px;"><a href="{url r="deal#show" p="id=$log_item.deal_info.id"}" target="_blank" title="{$log_item.deal_info.name}">
+						{function name="msubstr" v=$log_item.deal_info.name b=0 e=25}
+					</a></span>
+						  </div>
+						</div>
+						 <div class="banner_d_b">
+						    <div style="width:100%;margin-left:2%;position:relative;">
+                   <div class="progress" style="width:160px;margin-top:5%;">
+										{if $log_item.deal_info.percent > 100}			                  
+                         <div class="progress-bar" role="progressbar" aria-valuenow="60" 
+                            aria-valuemin="0" aria-valuemax="100" style="width:100%;">
+                        </div>
+                    {else}
+                    <div class="progress-bar" role="progressbar" aria-valuenow="60" 
+                            aria-valuemin="0" aria-valuemax="100" style="width:{$log_item.deal_info.percent}%;">
+                        </div>
+                    {/if}
+					 
+					          </div>
+					          <span style="color:#666666;font-size:14px;position:absolute;top:5%;right:0;padding-right:5%;color:#ff7800">{$log_item.deal_info.percent}%</span>
+					        </div>
+	                         <table width="100%">
+							     <tr>
+								    <td style="font-size:14px;color:#ff7800;">{function name="number_price_format" v=$log_item.deal_info.limit_price}</td>
+									<td style="font-size:14px;color:#333333">{function name="number_price_format" v=$log_item.deal_info.support_amount}</td>
+									<td style="font-size:14px;color:#333333">
+										{if $log_item.deal_info.begin_time > $now}
+										未上线
+										{elseif $log_item.deal_info.end_time < $now and $log_item.deal_info.end_time neq 0}
+										已过期
+										{else}
+										{if $log_item.deal_info.end_time eq 0}
+										长期项目
+										{else}
+										<font>{$log_item.deal_info.remain_days}</font>天
+										{/if}
+										{/if}
+								</td>
+								 </tr>
+								 <tr>
+								  <td style="color:#999999;font-size:14px;">目标</td>
+									<td style="color:#999999;font-size:14px;">已筹</td>
+									<td style="color:#999999;font-size:14px;">剩余时间</td>
+								 </tr>
+							 </table>						
+						 </div>
+					</li>
+			     	</ul>
+			       </div>
+				
+				</div>
+			   <div class="seta_a_left_b">
+			     <h4 style="font-weight:bold;"><a href="{url r="deal#updatedetail" p="id=$log_item.id"}" >{function name="msubstr" v=$log_item.log_info b=0 e=30}</a></h4>
+			      <p style="border-bottom:1px solid #d3cccc"><a href="{url r="home" p="id=$log_item.user_id"}" style="font-size:14px;" >{$log_item.user_name}</a> <a href="javascript:void(0);" onclick="send_message({$log_item.user_id});"><img src="{$TMPL}/images/sixin.png" border=0></a><span style="float:right;color:#d3cccc">{$log_item.pass_time}</span></p>
+			       <p>{function name="nl2br" v=$log_item.log_info}</p>
+						{if $log_item.image neq ''}
+						<img src="{function name="get_spec_image" v=$log_item.image w=520 h=400}" />
+						{/if}
+				   <p>
+				   	{if $log_item.comment_count gt 0}
+						<a href="javascript:void(0);" class="swap_comment" style="text-decoration:none;float:right;" id="comment_{$log_item.id}_tip">评论({$log_item.comment_count})</a>
+						{else}
+						<a href="javascript:void(0);" class="swap_comment" style="text-decoration:none;float:right;" id="comment_{$log_item.id}_tip">发表评论</a>
+						{/if}
+				   	</p>
+				     <div style="clear:both;height:10px;"></div>
+				    <div id="post_{$log_item.id}_comment" {if $log_item.comment_count eq 0}style="display:none;"{/if} class="seta_a_left_c">
+				    	<form name="comment_{$log_item.id}_form"  rel="{$log_item.id}" class="comment_form" action="{url r="deal#save_comment" p="log_id=$log_item.id&deal_id=$log_item.deal_info.id"}">		
+					    <textarea rows=2 cols=30 name="content">发表评论</textarea>
+								<input type="hidden" name="ajax" value="1" />
+									<input type="hidden" name="syn_weibo" value="0" />
+						<p style="float:right;"><a href="javascript:void(0);" class="send_btn" style="background:#ff7800;padding:5px 20px;text-decoration:none;color:#fff;">发送</a></p>
+							</form>
+					  <div style="clear:both;height:10px;"></div>
+						<div id="deal_comment_list_{$log_item.id}">
+							{if $log_item.comment_list}
+								{foreach from=$log_item.comment_list item=comment_item}
+									<p>{function name="show_avatar" p="$comment_item.user_id" t="small"}
+										<a href="{url r="home" p="id=$comment_item.user_id"}" style="color:#ff7800;text-decoration:none;">{$comment_item.user_name}:</a>&nbsp;{function name="nl2br" v=$comment_item.content} &nbsp;&nbsp;
+									<r style="color:#7a7575">{function name="pass_date" v=$comment_item.create_time}</r></p>
+										<p>{if $comment_item.user_id eq $user_info.id}
+										<a href="{url r="deal#delcomment" p="id=$comment_item.id"}" class="delcomment" style="text-decoration:none;">删除</a>
+										{/if}
+										<a href="javascript:void(0);" class="replycomment" style="text-decoration:none;" rel="{$comment_item.id}">回复</a>
+									</p>
+									<div id="reply_box_{$comment_item.id}">
+											<form name="comment_{$log_item.id}_form" rel="{$comment_item.log_id}" class="comment_form" action="{url r="deal#save_comment" p="log_id=$comment_item.log_id&deal_id=$comment_item.deal_id&pid=$comment_item.id"}">
+											<textarea name="content" rows=2 cols=30>回复 {$comment_item.user_name}:</textarea>
+											<input type="hidden" name="ajax" value="1" />
+											<input type="hidden" name="comment_pid" value="{$comment_item.id}" />
+												<input type="hidden" name="syn_weibo" value="0" />
+										<p style="float:right;"><a href="javascript:void(0);" class="ui-button" style="background:#ff7800;padding:5px 20px;text-decoration:none;color:#fff;">发送</a></p>
+											</form>
+									</div>
+								{/foreach}
+							{/if}
+						</div>
+					</div>
+					</div>
+				</div>
+		     <div style="clear:both;"></div>
+					{/foreach}
+		     <div style="clear:both;"></div>
+		     
+			<div class="ajax_loading_log" id="pin_loading" rel="{$ajaxurl}">加载更多动态</div>
+			  <div class="fy2"> 
+                <ul>
+                   {$pages}
+                 </ul>
+        </div>	
+		</div>
+		
+		
+		
+		
+		
+		
+		
+		<div class="seta_a_right" >
+		
+		   <p style="float:left;border-bottom:1px solid #d3cccc;height:40px;padding:10px 0">
+		   <h4 style="font-weight:bold;float:left;">你可能感兴趣的项目</h4>
+		   <a href="javascript:void(0);" id="chang_rand" rel="{url r="ajax#randdeal"}" style="float:right;line-height:30px;text-decoration:none;color:#ff7800;margin-right:20px;">换一换</a>
+		   </p>
+		   {foreach from=$rand_deals item=deal_item}
+		   <dl class="xm_exchange">
+		      <dt>
+		      		<a href="{url r="deal#show" p="id=$deal_item.id"}" title="{$deal_item.name}" target="_blank">
+								<img src="{function name="get_spec_image" v=$deal_item.image w=50 h=50 g=1}" />
+							</a>
+					</dt>
+			  	<dd>
+			  		<a href="{url r="deal#show" p="id=$deal_item.id"}" title="{$deal_item.name}" target="_blank" class="linkgreen">
+								{function name="msubstr" v=$deal_item.name b=0 e=10}	
+							</a>
+			  	</dd>
+		   </dl>
+		   {/foreach}
+		   <p style="float:left;border-bottom:1px solid #d3cccc;height:40px;padding:10px 0;">
+		   <h4 style="font-weight:bold;float:left;">热门推荐</h4>
+		   </p>	
+           <div style="clear:both;"></div>
+		    <ul class="xm_exchangea">
+			   <li><a href="{url r="index"}" >推荐项目</a></li>
+			   <li><a href="{url r="deals" p="r=new"}"  >最新上线</a></li>
+			   <li><a href="{url r="deals" p="r=nend"}"  >即将结束</a></li>
+			</ul>
+
+
+		   <p style="float:left;border-bottom:1px solid #d3cccc;height:40px;padding:10px 0;">
+		   <h4 style="font-weight:bold;float:left;">更多类别</h4>
+		   </p>
+           <div style="clear:both;"></div>
+		    <ul class="xm_exchangea">
+		    	{foreach from=$cate_list item=cate_item}
+					{if $cate_item.pid eq 0}
+						<li><a href="{url r="deals" p="id=$cate_item.id"}">{$cate_item.name}</a></li>
+						
+					{/if}
+					{/foreach}
+			</ul>
+			<div style="clear:both;height:30px;"></div>
+		</div>
+	 
+	 </div>
+ </div>
+</div>
+
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+{include file="inc/footer.html"}

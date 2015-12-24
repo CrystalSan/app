@@ -1,0 +1,96 @@
+{include file="inc/header.html"} 
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>修改邮箱</span>
+		   
+	 </div>
+	 {if $step eq 1}
+    <div class="about_b_c">
+       <p style="margin-top:30px;margin-bottom:30px;color:#ff7800;font-weight:bold;font-size:24px;">恭喜您邮件发送成功<p>
+	   <p style="font-weight:bold;font-size:24px;">下一步，验证您的Email<p>
+	   <p>我们发送了一封验证邮件到<r style="color:#ff7800;">{$user_email}</r>，请到您的邮箱收信，并点击其中的链接验证您的邮箱。<p>   
+	   	{if $gocheck_url neq ''}
+        <div class="form-group logo_table">
+                <a target="_blank" href="{$gocheck_url}" class="button_login1">立刻去邮箱激活账户</a>
+	   		</div>
+	   	{/if}
+	   <P style="font-weight:bold;">收不到邮件？</p>
+	   <p>有可能被误判为垃圾邮件了，请到垃圾邮件文件夹找找。</p>
+	   <p>用 {$user_email} 向 zhigang.yang@xinlechou.com 发送一封任意内容的邮件，几分钟后即可直接登录。</p>
+	 </div>
+	 {elseif $step eq 2}
+	 <div class="about_b_c">
+	 		<form class="ajax_form" action="{url r="settings#mail_change_1" }">
+           <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;">新邮箱:</label>
+							<input type="text" id="settings-email" value=""  class="form-control input_width" name="email"  style="width:310px;"/>
+           </div>
+		   		 <div class="form-group logo_table">
+                <a href="javascript:void(0);" class="ui-button button_login">发送验证</a>
+							<input type="hidden" value="1" name="ajax" />
+							<input type="hidden" value="2" name="step" />
+           </div>	
+			 </form>
+	 </div>
+	 {else}
+    <div class="about_b_c">
+       <form class="ajax_form" action="{url r="settings#mail_change_1" }">
+           <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="font-size:16px;">邮箱:</label>
+							<input type="text" id="settings-email" value="{$user.email}"  disabled="true" class="form-control input_width" name="email_show" />
+ 							<input type="hidden" name="email" value="{$user.email}">
+           </div>
+		   		 <div class="form-group logo_table">
+                <a href="javascript:void(0);" class="ui-button button_login">下一步</a>
+							<input type="hidden" value="1" name="ajax" />
+							<input type="hidden" value="1" name="step" />
+           </div>	
+			 </form>
+	 </div>
+	 {/if}
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

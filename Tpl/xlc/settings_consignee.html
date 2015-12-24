@@ -1,0 +1,225 @@
+{include file="inc/header.html"}
+<script type="text/javascript" src="{$TMPL}/js/consignee.js"></script>
+<script type="text/javascript" src="./system/region.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/switch_city.js"></script>
+<script>
+    var list = [];
+</script>
+<style>
+    .setting_box{
+        padding:20px 0;
+        margin:0 100px;
+        display:none;
+    }
+    .abo_id{text-align: left;}
+    .abo_id section{margin: 2%;}
+    .abo_id_top{
+        font-size: 18px;
+    }
+    .abo_id_right{
+        float: right;
+    }
+    .abo_id_right a{
+        /*font-style: normal;*/
+        color: #000;
+        /*margin-left: 5%;*/
+    }
+    #showAddNewAddress{
+        display: inline-block;
+        height: 40px;
+        margin: 3% auto;
+        text-align: center;
+    }
+    .abo_id_bottom span,.isdefault_ckb label{
+        background-image: url("{$TMPL}/images/ui-check.png");
+        background-repeat: no-repeat;
+        background-size: 22px;
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        padding-left: 30px;
+        background-position: 0 3px;
+    }
+    .abo_id_bottom span.onchecked,.isdefault_ckb label.onchecked{
+        background-position: 0 -30px;
+    }
+    .light-tips{
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: none;
+        width: 55%;
+        height: 50px;
+        margin: auto;
+        -webkit-border-radius: 1px;
+        -moz-border-radius: 1px;
+        border-radius: 1px;
+        background: #fff;
+        text-align: center;
+        line-height: 50px;
+        opacity: 0.9;
+        z-index: 99999999;
+    }
+    .con_direct_top,.dialog-button{
+        width:100%;
+        color:#977f70;
+        font-size:16px;
+        font-weight:bold;
+        position:relative;
+        height:50px;
+        line-height:50px;
+        border-bottom:1px solid #977f70;
+        text-align:center;
+        margin:0 auto;
+    }
+    .dialog-box .dialog-button {padding-top: 0}
+    .dialog-button input{
+        color:#977f70;
+        height:50px;
+        line-height:50px;
+        background: transparent;
+    }
+    .con_direct_top img{
+        position:absolute;
+        top:-18px;right:-25px;
+    }
+    .con_direct_bottom{
+        width:100%;
+        margin:0 auto;
+        text-align:center;
+        padding: 5px;
+    }
+    .addNewAddress{
+        text-align: left;
+        margin-top: 2%;
+    }
+    .addNewAddress p{
+        padding: 5px 0 5px 7%;
+    }
+    .addNewAddress p span{
+        width: 25%;
+        display: inline-block;
+    }
+
+</style>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+    <div class="about_a_left_pub" style="height: 100%;">
+        {include file="inc/account_left.html"}
+        <!--网站左侧下拉结束-->
+    </div>
+<div class="about_a_right">
+    <div class="about_a_right_a">
+        <span>个人设置</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;地址管理</span>
+
+    </div>
+		<div class="about_b_c">
+            {if $consignee_list}
+            {foreach from=$consignee_list item=consignee_item}
+            <script>
+                list[{$consignee_item.id}] = {consignee:'{$consignee_item.consignee}',mobile:'{$consignee_item.mobile}',province:'{$consignee_item.province}',city:'{$consignee_item.city}',address:'{$consignee_item.address}',zip:'{$consignee_item.zip}',is_default:'{$consignee_item.is_default}'};
+            </script>
+            <div class="abo_id" data-id="{$consignee_item.id}">
+                <section>
+                <div class="abo_id_top">
+                    <name>{$consignee_item.consignee}</name>
+                    <moblie>{$consignee_item.mobile}</moblie>
+                </div>
+                <div class="abo_od_middle">
+                    <p>{$consignee_item.province}{$consignee_item.city} {$consignee_item.address} {$consignee_item.zip}</p>
+                </div>
+                <div class="abo_id_right">
+                    <a href="javascript:void(0);" class="editConsignee">修改</a>
+                    <a href="javascript:void(0);" class="delConsignee">删除</a>
+                </div>
+                <div class="abo_id_bottom setDefault">
+                    {if $consignee_item.is_default}
+                    <span class="onchecked">当前默认地址</span>
+                    {else}
+                    <span>设为默认地址</span>
+                    {/if}
+                </div>
+                    </section>
+            </div>
+            {/foreach}
+            <div style="clear:both;"></div>
+            {else}
+            <div class="empty_tip">还未设置任何配送地址</div>
+            {/if}
+    </div>
+    <div id="showAddNewAddress" url="{url r="settings#add_consignee"}">
+        <div class="ui-button theme_bgcolor" rel="green" >
+            <span>添加配送地址</span>
+        </div>
+    </div>
+</div>
+		</div>
+<div class="light-tips"></div>
+<!--中间结束-->
+<div style="clear:both;"></div>
+<!--网站左侧下拉-->
+<script type="text/javascript">
+    $(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+    $(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+    $(function(){
+        $(".leftsidebar_box dd").hide();
+        $(".leftsidebar_box dt").click(function(){
+            $(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+            $(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+            $(this).parent().find('dd').removeClass("menu_chioce");
+            $(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+            $(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+            $(".menu_chioce").slideUp();
+            $(this).parent().find('dd').slideToggle();
+            $(this).parent().find('dd').addClass("menu_chioce");
+        });
+        $(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+        $(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+        $(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+        $(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+        $(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+    })
+    window.onload = function(){
+        //$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+        $(".about_a").css('height', document.body.clientHeight);
+    };
+</script>
+<div id="addNewAddress" style="display:none;">
+    <div class="con_direct_top">
+        添加新地址
+    </div>
+    <div class="con_direct_bottom">
+        <div class="addNewAddress">
+            <form id="addNewAddressForm">
+                <p><span>*收件人：</span><input type="text" name="consignee" placeholder="请填写收件人姓名"></p>
+                <p><span>*地区：</span>
+                          <!--<span><em id="provinceValue">请选择省份</em>-->
+                          <select name="province" id="province" class="selectStyle">
+                              <option value="" rel="0">请选择省份</option>
+                              {foreach from=$region_lv2 item=region}
+                              <option value="{$region.name}" rel="{$region.id}">{$region.name}</option>
+                              {/foreach}
+                          </select></span>
+                          <!--<span><em id="cityValue">请选择城市</em>-->
+                          <select name="city" id="city" class="selectStyle">
+                              <option value="" rel="0">请选择城市</option>
+                              {foreach from=$region_lv3 item=region}
+                              <option value="{$region.name}" rel="{$region.id}">{$region.name}</option>
+                              {/foreach}
+                          </select></span>
+                <p><span>*详细地址：</span><input type="text" name="address" placeholder="请填写详细地址"></p>
+                <p><span>&nbsp;&nbsp;邮编：</span><input type="text" name="zip" placeholder="请填写邮编"></p>
+                <p><span>*手机：</span><input type="text" name="mobile" placeholder="请填写手机号"></p>
+                <p class="isdefault_ckb"><label for="isdefault">是否设为默认地址</label><input type="checkbox" name="isdefault" id="isdefault" hidden="hidden"></p>
+                <!--隐藏input，用于保存参数-->
+                <input id="area" hidden="hidden">
+                <!--<input name="id" hidden="hidden" value="{$user_info.id}">-->
+                <!--<p class="tips"></p>-->
+            </form>
+        </div>
+    </div>
+</div>
+    {include file="inc/footer.html"}

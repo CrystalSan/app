@@ -1,0 +1,212 @@
+{include file="inc/header.html"}
+
+<script type="text/javascript" src="{$TMPL}/js/deal_list.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height:100%">
+  	{include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>我的资金</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;我的冻结资金列表</span>
+	 </div>
+     <div class="about_b_c">
+        <div class="xm_style">
+        	<form method="post" action="{url r="account#dongjie" }" id="account_dongjie">
+		   <p>项目类型：<select class="select_opt" name="search_type" id="phase_id">
+		   	{if app_conf("INVEST_STATUS")eq 0 }	
+					<option value="-1" {if $search_type eq -1}selected="selected"{/if}>请选择</option>
+					<option value="0" {if $search_type eq 0}selected="selected"{/if}>普通众筹</option>
+	        <option value="1" {if $search_type eq 1}selected="selected"{/if}>股权众筹</option>  
+				{/if}
+				{if app_conf("INVEST_STATUS")eq 1 }	
+					<option value="-1" {if $search_type eq -1}selected="selected"{/if}>请选择</option>
+					<option value="0" {if $search_type eq 0}selected="selected"{/if}>普通众筹</option>
+				{/if}
+				{if app_conf("INVEST_STATUS")eq 2 }	
+					<option value="-1" {if $search_type eq -1}selected="selected"{/if}>请选择</option>
+					<option value="1" {if $search_type eq 1}selected="selected"{/if}>股权众筹</option>  
+				{/if}
+		   	</select> 项目名称：<input type="text" size=40 id="deal_search_name" style="border:1px solid #7e7e7e" name="search_name" value="{$search_name}"/> <a href="javascript:void(0);" class="shaixuan" name="submit_form" id="screening" onclick="bind_dongjie_form();">筛选</a></p>
+		</div>
+        <div style="clear:both;"></div>
+        {if $deal_list}
+		
+       <table class="tableborder"  cellpadding=0 cellspacing=0>
+				 <tr class="tr_title">
+				  <td >项目名称</td>
+					<td >可发放金额</td>
+					<td >项目状态</td>
+					<td >放款状态</td>
+					<td >申请放款状态</td>
+					<td>已放款金额</td>
+					<td>操作</td>
+				 </tr>
+			 	{foreach from=$deal_list item=deal_item}
+				 <tr class="tr_height">
+				    <td width=30% class="td_left">
+				    	<a href="{url r="deal#show" p="id=$deal_item.id"}" target="_blank" title="{$deal_item.name}"><img src="{function name="get_spec_image" v=$deal_item.image w=60 h=60 g=1}"  alt="{$deal_item.name}" border=0 width=60 height=60/></a>
+						  &nbsp;&nbsp;
+							<a href="{url r="deal#show" p="id=$deal_item.id"}" target="_blank" title="{$deal_item.name}" style="text-decoration:none;color:#8a8888;">{function name="msubstr" v=$deal_item.name b=0 e=25}</a>
+						</td>
+						<td width=10%>{$deal_item.pay_amount}</td>
+						<td width=10%>
+							{if $deal_item.is_effect eq 0}
+								{if $deal_item.is_edit eq 1}
+									准备中
+								{else}
+									等待审核
+								{/if}
+							{elseif $deal_item.is_effect eq 2}
+									未通过{if $deal_item.refuse_reason},<a href="javascript:void(0);" class="refuse_reason" rel="{$deal_item.id}">查看理由</a>{/if}
+							{else}
+							{if $deal_item.type eq 1}
+								{if $deal_item.is_success eq 1}
+									{if $deal_item.begin_time > $now}未开始{/if}
+									{if $deal_item.end_time < $now and $deal_item.end_time neq 0 and $deal_item.pay_end_time>$now }已成功{/if}
+									{if $deal_item.pay_end_time<$now}已成功{/if}
+									{if $deal_item.begin_time < $now and ($deal_item.end_time > $now or $deal_item.end_time eq 0)}已成功{/if}
+								{else}
+									{if $deal_item.begin_time > $now}未开始{/if}
+									{if $deal_item.end_time < $now and $deal_item.end_time neq 0 and $deal_item.pay_end_time>$now}支付阶段{/if}
+									{if $deal_item.pay_end_time<$now}未成功{/if}
+									{if $deal_item.begin_time < $now and ($deal_item.end_time > $now or $deal_item.end_time eq 0)}融资中{/if}
+								{/if}
+							{else}
+								{if $deal_item.is_success eq 1}
+									{if $deal_item.begin_time > $now}未开始{/if}
+									{if $deal_item.end_time < $now and $deal_item.end_time neq 0}已成功{/if}
+									{if $deal_item.begin_time < $now and ($deal_item.end_time > $now or $deal_item.end_time eq 0)}已成功{/if}
+								{else}
+									{if $deal_item.begin_time > $now}未开始{/if}
+									{if $deal_item.end_time < $now and $deal_item.end_time neq 0}未成功{/if}
+									{if $deal_item.begin_time < $now and ($deal_item.end_time > $now or $deal_item.end_time eq 0)}进行中{/if}
+								{/if}
+							{/if}
+						{/if}	
+						</td>
+						<td width=10%>{if $deal_item.pay_amount>$deal_item.paid_money}可放款{else}已放款{/if}</td>
+						<td width=15%>{if $deal_item.apply_pay_num > 0}已申请{else}未申请{/if}</td>
+						<td width=10%>{$deal_item.paid_money}</td>
+						<td width=15%>
+							{if $deal_item.can_apply eq 1}<a href="{url r="account#to_pay" p="id=$deal_item.id"}" style="text-decoration:none;">申请放款</a></br>{/if}
+							<a href="{url r="account#paid" p="id=$deal_item.id"}" style="text-decoration:none;">放款记录</a>
+						</td>
+				 </tr>
+				 {/foreach}
+		 	 </table>
+		 
+              <div style="clear:both;"></div>
+			  <div class="fy2" style="width:100%;padding-top:30px;"> 
+                {$pages}
+           </div>
+           
+        {else}
+	    		<p style="margin:20px 0;">从未创建过项目<a href="{url r="account#project"}" style="text-decoration:none;">查看我的项目</a></p>
+				{/if}
+	 </div>
+
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+<script>
+	$(function(){
+		funSelect("#search_type_select","#search_type_cur",'#search_type_select option:selected');
+ 		$(".refuse_reason").bind("click",function(){
+			var ajaxurl = APP_ROOT+"/index.php?ctl=ajax&act=refuse_reason";
+ 			var obj=new Object();
+			obj.deal_id=$(this).attr("rel");
+			$.ajax({ 
+				url: ajaxurl,
+				data:obj,
+				type: "POST",
+				dataType: "json",
+				success: function(data){
+					if(data.status==1){
+						$.weeboxs.open(data.info, {boxid:'fanwe_success_box',contentType:'text',showButton:true, showCancel:false, showOk:true,title:'未通过原因',width:250,type:'wee'});
+					}else{
+						$.showErr(data.info);
+					}
+					
+					
+				}
+			});
+		});
+	});
+	
+	function bind_project_form()
+	{	
+			$("#account_project").submit();
+	}
+	
+</script>
+<!--网站左侧下拉-->
+<script type="text/javascript" src="{$TMPL}/js/jqueryleft.js"></script>
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight+140);
+};
+</script>
+<script>
+	$(function(){
+		funSelect("#search_type_select","#search_type_cur",'#search_type_select option:selected');
+ 		$(".refuse_reason").bind("click",function(){
+			var ajaxurl = APP_ROOT+"/index.php?ctl=ajax&act=refuse_reason";
+ 			var obj=new Object();
+			obj.deal_id=$(this).attr("rel");
+			$.ajax({ 
+				url: ajaxurl,
+				data:obj,
+				type: "POST",
+				dataType: "json",
+				success: function(data){
+					if(data.status==1){
+						$.weeboxs.open(data.info, {boxid:'fanwe_success_box',contentType:'text',showButton:true, showCancel:false, showOk:true,title:'未通过原因',width:250,type:'wee'});
+					}else{
+						$.showErr(data.info);
+					}
+					
+					
+				}
+			});
+		});
+	});
+	
+	function bind_dongjie_form()
+	{	
+			$("#account_dongjie").submit();
+	}
+	
+</script>
+{include file="inc/header.html"} 

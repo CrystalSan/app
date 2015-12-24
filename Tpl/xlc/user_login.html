@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+ <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+<title>{if $page_title neq ''}{$page_title} - {/if}{$site_name} - {$seo_title}</title>
+<meta name="keywords" content="{if $page_seo_keyword neq ''}{$page_seo_keyword}{else}{$seo_keyword}{/if}" />
+<meta name="description" content="{if $page_seo_description neq ''}{$page_seo_description}{else}{$seo_description}{/if}" />
+    <!-- Bootstrap -->
+
+<script type="text/javascript">
+	var APP_ROOT = '{$APP_ROOT}';
+	var LOADER_IMG = '{$TMPL}/images/lazy_loading.gif';
+	var ERROR_IMG = '{$TMPL}/images/image_err.gif';
+	{if app_conf("APP_MSG_SENDER_OPEN") eq 1}
+	var send_span = {function name="app_conf" v="SEND_SPAN"}000;
+	{/if}
+</script>
+    <link href="{$TMPL}/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+	<link href="{$TMPL}/css/style.css" type="text/css" rel="stylesheet">
+<link href="{$TMPL}/css/weebox.css" rel="stylesheet">
+<script type="text/javascript" src="{$TMPL}/js/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.bgiframe.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.weebox.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/jquery.pngfix.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/lazyload.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/script.js"></script>
+{if APP_MSG_SENDER_OPEN==1}
+<script type="text/javascript" src="{$TMPL}/js/msg_sender.js"></script>
+{/if}
+{if HAS_DEAL_NOTIFY>0}
+<script type="text/javascript" src="{$TMPL}/js/notify_sender.js"></script>
+{/if}
+<script type="text/javascript" src="{$TMPL}/js/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/ajax_user_login.js"></script>
+<!--[if IE 6]>
+	<script src="{$TMPL}/js/DD_belatedPNG_0.0.8a-min.js"></script>
+	<script>
+	DD_belatedPNG.fix('.banner .btn_tit ul li.on , .banner .btn_tit ul li , .mx_1 , .mx_2 , .mx_3 , .mx_4 , .xzdq1 , .zcz , .timeline-left-gray , .deal_log_title .title , .timeline-comment-top , .timeline-start span , .pageleft a , .dz , .kj , .boxaddress , .xzdq , .con6 .sub , .fx i , .attention_focus_deal i , .head_down_icon , .banner .prev , .banner .next , .mxr_1 , .mxr_2 , .mxr_3 , .shenhe .shenhe_info li , .mod_title i , .box4 .mod_cont3 .leader_t , .box4 .mod_cont3 .leader_w , .box4 .mod_cont3 .leader_r , .box4 .mod_cont3 .leader_x , .box4 .mod_cont3 .leader_p , .step_box , .pageleft a i , .invester_all .col_a , .article_l li.on , .article_box .article_r_list h3'); 
+	</script>
+<![endif]-->
+	<!--焦点图代码结束-->
+ </head>
+ <body>
+   <div class="top_logina">
+      <div class="top_logoa">
+	     <a href="{$APP_ROOT}/"><img src="{$TMPL}/images/logo.png" border=0></a>
+	  </div>
+   </div>
+   <div class="top20"><img src="{$TMPL}/images/toplogin.png"></div>
+   <div class="login">
+         <form id="user_login_form" name="user_login_form" action="{url r="user#do_login"}">
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">手机号:</label>
+              <input type="text" class="form-control input_width" name="email" id="email" placeholder="用户名或者手机号">
+           </div>
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">密码:</label>
+              <input type="password" class="form-control input_width" name="user_pwd" id="user_pwd" placeholder="填写密码">
+			   <a class="forget_pwd" href="{url r="user#getpassword"}">忘记密码？</a>
+            </div>
+				<input type="hidden" value="1" name="ajax" />
+			<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+                <a href="javascript:void(0);" id="submit_form" class="button_login">登录</a>
+			     <a href="{url r="user#register"}" class="button_register">注册</a>
+			
+            </div>
+        </form>
+   </div>
+ <script type="text/javascript">
+	$(document).ready(function(){
+		resetWindowBox();
+	});
+</script>
+
+{include file="inc/footer.html"}

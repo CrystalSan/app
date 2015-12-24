@@ -1,0 +1,133 @@
+{include file="inc/header.html"}
+
+<script type="text/javascript" src="{$TMPL}/js/deal_list.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/account_support.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>{$deal_info.name}支持记录</span>
+		   
+	 </div>
+	 {if $support_list}
+    <div class="about_b_c">
+       <table cellpadding="0" cellspacing="0"  width="90%" class="table_pay_table_con" style="margin:0 auto;text-align:center;margin-top:20px;border-color:#ff7800;">
+       	{foreach from=$support_list item=support_item}
+	       <tr class="table_pay">
+		      <td class="table_pay_a">支持者</td>
+			  <td>{$support_item.user_name}</td>
+			  <td class="table_pay_a">支持金额</td>
+			   <td>{if $support_item.delivery_fee gt 0}
+					{function name="format_price" v=$support_item.deal_price}+运费{function name="format_price" v=$support_item.delivery_fee}={function name="format_price" v=$support_item.total_price}
+					{else}
+					{function name="format_price" v=$support_item.total_price}
+					{/if}</td>
+			    <td class="table_pay_a">下单时间</td>
+			   <td>{function name="to_date" v=$support_item.create_time}</td>
+			 
+		   </tr>
+		   {if $deal_info.type eq 1}
+			<tr>
+				<td class="data-title">出让股份</td>
+				<td width=193 class="tl">{$deal_info.transfer_share}%</td>
+				<td class="data-title">项目金额</td>
+				<td width=193 class="tl">
+					{$support_item.stock_value}元
+ 				</td>
+				<td class="data-title">用户所占股份</td>
+				<td width=193 class="tl">{$support_item.user_stock}%</td>
+				
+			</tr>
+			{/if}
+			{if $support_item.province neq '' or  $support_item.city neq ''}
+			<tr>
+				<td class="data-title">配送信息</td>
+				<td colspan="5" class="tl">
+				地址:{$support_item.province}{$support_item.city}{$support_item.address} 邮编:{$support_item.zip} 收件人:{$support_item.consignee} 电话:{$support_item.mobile}
+				</td>				
+			</tr>
+			{/if}
+			{if $support_item.support_memo neq ''}
+			<tr>
+				<td class="data-title">备注</td>
+				<td colspan="5" class="tl">{function name="nl2br" v=$support_item.support_memo}</td>				
+			</tr>
+			{/if}
+		    <tr class="table_pay_con">
+		      <td class="table_pay_a" style="color:#fff;">回报设置</td>
+			  <td colspan=6 align=center>
+			  	<form id="repay_form_{$support_item.id}" class="repay_form" action="{url r="account#save_repay" p="id=$support_item.id"}">
+			  		<input type="hidden" name="ajax" value="1" />
+			  		<textarea cols=80% rows=5 style="margin-top:20px;" name="repay_memo">{$support_item.repay_memo}</textarea>
+				 <br>
+				 <br>
+				  <p><a href="javascript:void(0);" class="set_repay pay_set_bb" id="{$support_item.id}">立即设置回报</a></p>
+				  <br>
+				  <br>
+				  <p>请设置回报内容，如需配送的请输入相应的配送信息与单号</p>
+				  </form>
+			  </td>
+		   </tr>
+		   <tr style="border:none">
+		     <td style="border:none;" colspan=7 height=20></td>
+		  </tr>
+		   {/foreach}
+	   </table>
+		  <div style="clear:both;"></div>
+			  <div class="fy2" style="margin-top:30px;"> 
+                <ul>
+                   {$pages}
+                 </ul>
+           </div>	
+     
+		   
+
+	 </div>
+		{else}
+		<div class="empty_tip">
+			没有任何支持记录
+		</div>
+		{/if}
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

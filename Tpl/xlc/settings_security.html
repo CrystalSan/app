@@ -1,0 +1,376 @@
+﻿{include file="inc/header.html"} 
+
+<style>
+	.setting_box{
+		padding:20px 0;
+		margin:0 100px;
+		display:none;
+	}
+</style>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>个人设置</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;安全信息</span>
+		   
+	 </div>
+	 
+     <div class="about_b_c">
+       <div class="abo_id">
+	       <div class="abo_id_a" style="background:url({$TMPL}/images/id.png) no-repeat left center;">
+	         <span style="margin-left:100px;">昵称</span>
+	         {if $user_info.user_name}
+			    	<span style="margin-left:87px;">已设置</span>
+			    	<span style="margin-left:300px;color:#a29b9b">{$user_info.user_name}</span>
+			     {else}
+			    	<span style="margin-left:87px;">未设置</span>
+			    <span style="margin-left:300px;color:#a29b9b"><a href="javascript:void(0);" class="J_setting" id="J_setting_user_name" style="color:#a29b9b;text-decoration:none;">{if $user_info.user_name}修改{else}设置{/if}</a></span>
+			     {/if}
+		   	</div>
+			   <div class="setting_box" id="setting-username-box">
+			   	{if !$user_info.user_name}
+			   <form class="ajax_form_user_name" action="{url r="settings#save_username"}" id="save_name" > 
+			    <div style="clear:both;"></div>
+	            <div class="form-group logo_table">
+	             <label for="name" class="logo_tex">昵称:</label>
+	             <input type="text" value="" class="form-control input_width" name="user_name" />				   
+	            </div>
+							<div style="clear:both;"></div>
+	            <div class="form-group logo_table">
+	                <a href="javascript:void(0);" class="ui-button button_login"  name="pass" id="user_name">保存昵称</a>
+								<input type="hidden" value="1" name="ajax" />
+	            </div>			
+			   </form>
+					{/if}
+			   </div>
+	   </div>
+       <div class="abo_id">
+	       <div class="abo_id_a" style="background:url({$TMPL}/images/pwd.png) no-repeat left center;">
+           <span style="margin-left:100px;">登录密码</span>
+           	{if $user_info.user_pwd}
+			    	<span style="margin-left:60px;">已设置</span>
+			    	{else}
+			    	<span style="margin-left:60px;">未设置</span>
+			    	{/if}
+			    	<span style="margin-left:300px;color:#a29b9b"><a href="javascript:void(0);" class="J_setting" id="J_setting_pwd" style="color:#a29b9b;text-decoration:none;">{if $user_info.user_pwd}修改{else}设置{/if}</a></span>
+		   </div>
+		   <div class="setting_box" id="setting-pwd-box">
+		   <form class="ajax_form_password" action="{url r="settings#save_pass"}" id="save_pass" >
+		    <div style="clear:both;"></div>
+		    		{if $user_info.user_pwd}
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">旧密码:</label>
+              <input type="password" class="form-control input_width" name="user_old_pwd">
+            </div>
+							<input type="hidden" name="change_pwd" value="1">
+							{else}
+							<input type="hidden" name="change_pwd" value="0">
+							{/if}
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">新密码:</label>
+								<input type="password" value="" class="form-control input_width" name="user_pwd" />
+            </div>	
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">确认密码:</label>
+								<input type="password" value="" class="form-control input_width" name="confirm_user_pwd" />
+            </div>	
+			<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+                <a href="javascript:void(0);" class="ui-button button_login" name="pass" id="pass">保存密码</a>
+								<input type="hidden" value="1" name="ajax" />
+								<input type="hidden" name="setting_pwd" value="1">
+            </div>			
+		   </form>
+		   </div>
+	   </div>
+	    <div class="abo_id">
+	       <div class="abo_id_a" style="background:url({$TMPL}/images/pay.png) no-repeat left center;">
+           <span style="margin-left:100px;">绑定手机</span>
+           {if $user_info.mobile}
+			    <span style="margin-left:60px;">已绑定</span>
+			    <span style="margin-left:300px;color:#a29b9b"><a href="javascript:void(0)" class="J_setting" id="J_setting_mobile" style="color:#a29b9b;text-decoration:none;">修改</a></span>
+			    {else}
+			    <span style="margin-left:60px;">未绑定</span>
+			    <span style="margin-left:300px;color:#a29b9b"><a href="javascript:void(0)" class="J_setting" id="J_setting_mobile" style="color:#a29b9b;text-decoration:none;">绑定</a></span>
+			    {/if}
+		   </div>
+			<div class="setting_box" id="setting-mobile-box">
+         <form class="ajax_form_mobile" action="{url r="settings#mobile_binding"}" >
+         	{if $user_info.mobile}
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">原手机号:</label>
+              <input type="text" class="form-control input_width" value="{function name="hideMobile" v=$user_info.mobile}" readonly>
+								<input type="hidden" id="settings-mobile-type" name="step" value="2">
+            </div>	
+		    		<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">验证码:</label>
+             <input type="text" value="" class="form-control input_test" name="verify_coder" />
+			      <a href="javascripty:void(0);" class="test_code" id="J_send_sms_verify">获取验证码</a>
+            </div>
+						<div style="clear:both;"></div>
+		    		<div class="form-group logo_table">
+             <label for="name" class="logo_tex">新手机号:</label>
+								<input type="text" id="settings-new-mobile" value="" class="form-control input_width" name="mobile" />
+							<input type="hidden" name="bind_mobile" value="0">
+            </div>
+            {else}
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">手机号:</label>
+								<input type="text" id="settings-mobile" value="" class="form-control input_width" name="mobile" />
+							<input type="hidden" id="settings-mobile-type" name="step" value="1">
+            </div>	
+		    		<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">验证码:</label>
+             <input type="text" value="" class="form-control input_test" name="verify_coder" />
+			      <a href="javascripty:void(0);" class="test_code" id="J_send_sms_verify">获取验证码</a>
+							<input type="hidden" name="bind_mobile" value="1">
+            </div>
+						<div style="clear:both;"></div>
+						{/if}
+						<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+                <a href="#" class="ui-button button_login" name="setting_mobile" id="setting_mobile">提交</a>
+            </div>
+            <input type="hidden" value="1" name="ajax" />
+        </form>
+      </div>
+	   </div>
+	    <div class="abo_id">
+	       <div class="abo_id_a" style="background:url({$TMPL}/images/phone.png) no-repeat left center;">
+           <span style="margin-left:100px;">支付密码</span>
+           {if $user_info.mobile}
+							{if $user_info.paypassword}
+					    <span style="margin-left:60px;">已设置</span>
+					    {else}
+					    <span style="margin-left:60px;" class="set_pwd">未设置</span>
+							{/if}
+							<span style="margin-left:300px;color:#a29b9b"><a href="javascript:void(0);" class="J_setting" id="J_setting_paypwd" style="color:#a29b9b;text-decoration:none;">{if $user_info.paypassword}修改{else}设置{/if}</a></span>
+						{else}
+						<span style="margin-left:60px;" class="set_pwd">请先设置手机号</span>
+						{/if}
+		   </div>
+		   <div class="setting_box" id="setting-pass-box">
+		    <form class="ajax_form_paypassword" action="{url r="settings#paypassword_binding"}">
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="width:120px;">支付密码:</label>
+             <input type="password" id="" value="" class="form-control input_width" name="paypassword" />			   
+            </div>
+			 <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="width:120px;">确认支付密码:</label>
+             <input type="password" id="" value="" class="form-control input_width" name="confirm_pypassword" />
+            </div>
+			<div style="clear:both;"></div>
+			<div style="clear:both;"></div>
+		    <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="width:120px;">手机号:</label>
+              <input type="text" class="form-control input_width"  value="{function name="hideMobile" v=$user_info.mobile}" readonly >
+            </div>			
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex" style="width:120px;">验证码:</label>
+             <input type="text" value="" class="form-control input_test" name="verify" />
+			      <a href="javascript:void(0);" class="test_code" id="J_send_sms_verify_pay" >获取验证码</a>
+            </div>
+
+			<div style="clear:both;"></div>
+            <div class="form-group logo_table">
+                <a href="javascript:void(0);" class="ui-button button_login">提交</a>
+								<input type="hidden" value="1" name="ajax" />
+								<input type="hidden" value="0" name="step" />
+            </div>
+        </form>	
+	   </div>	   
+	 </div>
+  </div>
+</div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+
+<script>
+	var code_timeer = null;
+	var code_lefttime = 0 ;
+		$(document).ready(function(){
+			{if $method}
+				$("#{$method}").show();
+			{/if}
+			
+			
+ 			$("#J_send_sms_verify").bind("click",function(){
+				send_mobile_verify_sms();
+			});	
+			$("#email_verify_code").bind("click",function(){
+				step=$(".ajax_form_email").find("input[name='step']").val();
+				if(step==1){
+					email=$(".ajax_form_email").find("input[name='email']").val();
+					send_email_verify(step,email,"#email_verify_code");
+				}else{
+					if(step==2){
+						send_email_verify(step,'',"#email_verify_code");
+					}
+				}
+ 			});
+			$("#J_send_sms_verify_pay").bind("click",function(){
+  				send_mobile_verify_sms_custom(2,'',"#J_send_sms_verify_pay");
+			});
+			//J_send_sms_verify_iden
+			$("#J_send_sms_verify_iden").bind("click",function(){
+  				send_mobile_verify_sms_custom(2,'',"#J_send_sms_verify_iden");
+			});
+			bind_ajax_form_custom(".ajax_form_user_name");
+			bind_ajax_form_custom(".ajax_form_paypassword");
+			bind_ajax_form_custom(".ajax_form_mobile");
+			bind_ajax_form_custom(".ajax_form_email");
+			bind_ajax_form_custom(".ajax_form_password");
+			//ajax_form_identify
+			bind_ajax_form_custom(".ajax_form_identify");
+			$(".ajax_form_identify").find("input[name='is_investor']").bind('click',function(){
+				$("#qy_div").toggle();
+ 				if($(this).val()==2){
+					$("#identify_name_str").html("法人身份证姓名");
+				}else{
+					$("#identify_name_str").html("个人身份证姓名");
+				}
+			});
+		})
+ 		function send_mobile_verify_sms(){
+			type=$.trim($("#settings-mobile-type").val());
+ 			if(type!=2){
+				if($.trim($("#settings-mobile").val()).length == 0)
+				{			
+		 			$.showErr("手机号码不能为空");
+					return false;
+				}
+		 		if(!$.checkMobilePhone($("#settings-mobile").val()))
+				{
+		 			$.showErr("手机号码格式错误");
+					return false;
+				}
+ 				if(!$.maxLength($("#settings-mobile").val(),11,true))
+				{
+					$.showErr("长度不能超过11位");
+					return false;
+				}
+			}
+ 			var sajaxurl = APP_ROOT+"/index.php?ctl=ajax&act=send_change_mobile_verify_code";
+ 			var squery = new Object();
+			squery.mobile = $.trim($("#settings-mobile").val());
+			squery.step =type;
+			$.ajax({ 
+				url: sajaxurl,
+				data:squery,
+				type: "POST",
+				dataType: "json",
+				success: function(sdata){
+					if(sdata.status==1)
+					{
+						code_lefttime = 60;
+						code_lefttime_func();
+						$.showSuccess(sdata.info);
+						return false;
+					}
+					else
+					{
+	 					$.showErr(sdata.info);
+						return false;
+					}
+				}
+			});	
+			
+		}
+	function code_lefttime_func(){
+		
+		clearTimeout(code_timeer);
+		$("#J_send_sms_verify").val(code_lefttime+"秒后重新发送");
+		$("#J_send_sms_verify").css({"color":"#f1f1f1"});
+		code_lefttime--;
+		if(code_lefttime >0){
+			//$("#J_send_sms_verify").attr("disabled","true");
+			code_timeer = setTimeout(code_lefttime_func,1000);
+		}
+		else{
+			code_lefttime = 60;
+			$("#J_send_sms_verify").val("发送验证码");
+ 			$("#J_send_sms_verify").css({"color":"#fff"});
+			$("#J_send_sms_verify").bind("click",function(){
+				send_mobile_verify_sms();
+			});
+		}
+		
+	}
+	
+</script>
+<script type="text/javascript">
+	$(".J_setting").bind('click',function(){
+		var setting_box = $(this).parent().parent().parent().find(".setting_box");
+		if(setting_box.is(":hidden")){
+			setting_box.slideDown(300);
+			if($(this).text()=='修改'){
+				$(this).text("取消修改");
+			}
+			if($(this).text()=='绑定'){
+				$(this).text("取消绑定");
+			}
+			if($(this).text()=='设置'){
+				$(this).text("取消设置");
+			}
+  		}
+		else{
+			setting_box.slideUp(300);
+ 			if($(this).text()=='取消绑定'){
+				$(this).text("绑定");
+			}
+			if($(this).text()=='取消修改'){
+				$(this).text("修改");
+			}
+			if($(this).text()=='取消设置'){
+				$(this).text("设置");
+			}
+		}
+	});
+</script>
+
+{include file="inc/footer.html"}

@@ -1,0 +1,449 @@
+{include file="inc/header.html"} 
+	<link href="{$TMPL}/css/jquery.sliderTabs.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="{$TMPL}/js/jquery.sliderTabs.min.js"></script>
+    <script type="text/javascript" src="{$TMPL}/js/jquery.fancybox.js"></script>
+    <script type="text/javascript" src="{$TMPL}/js/deal.js"></script>
+    <script type="text/javascript" src="{$TMPL}/js/deal_comment.js"></script>
+  
+    <script>
+       $(function(){
+	    var demo = $("div#demoSlider").sliderTabs({
+	     indicators: true,
+	     panelArrows: true,
+	     panelArrowsShowOnHover: true,
+	     tabs: false,
+	    classes: {
+		  panel: 'demoPanel'
+	     }
+	   });
+     });
+   </script>
+<style>
+	.fx, .attention_focus_deal {
+    height: 30px;
+    line-height: 30px;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    text-align: left;
+}
+	.nc {
+		overflow: hidden;
+		width:161px;
+		display:none; 
+		}
+	.nc_hover { display:block; }
+	.li_hover { display:block; }
+	.f_r1{float:right;}
+</style>
+   <script type="text/javascript">
+var dealBeginTime = {$deal_info.begin_time};
+var phptime = <?php echo time();?>;
+var leftTime = (dealBeginTime+8*3600)-phptime;
+var paymentArray = new Array();
+
+{foreach from=$deal_item_list item=deal_item key=key}
+paymentArray[{$key}]=new Array();
+paymentArray[{$key}]['url'] = '{url r="cart" p="id=$deal_item.id"}';
+paymentArray[{$key}]['format'] = {$deal_item.price_format};
+{/foreach}
+
+
+function ShowCountDown(){
+	leftTime = leftTime-1;
+	if(leftTime<0){
+		window.clearInterval(showTM);
+		stopShowCount();
+		return false;
+	}
+	var day=Math.floor(leftTime/(60*60*24)); 
+	var hour=Math.floor((leftTime-day*24*60*60)/3600); 
+	var minute=Math.floor((leftTime-day*24*60*60-hour*3600)/60); 
+	var second=Math.floor(leftTime-day*24*60*60-hour*3600-minute*60);
+	var showtime = '<em class="f20">距离开始时间还有'+day+'天'+hour+'小时'+minute+'分'+second+'秒</em>';
+	$("#showtime").html(showtime);
+}
+
+function stopShowCount(){
+	for(var i=0;i<paymentArray.length;i++){
+		var showPaySTR = '<a class="box22_3 theme_bgcolor" href="'+ paymentArray[i]["url"] +'" target="_blank"><div><span>支持¥'+ paymentArray[i]["format"] +'</span></div></a>';
+		$("#showpay_"+i).html(showPaySTR);
+	}
+	var newshowtime = '<em class="f20">￥</em>0';
+	$("#showtime").html(newshowtime);
+	$("#showword").html("筹资中");
+}
+if(leftTime>0){
+	var showTM = setInterval(ShowCountDown,1000);
+}
+
+function toSup(){
+	 window.location.hash = "#infodiv";
+}
+
+function toPay(deal_item_id){
+	$.ajax({
+      type: "post",
+			dataType: "json",
+      url: '/index.php?ctl=ajax&act=check_iqianjin&item_id='+deal_item_id,
+      data: "",
+      success: function (data){
+        if(data.status==1){
+      		
+      	}else{
+					$.showErr(data.message);
+        }
+      }
+  });
+}
+</script>
+<script>
+$(function(){
+	$("#fx_show").hover(function(){
+		$("#nc").show();
+	},function(){
+		$("#nc").hide();
+	});
+	$('#nc').hover(function(){
+		$(this).show();
+		},function(){
+		$(this).hide();
+	});
+	
+});
+</script>
+<div style="clear:both;"></div>
+
+<div class="xm_contenta">
+   <div class="xm_contenta_left">
+     <!--焦点图箭头可消失开始-->
+       <div id="demoSlider">
+           <ul>
+           	{foreach from=$deal_img_array item=deal_img key=keydm}
+             <li><a href="#img_{$keydm}"></a></li>
+             {/foreach}
+           </ul>
+           {foreach from=$deal_img_array item=deal_img key=keydm}
+           <div id="img_{$keydm}"><img src="{$deal_img}" width="798px" height="524px"></div>
+           {/foreach}
+       </div>
+     <!--焦点图箭头可消失结束-->
+   </div>
+   <div class="xm_contenta_right">
+      <div class="xm_contenta_righta">
+	       <div class="xm_contenta_righta_a">
+		      <div class="xm_contenta_righta_a_left">
+			     <a href="javascript:void(0);" onClick="toSup();"><img src="{if $deal_sup_num==0}{$TMPL}/images/sup.png{else}{$TMPL}/images/sup1.png{/if}" border=0></a>
+			  </div>
+			  <div class="xm_contenta_righta_a_right">
+			    <h4 style="font-weight:bold;text-align:left;">{$deal_info.name}</h4>
+				<p >标签：
+					{foreach from=$deal_info.tags_arr item=tag}
+	          {if trim($tag) neq ''}
+	              <span><a href="{url r="aps" p="tag=$tag&type=0"}" title="{$tag}" target="_blank">{$tag}</a></span>
+	          {/if}
+          {/foreach}
+				</p>
+			  </div>
+		   </div>
+		   <div style="clear:both;"></div>
+		   <div class="xm_contenta_righta_b">
+		        <div class="xm_contenta_righta_b_a">
+				   <div style="float:left;">
+				      <span style="color:#999999;font-size:16px;">目前累计：<r style="color:#ff7800;font-size:36px;">{if $deal_info.begin_time > $now}{else}{$deal_info.ap_amount}积分{/if}</r><span>
+				   </div>
+				   <div style="float:right;padding-right:12%;padding-top:2%;font-size:14px;color:#fff;">
+				       {if $deal_info.begin_time > $now}
+								即将开始
+								{elseif $deal_info.end_time < $now and $deal_info.end_time neq 0}
+									{if $deal_info.percent gte 100}
+								已成功
+									{else $deal_info.percent gt 0}
+								筹资失败
+									{/if}	 
+								{else}
+									{if $deal_info.percent gte 100}
+										已成功
+									{elseif $deal_info.end_time eq 0}
+								长期项目
+									{else}
+								筹资中
+									{/if}
+								{/if}
+				   </div>
+				</div>
+				<div style="clear:both;"></div>
+		     <!--进度条-->
+			    <div style="width:100%;margin-left:5%;position:relative;">
+						{if $deal_info.begin_time > $now}
+		         <div class="progress" style="width:240px;margin-top:5%;">
+                  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_info.percent}%;">
+                  </div>
+				 		 </div>
+				  	 <span style="color:#666666;font-size:14px;position:absolute;top:0;right:20%;">{$deal_info.percent}%</span>
+				  	 {elseif $deal_info.end_time < $now and $deal_info.end_time neq 0}
+								{if $deal_info.percent gte 100}	
+								<div class="progress" style="width:240px;margin-top:5%;">
+	                  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:100%;">
+	                  </div>
+					 		 </div>
+					  	 <span style="color:#666666;font-size:14px;position:absolute;top:0;right:20%;">{$deal_info.percent}%</span>
+					  	 {else $deal_info.percent gt 0}
+					  	 <div class="progress" style="width:240px;margin-top:5%;">
+	                  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_info.percent}%;">
+	                  </div>
+					 		 </div>
+					  	 <span style="color:#4d4d4f;font-size:14px;position:absolute;top:0;right:20%;">{$deal_info.percent}%</span>
+					  	 {/if}
+						 {else}
+						 	 {if $deal_info.percent gte 100}
+						 	 <div class="progress" style="width:240px;margin-top:5%;">
+	                  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:100%;">
+	                  </div>
+					 		 </div>
+					  	 <span style="color:#666666;font-size:14px;position:absolute;top:0;right:20%;">{$deal_info.percent}%</span>
+					  	 {else}
+					  	   {if $deal_info.end_time eq 0}
+								 <div class="progress" style="width:240px;margin-top:5%;">
+		                  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_info.percent}%;">
+		                  </div>
+						 		 </div>
+						  	 <span style="color:#666666;font-size:14px;position:absolute;top:0;right:20%;">{$deal_info.percent}%</span>
+						  	 {else}
+						  	 <div class="progress" style="width:240px;margin-top:5%;">
+		                  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{$deal_info.percent}%;">
+		                  </div>
+						 		 </div>
+						  	 <span style="color:#666666;font-size:14px;position:absolute;top:0;right:20%;">{$deal_info.percent}%</span>
+						  	 {/if}
+						  	{/if}
+						  {/if}
+					</div>
+				  
+		   </div>
+		   <div class="xm_contenta_righta_c">
+		      <dl>
+			     <dt>目标</dt>
+				 <dd>{$deal_info.limit_ap}积分</dd>
+			  </dl>
+		      <dl>
+			     <dt>剩余</dt>
+				 <dd>{if $deal_info.remain_days < 0}{if $deal_info.percent gt 100}已成功{else}已过期{/if}{else}{$deal_info.remain_days}天{/if}</dd>
+			  </dl>	
+		      <dl style="border-bottom:none;">
+			     <dt>支持者</dt>
+			     	{if $deal_info.virtual_person eq 0}
+						<dd>{$deal_info.support_count}人</dd>
+						{/if}
+						{if $deal_info.virtual_person neq 0}
+						<dd>{$deal_info.person}人</dd>
+						{/if}
+			  </dl>			  
+		   </div>
+	   <div class="xm_contenta_righta_d">
+		   <div class="xm_contenta_righta_d_a">
+		     项目截止时间：{function name="to_date" v=$deal_info.end_time f="Y年m月d日H时i分"}
+		   </div>
+		   <div  class="xm_contenta_righta_d_b" style="right:15px;position:relative;">
+		    <a href="#" id="fx_show"><img src="{$TMPL}/images/lianjie.png" border="0"></a>
+		    <span id="nc" class="f_r1 nc" style="position:absolute;right:40px;top:15px;">
+					<div class="bdsharebuttonbox" ><a href="#" class="bds_more" data-cmd="more" style="background-image:none;width:35px;height:35px;margin:0px;"></a></div>
+					<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","tqq","douban","renren"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","tqq","douban","renren"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+				</span>
+				{if $deal_info.type neq 1}	
+				{if $is_focus}
+					<a class=" attention_focus_deal qxgz" id="{$deal_info.id}"><img src="{$TMPL}/images/look.png" border=0></a>
+				{else}
+					<a class=" attention_focus_deal gz" id="{$deal_info.id}"><img src="{$TMPL}/images/look1.png" border=0></a>	
+				{/if}
+			{/if}
+		   </div>
+	   </div>
+	  </div>
+	
+
+   </div>
+</div>
+<div style="clear:both;"></div>
+
+<div id="infodiv" class="xm_contentb">
+  <div class="xm_contentb_left">
+      <div class="xm_contentb_left_a">
+	      <h4>项目简介</h4>
+		  <div class="xm_contentb_left_a_con">
+		     <div class="xm_contentb_left_a_con_con">
+			   {$deal_info.description}
+			 	 </div>
+          <div class="xm_contentb_left_a_con_con">
+              {foreach from=$deal_info.deal_faq_list item=faq}
+              <div class="faq_question" rel="{$faq.id}"> - {$faq.question}</div>
+              <div class="faq_answer" rel="{$faq.id}" style="display: none;">{$faq.answer}</div>
+              <div class="blank_10"></div>
+              {/foreach}
+          </div>
+		  </div>
+	  </div>
+      <div class="xm_contentb_left_a">
+	      <h4>评论</h4>
+		  <div class="xm_contentb_left_a_con">
+		  	{if $user_info}
+			     <div class="xm_contentb_left_a_con_con_a">
+			     	<form name="comment_form" action="{url r="deal#savedealcomment" p="id=$deal_info.id"}">
+				    <textarea  name="content" rows="3" cols=100% placeholder="写评论......" class="textarea_con"></textarea>
+				    <a class="send_btn" style="float:right; margin-top:10px;text-decoration:none; padding:5px 10px; border:1px solid #ff7800; color:#ff7800;cursor:pointer;" >发表评论</a>
+						<input type="hidden" name="ajax" value="1" />
+						</form>
+				 	 </div>
+			 	{else}
+			 	 	<div class="xm_contentb_left_a_con_con_a">
+						<div class="xm_textarea">
+						    <span>
+		       			<a href="{url r="user#login"}" class="comment">登陆后评论</a>
+								<a href="{url r="user#register"}" class="noumber" style="color:#666666;text-decoration:none;">没有账号，<r style="color:#ff7800;">去注册</r></a>
+							</span>
+						</div>
+				 	</div>
+			 	{/if}
+			 	<div style="clear:both;"></div>
+		     <div class="xm_contentb_left_a_con_con">
+		     	 {foreach from=$comment_list item=comment_info key=keyc}
+			     	<div class="fenxiang">
+                    <div class="fxw1">
+                        <dl class="user_b4">
+                        <dt><img src="{function name="get_user_avatar" uid=$comment_info.user_id type="small"}" width="48" height="48" /></dt>
+                        <dd>
+                          <strong><a href="{url r="home" p="id=$comment_info.user_id"}" class="linkgreen">{$comment_info.user_name}:</a></strong>
+                         <div class="user_b42">{function name="nl2br" v=$comment_info.content}</div>
+                          <div class="user_b41">发表于 {function name="pass_date" v=$comment_info.create_time}</div>
+                        </dd>
+                       </dl>
+                    </div>
+                    <div class="fxw2">
+                      <dl>
+                        <dt style="text-align:right;width:27px;"><img class="replycomment" rel="{$comment_info.id}" src="{$TMPL}/images/infa.png" width="27" height="27" /></dt>
+                      </dl>
+                      {if $comment_info.user_id == $user_info.id}
+                      <dl>
+                        <dt style="text-align:right;"><a class="delcomment" href="{url r="deal#delcomment" p="id=$comment_info.id"}" style="text-decoration:none;padding:5px 10px; border:1px solid #ff7800; color:#ff7800;">删除</a></dt>
+                      </dl>
+                      {/if}
+                 		</div>
+                  <div class="clear"></div>
+                  <div class="reply_box" id="reply_box_{$comment_info.id}">
+                  	<div class="clear"></div>
+                  	<form name="comment_form" action="{url r="deal#savedealcomment" p="id=$comment_info.deal_id&pid=$comment_info.id"}">
+									    <textarea  name="content" rows="2" cols=80% class="textarea_con">回复 {$comment_info.user_name}:</textarea>
+									    <a class="send_btn" style="float:right;text-decoration:none; padding:5px 10px; border:1px solid #ff7800; color:#ff7800;cursor:pointer;">发表评论</a>
+											<input type="hidden" name="ajax" value="1" />
+											<input type="hidden" name="comment_pid" value="{$comment_info.id}" />
+										</form>
+								</div>
+           </div>
+           {/foreach}
+           <div class="fy2">
+                {$page}
+           </div>
+			 		 <div style="clear:both;"></div>
+           <div class="l_foot2" style="margin:0 auto;text-align:center;margin-top:50px;">
+	              <span class="lft1">
+	                  如果您对项目有疑问，可以在此向项目发起人咨询
+	              </span>
+	              <span onclick="send_message({$deal_info.user_id});" class="f_r">
+	                  <a class="ui-small-button theme_bgcolor" style="color:#fff;text-decoration:none;padding:5px 10px;margin-left:5px;cursor:pointer;">对发起人提问</a>
+	              </span>
+	          </div>
+			 </div>
+		  </div>
+	  </div>	  
+  </div>
+  <div class="xm_contentb_right">
+  	{foreach from=$deal_item_list item=deal_item1 key=key}
+     <div class="xm_contentb_right_a">
+		    <dl>
+			   <dt>{$deal_item1.ap_price}积分</dt>
+			   <dd><r style="color:#ff7f15">{$deal_item1.virtual_person_list}</r>位支持者</dd>
+				</dl>
+				<div class="xm_contentb_right_a_a">
+				     <h4>{function name="nl2br" v=$deal_item1.description}</h4>
+					 <div class="xm_contentb_right_a_b">
+					    <p>
+					    		{if $deal_item1.is_delivery eq 1}
+										{if $deal_item1.delivery_fee eq 0}
+										运费：包邮
+										{else}
+										运费：{$deal_item1.delivery_ap}
+										{/if}
+										&nbsp;&nbsp;
+									{/if}
+									{if $deal_item1.is_limit_user eq 1}
+										{if $deal_item1.limit_user gt 0}
+										限额：{$deal_item1.limit_user}位&nbsp;&nbsp;&nbsp;
+										剩余：{$deal_item1.remain_person}位
+										{/if}
+									{/if}
+							</p>
+							{foreach from=$deal_item1.images item=image}
+							<div class="image_item">
+								<img src="{function name="get_spec_image" v=$image.image w=50 h=50 g=1}" rel="{function name="get_spec_image" v=$image.image w=570 h=430}" width=50 height=50 />
+							</div>
+							{/foreach}
+							{if $deal_item1.repaid_day gt 0}
+								<p>预计发放时间：项目成功结束后{$deal_item1.repaid_day}天内</p>
+							{/if}
+					 </div>
+				</div>
+			  <div id="showpay_{$key}" class="xm_contentb_right_a_a_b">
+			  	{if ($deal_info.end_time > $now or $deal_info.end_time eq 0) and $deal_info.begin_time < $now and $deal_info.is_effect eq 1 }
+						{if $deal_item1.support_count < $deal_item1.limit_user or $deal_item1.limit_user eq 0}
+							{if $deal_item1.error_type eq 1}
+							<a class="sur2" href="{url r="apcart" p="id=$deal_item1.id"}" target="_blank">支持{$deal_item1.ap_price}积分</a>
+							{else}
+							<a class="sur2" href="javascript:void(0);" onclick="toPay('{$deal_item1.id}')">支持{$deal_item1.ap_price}积分</a>
+							{/if}
+						{else}
+						<a class="sur1" disabled="disabled">已满额</a>
+						{/if}
+					{else}
+					<a class="sur1" disabled="disabled">支持{$deal_item1.price_format}积分</a>
+					{/if}
+			  </div>
+	 	 </div>
+	 	 {/foreach}
+	 	 {if $deal_info.description_1 neq null}
+		  <div class="xm_contentb_right_a">
+		    <dl>
+			   <dt style="color:#000;font-size:24px;">付款与退款说明：</dt>
+			   <dd></dd>
+				</dl>
+				<div class="xm_contentb_right_a_a">
+				     <h4>{$deal_info.description_1}</h4>		
+				</div>
+			</div>
+		 {/if}
+	    <div class="xm_contentb_right_a">
+		    <dl>
+			   <dt style="color:#000;font-size:24px;">发起人信息</dt>
+				</dl>
+				<div class="xm_contentb_right_a_a">
+				     <h4>{$deal_info.user_name}</h4>
+				     {function name="show_avatar" p="$deal_info.user_id"}
+					 <div class="xm_contentb_right_a_b">
+					    <p>上次登录时间：{function name="to_date" v=$deal_info.login_time f="Y/m/d"}</p>
+							{if $deal_info.province neq '' or $deal_info.city neq ''}
+							<p>
+									<span class="boxaddress">{$deal_info.province}&nbsp;{$deal_info.city}</span>
+							</p>
+							{/if}
+							<p>
+									<a href="javascript:send_message({$deal_info.user_id});" class="boxmail">发信息</a>
+							</p>
+					 </div>
+		
+				</div>
+	 		</div>
+  </div>
+</div>
+
+<div style="clear:both;"><br><br></div>
+<!--结尾-->
+{include file="inc/footer.html"}

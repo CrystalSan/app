@@ -1,0 +1,235 @@
+{include file="inc/header.html"} 
+
+<script type="text/javascript"> 
+//	var VAR_MODULE = "m";
+//	var VAR_ACTION = "a";
+	var ROOT = '{$APP_ROOT}/keupload.php';
+	var ROOT_PATH = '{$APP_ROOT}';
+	var can_use_quota = "{$can_use_quota}";
+//	var MAX_FILE_SIZE = "<?php echo (app_conf("MAX_IMAGE_SIZE")/1000000)."MB"; ?>";
+</script>
+<script type="text/javascript"> 
+    var ROOT = '{$APP_ROOT}/xlc.php';
+    var VAR_MODULE = "m";
+    var VAR_ACTION = "a";
+    var WEB_SESSION_ID = '<?php echo es_session::id(); ?>';
+    var EMOT_URL = '{$APP_ROOT}/public/emoticons/';
+    var MAX_FILE_SIZE = "<?php echo (app_conf("MAX_IMAGE_SIZE")/1000000)."MB"; ?>";
+    var UPLOAD_URL ='{$APP_ROOT}/xlc.php?m=File&a=do_upload&upload_type=0&dir=image' ;
+	var UPLOAD_SWF='{$TMPL}/js/plupload/Moxie.swf';
+	var UPLOAD_XAP='{$TMPL}/js/plupload//Moxie.xap';
+	var ALLOW_IMAGE_EXT= "gif,jpg,jpeg,png,bmp";
+	var MAX_IMAGE_SIZE= "<?php echo (app_conf("MAX_IMAGE_SIZE")/1000000)."MB"; ?>";
+	function get_file_fun(name){
+    		$("#"+name).ui_upload({multi:false,
+		FileUploaded:function(ajaxobj){
+ 				if(ajaxobj.error==1)
+				{
+					$.showErr(ajaxobj.info);
+				}else{
+					$("#"+name+"_url").val(ajaxobj.public_url);
+					$("#"+name+"_image").attr('src',ajaxobj.url);
+ 				}
+			},Error:function(error){
+			$.showErr(error.message);
+ 		}});
+	}
+</script>
+
+<script type="text/javascript" src="{$TMPL}/js/deal_publish.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/upload_deal_image.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/ajaxupload.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/switch_city.js"></script>
+<script type="text/javascript" src="{$APP_ROOT}/system/region.js"></script>
+<link rel="stylesheet" href="{$APP_ROOT}/admin/public/kindeditor/themes/default/default.css" />
+<script type='text/javascript'  src='{$APP_ROOT}/admin/public/kindeditor/kindeditor.js'></script>
+<script type="text/javascript" src="{$APP_ROOT}/admin/public/kindeditor/lang/zh_CN.js"></script>
+<div class="set1">
+    <div class="set_top">
+	  <img src="{$TMPL}/images/set1.jpg"> 
+	</div>
+    <form id="project_form" action="{url r="project#save"}" method="post">	
+	<div class="set_bottom" style="padding:20px 40px;">
+	    <div class="set_bottom_h_l">
+		    <div class="sur_xm_bar" style="padding:0 0;">
+             <dl style="border-bottom:none;">
+	          <dt>项目信息</dt>
+		     </dl>
+           </div>
+		
+			
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>项目标题:</label>
+              <input type="text" class="form-control input_width" name="name"  placeholder="名称不可超过40个字">
+           </div>
+             <div style="clear:both;"></div>		   
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>筹资金额:</label>
+              <input type="text" class="form-control input_width" name="limit_price"  placeholder="不少于50">
+              <span style="float:left;line-height:50px;margin-left:10px;">元</span>
+           </div>
+             <div style="clear:both;"></div>		   
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>筹集天数:</label>
+              <input type="text" class="form-control input_width" name="deal_days" placeholder="10~90"><span style="float:left;line-height:50px;margin-left:10px;">天</span>
+           </div>	
+           <div style="clear:both;"></div>		   
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>项目分类:</label>
+              <select style="width:294px;height:50px;float:left;" name="cate_id" id='cate_id'>
+              	{foreach from=$cate_list item="cate_item" key=key}
+              		<option rel="{$cate_item.id}">{if $cate_item.title_show}|--{/if}{$cate_item.name}</br></option>
+              	{/foreach}
+              </select>
+              <input type="hidden" name="cate_id" id='cate_id_last' />
+           </div>
+           <div style="clear:both;"></div>		   
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border=0></span>所在地区:</label>
+             <select name="province" style="width:100px;height:45px;float:left;margin-right:40px;" id="cityid-1">				
+							<option value="" rel="0">请选择省份</option>			
+							{foreach from=$region_lv2 item=region}
+								<option value="{$region.name}" rel="{$region.id}" {if $region.selected}selected="selected"{/if}>{$region.name}</option>
+							{/foreach}
+						 </select>
+						 <select name="city" style="width:100px;height:45px;float:left;" id="cityid-2">				
+							<option value="" rel="0">请选择城市</option>
+							{foreach from=$region_lv3 item=region}
+								<option value="{$region.name}" rel="{$region.id}" {if $region.selected}selected="selected"{/if}>{$region.name}</option>
+							{/foreach}
+						 </select>
+           </div>		   
+		    <div style="clear:both;"></div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">简要说明:</label>
+             <textarea name="brief" id="intro" rows=5 cols=38 style="float:left;"></textarea>			   
+            </div>
+			<div style="clear:both;"></div>
+            <div class="form-group logo_table" style="margin-top:20px;margin-bottom:20px;">
+             <label for="name" class="logo_tex">项目详情:</label>
+              <div style="width:249px;height:300px;float:left;">
+			     {function name="show_ke_form" text_name="descript" width="470" height="300" ctn=""}
+			  </div>
+			   
+				<input type="hidden" value="1" name="ajax" />
+				<input type="hidden" name="id" value="0" />
+				<input type="hidden" name="image" value="{$deal_image.url}" />
+				<input type="hidden" name="savenext" value="1" />
+            </div>
+            
+             <div style="clear:both;"></div>
+	        <div class="form-group logo_table">
+	        		
+            </div>
+             <div style="clear:both;"></div>
+             <div id="faq_list" style="position:relative;">
+             	<a href="javascript:void(0);" id="add_faq" style="position:absolute;right:100px;top:0px;color:#ff7800;text-decoration:none;">添加</a>
+             	<input type="hidden" id="faq_num" value="1" />
+             	<div class="faq_item">
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">Q:</label>
+              <input type="text" value="{if $faq_item.question neq ''}{$faq_item.question}{/if}" name="question[]" class="form-control input_width" ><a href="javascript:void(0);" onclick='del_faq(this);' style="color:#ff7800;text-decoration:none;">删除</a>
+           </div>
+            <div class="form-group logo_table">
+             <label for="name" class="logo_tex">A:</label>
+              <input type="text" value="{if $faq_item.answer neq ''}{$faq_item.answer}{/if}" class="form-control input_width" name="answer[]">
+           </div>
+           </div>
+           </div>
+       </div>
+		<div class="set_bottom_h_r">
+		   <div class="sur_xm_bar" style="padding:0 0;">
+             <dl style="border-bottom:none;">
+	          <dt>项目图集</dt>
+		     </dl>
+
+           </div> 
+		   <div class="xmimg_font">
+		       			 <p>
+			    支持jpg、jpeg、png、gif格式，大小不超过2.0M。【推荐尺寸800px*600px】
+			 </p>
+		   </div>
+		   <ul>
+        <li id="img_li_index"><label class="fileupload" onclick="upd_file(this,'image_file','image');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $deal_image.thumb_url eq ''}{$TMPL}/images/deal_img_index.jpg{else}{$deal_image.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="image_file" id="image_file"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+				<input type="hidden" name="image" value="{$deal_image.url}" />
+        <li id="img_li_1"><label class="fileupload" onclick="upd_file(this,'pic_0','imghead_0');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $imghead_0.thumb_url eq ''}{$TMPL}/images/deal_img_1.jpg{else}{$imghead_0.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="pic_0" id="pic_0"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+        <input type="hidden" name="imghead_0" value="{$imghead_0.url}" />
+				<input type="hidden" name="imghead_0_thumb" value="{$imghead_0_thumb.url}" />
+				
+				<li id="img_li_2"><label class="fileupload" onclick="upd_file(this,'pic_1','imghead_1');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $imghead_1.thumb_url eq ''}{$TMPL}/images/deal_img_2.jpg{else}{$imghead_0.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="pic_1" id="pic_1"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+        <input type="hidden" name="imghead_1" value="{$imghead_1.url}" />
+				<input type="hidden" name="imghead_1_thumb" value="{$imghead_1_thumb.url}" />
+				
+				<li id="img_li_3"><label class="fileupload" onclick="upd_file(this,'pic_2','imghead_2');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $imghead_2.thumb_url eq ''}{$TMPL}/images/deal_img_3.jpg{else}{$imghead_2.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="pic_2" id="pic_2"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+        <input type="hidden" name="imghead_2" value="{$imghead_2.url}" />
+				<input type="hidden" name="imghead_2_thumb" value="{$imghead_2_thumb.url}" />
+				
+				<li id="img_li_4"><label class="fileupload" onclick="upd_file(this,'pic_3','imghead_3');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $imghead_3.thumb_url eq ''}{$TMPL}/images/deal_img_4.jpg{else}{$imghead_3.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="pic_3" id="pic_3"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+        <input type="hidden" name="imghead_3" value="{$imghead_3.url}" />
+				<input type="hidden" name="imghead_3_thumb" value="{$imghead_3_thumb.url}" />
+				
+				<li id="img_li_5"><label class="fileupload" onclick="upd_file(this,'pic_4','imghead_4');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $imghead_4.thumb_url eq ''}{$TMPL}/images/deal_img_5.jpg{else}{$imghead_4.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="pic_4" id="pic_4"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+        <input type="hidden" name="imghead_4" value="{$imghead_4.url}" />
+				<input type="hidden" name="imghead_4_thumb" value="{$imghead_4_thumb.url}" />
+				
+				<li id="img_li_6"><label class="fileupload" onclick="upd_file(this,'pic_5','imghead_5');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $imghead_5.thumb_url eq ''}{$TMPL}/images/deal_img_6.jpg{else}{$imghead_5.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="pic_5" id="pic_5"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+        <input type="hidden" name="imghead_5" value="{$imghead_5.url}" />
+				<input type="hidden" name="imghead_5_thumb" value="{$imghead_5_thumb.url}" />
+				
+				<li id="img_li_7"><label class="fileupload" onclick="upd_file(this,'pic_6','imghead_6');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $imghead_6.thumb_url eq ''}{$TMPL}/images/deal_img_7.jpg{else}{$imghead_6.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="pic_6" id="pic_6"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+        <input type="hidden" name="imghead_6" value="{$imghead_6.url}" />
+				<input type="hidden" name="imghead_6_thumb" value="{$imghead_6_thumb.url}" />
+				
+				<li id="img_li_8"><label class="fileupload" onclick="upd_file(this,'pic_7','imghead_7');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $imghead_7.thumb_url eq ''}{$TMPL}/images/deal_img_8.jpg{else}{$imghead_7.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="pic_7" id="pic_7"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+        <input type="hidden" name="imghead_7" value="{$imghead_7.url}" />
+				<input type="hidden" name="imghead_7_thumb" value="{$imghead_7_thumb.url}" />
+				
+				<li id="img_li_9"><label class="fileupload" onclick="upd_file(this,'pic_8','imghead_8');" style="width:150px;height: 150px;cursor: pointer;overflow: hidden;display: inline-block;background: transparent url('{if $imghead_8.thumb_url eq ''}{$TMPL}/images/deal_img_9.jpg{else}{$imghead_8.thumb_url}{/if}') repeat center top;text-align: center;line-height: 150px;">
+					<input type="file" class="filebox" name="pic_8" id="pic_8"  style="cursor:pointer;padding: 0;height: 150px;width: 150px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>	
+				</label></li>
+        <input type="hidden" name="imghead_8" value="{$imghead_8.url}" />
+				<input type="hidden" name="imghead_8_thumb" value="{$imghead_8_thumb.url}" />
+			 
+ 		   </ul>
+		</div>
+		<div style="clear:both;"></div>
+		<div style="width:100%;height:160px;border-top:1px solid #dee0e0;padding-top:20px;line-height:160px;">
+		   <a id="savenext" style="font-size:18px;color:#fff;font-weight:bold;background:#ff7800;padding:10px 40px;text-decoration:none;">保存</a>
+		
+		</div>
+      </div>
+   </form>
+</div>
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+<script type="text/javascript">
+	$(function(){
+		show_tip();
+		// 项目分类
+		funSelect("#cate_id_select","#cate_id_cur",'#cate_id_select option:selected');
+	});
+</script>
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+{include file="inc/footer.html"}
+

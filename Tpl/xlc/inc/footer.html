@@ -1,0 +1,54 @@
+<div class="bottom">
+   <div class="bottom_a">
+       <div class="bottom_a_a">
+	      <div class="bottom_a_a_a">
+		       <div class="bottom_a_a_a_left">
+			      <ul>
+			      	{foreach from=$help_cates item=help_item name="help_items"}
+			      		<li><a href="{$help_item.url}" >{$help_item.title}</a></li>
+							{/foreach}
+				  	</ul>
+			   </div>
+		      <div class="bottom_a_a_a_right">
+			     <dl>
+				    <dt><img width="130px" height="130px" src="{$TMPL}/images/weixin.png"></dt>
+					<dd>新乐筹微信公众号</dd>
+				 </dl>
+			  </div>
+		  </div>
+		  <div class="bottom_a_a_b">
+		      <p>新乐筹版权所有  京ICP备15009436号-1</p>
+		  </div>
+	   </div>
+	   
+   </div>
+</div>
+<!--
+返回顶部代码
+-->
+<div id="goTopBtn"></div>
+<script type="text/javascript">
+  $(window).scroll(function(){
+		   var sc=$(window).scrollTop();
+		   var rwidth=$(window).width();
+      	  if(sc>0){
+				$("#goTopBtn").css("display","block");
+				$("#goTopBtn").css("left",(rwidth-55)+"px")
+				}else{
+			$("#goTopBtn").css("display","none");
+				}
+		  })
+		  	
+	  $("#goTopBtn").click(function(){
+		  var sc=$(window).scrollTop();
+		 $('body,html').animate({scrollTop:0},500);
+		  })		
+			
+</script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		resetWindowBox();
+	});
+</script>
+ </body>
+</html>

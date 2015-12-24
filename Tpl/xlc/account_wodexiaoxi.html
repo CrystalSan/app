@@ -1,0 +1,94 @@
+{include file="inc/header.html"}
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+     {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>我的消息</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;我的消息</span>
+	 </div>
+    <div class="about_b_c">
+		  <p style="text-align:left;font-weight:bold;font-size:16px;margin-top:15px;">关注消息</p>
+		  <table class="tableborder" cellpadding=0 cellspacing=0>
+			 <tr class="tr_title">
+			  <td >消息内容</td>
+				<td >操作时间</td>
+			 </tr>
+			 {foreach from=$guanzhu item=guan}
+			 <tr class="tr_height">
+			  <td width=55% class="td_left">&nbsp;&nbsp;关注项目<{$guan.name}></{$guan.name}>成功</td>
+				<td width=45%>{function name="to_date" v=$guan.create_time}</td>
+			 </tr>
+			 {/foreach}
+		 </table>
+        <div style="clear:both;"></div>
+			  <div class="fy2" style="width:100%;padding-top:30px;"> 
+            <ul>
+            {$pages1}
+            </ul>
+        </div>
+        
+        
+		  <p style="text-align:left;font-weight:bold;font-size:16px;margin-top:15px;">支持消息</p>
+		  <table class="tableborder" cellpadding=0 cellspacing=0>
+			 <tr class="tr_title">
+			  <td >消息内容</td>
+				<td >操作时间</td>
+			 </tr>
+			 {foreach from=$zhichi item=zhi}
+			 <tr class="tr_height">
+			  <td width=55% class="td_left">&nbsp;&nbsp;支持项目<{$zhi.deal_name}>成功</td>
+				<td width=45%>{function name="to_date" v=$zhi.pay_time}</td>
+			 </tr>
+			 {/foreach}
+		 </table>
+        <div style="clear:both;"></div>
+			  <div class="fy2" style="width:100%;padding-top:30px;"> 
+			  		<ul>
+            {$pages2}
+            </ul>
+        </div>
+	 </div>
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

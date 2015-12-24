@@ -1,0 +1,50 @@
+<script type="text/javascript" src="{$TMPL}/js/ajax_user_login.js"></script>
+<style>
+	.dlmain{position:relative;z-index:1;}
+	.control-group{ position:relative; _float:left; }
+	.dlmain { background:url({$TMPL}/images/images/reglog_bg.gif) repeat-y; }
+	.control-group label{width:30px}
+</style>
+<div class="blank"></div>
+<!--中间开始-->
+
+<div class="login">
+     <form id="user_login_form" name="user_login_form" action="{url r="user#do_login"}">
+        <div class="form-group logo_table">
+         <label for="name" class="logo_tex">手机号:</label>
+          <input type="text" class="form-control input_width" name="email" id="email" placeholder="用户名或者手机号">
+       </div>
+    <div style="clear:both;"></div>
+        <div class="form-group logo_table">
+         <label for="name" class="logo_tex">密码:</label>
+          <input type="password" class="form-control input_width" name="user_pwd" id="user_pwd" placeholder="填写密码">
+	   <a class="forget_pwd" href="{url r="user#getpassword"}">忘记密码？</a>
+        </div>
+		<input type="hidden" value="1" name="ajax" />
+	<div style="clear:both;"></div>
+        <div class="form-group logo_table">
+            <a href="javascript:void(0);" id="submit_form" class="button_login">登录</a>
+	     <a href="{url r="user#register"}" class="button_register">注册</a>
+	
+        </div>
+    </form>
+</div>
+   
+<!--中间结束-->
+<script type="text/javascript">
+	show_tip();
+
+	$(document).ready(function(){
+		setTimeout("autofillHide()", 100);
+	});
+	function autofillHide(){
+		if($("#user_pwd").val() || $("#email").val()){
+			$(".holder_tip").hide();
+		}
+		else{
+			$(".holder_tip").show();
+		}
+	}		
+</script>
+<div class="blank"></div>
+<div id="gotop" style="display: block;z-index:99;"></div>

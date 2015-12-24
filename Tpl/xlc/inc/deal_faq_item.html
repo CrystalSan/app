@@ -1,0 +1,10 @@
+<div class="faq_item">
+  <div class="form-group logo_table">
+   <label for="name" class="logo_tex">Q:</label>
+    <input type="text" value="{if $faq_item.question neq ''}{$faq_item.question}{/if}" name="question[]" class="form-control input_width" ><a href="javascript:void(0);" onclick='del_faq(this);' style="color:#ff7800;text-decoration:none;">删除</a>
+ </div>
+  <div class="form-group logo_table">
+   <label for="name" class="logo_tex">A:</label>
+    <input type="text" value="{if $faq_item.answer neq ''}{$faq_item.answer}{/if}" class="form-control input_width" name="answer[]">
+ </div>
+</div>

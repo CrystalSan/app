@@ -1,0 +1,106 @@
+{include file="inc/header.html"} 
+<style>
+	body{ background:#f3f3f3; }
+	.setlist_new {
+		padding: 5px 0;
+		width: 100%;
+	}
+	.tip_box{
+		height:50px;
+		line-height:50px;
+		
+	}
+	.tip_box .form_tip{ color:red;}
+	.tip_box .form_success{ color:green;}
+</style>
+<div class="blank"></div>
+<!--中间开始-->
+<div class="dlmain Myhomepage">
+		<div class="homeleft pageleft f_l ">
+			<div class="menutitle">项目管理</div>
+			<ul class="homemenulist">
+				<li><a href="{url r="account#index"}" class="a1">支持的项目</a></li>
+				<li><a href="{url r="account#project"}" class="a2">我的项目</a></li>
+				<li><a href="{url r="account#focus"}" class="a3">关注的项目</a></li>
+				<li><a href="{url r="account#credit"}" class="a4">收支明细</a></li>
+				<li><a href="{url r="account#record"}">充值记录</a></li>	
+			</ul>
+			<div class="menutitle">个人设置</div>
+			<ul class="homemenulist">
+				<li class="select"><a href="{url r="settings#index"}" class="a5">资料修改</a></li>
+				<li><a href="{url r="settings#password"}" class="a6">修改密码</a></li>
+				<li><a href="{url r="settings#consignee"}" class="a8">收件地址管理</a></li>
+				<li><a href="{url r="settings#bind"}" class="a7">绑定设置</a></li>
+				<li><a href="{url r="settings#bank"}" class="a9">银行帐户</a></li>	
+			</ul>			
+		</div>
+		<div class="homeright pageright f_r">
+			<div >
+				<div class="page_title">
+					修改邮箱
+				</div>
+				<div class="blank"></div>
+ 				{if $step eq 1}
+				<div class="msg_box">
+					<h2>恭喜您，验证邮件发送成功</h2>												
+					<div class="notice">
+						<h2 class="notice-title">下一步，请验证您的Email</h2>
+						<div>
+							<p>
+								<?PHP echo sprintf("我们发送了一封验证邮件到%s，请到您的邮箱收信，并点击其中的链接验证您的邮箱。","<span class='red'>".$this->_var['user_email']."</span>");?>																
+							</p>
+						</div>
+						{if $gocheck_url neq ''}
+						<a target="_blank" href="{$gocheck_url}" class="gomailcheck">立刻去邮箱激活帐户l</a>
+						{/if}
+						<div class="help-tip">
+							<h3 class="help-title">收不到邮件？</h3>
+							<ul class="help-list">
+								<li>有可能被误判为垃圾邮件了，请到垃圾邮件文件夹找找。</li>
+								<li>
+									<?PHP echo sprintf("用  %s 向 %s 发送一封任意内容的邮件，几分钟后即可直接登录。",$this->_var['user_email'],app_conf("REPLY_ADDRESS"));?>
+									
+								</li>
+	
+							</ul>
+						</div>
+					</div>
+				</div>	
+				{else}
+				<div class="left" >
+					<form class="ajax_form" action="{url r="settings#mail_change" }">
+						<div class="form_row control-group">
+							<label class="form_lable">邮箱:</label>
+							<input type="text" id="settings-email" value="{$user.email}" disabled="true" class="textbox" name="mail"  style="width:310px;"/>
+ 							<div class="blank15"></div>
+ 						</div>					
+ 						
+						<div class="submit_btn_row ">
+							<div class="ui-button green" rel="green" style="display:inline; margin-left:111px;margin-top:20px;">
+								<div>
+									<span>下一步</span>
+								</div>
+							</div>
+							<input type="hidden" value="1" name="ajax" />
+							<input type="hidden" value="1" name="step" />
+							<div class="blank15"></div>
+						</div>
+					</form>
+				</div>
+				{/if}
+				
+											
+ 				</div><!--left-->
+		
+				 
+				<div class="blank"></div>
+			</div>
+	
+	 		<div class="blank"></div>	
+		</div>
+
+<!--中间结束-->
+<div class="blank"></div>
+</div>
+<div class="blank"></div>
+{include file="inc/footer.html"} 

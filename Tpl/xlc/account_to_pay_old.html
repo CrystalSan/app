@@ -1,0 +1,111 @@
+{include file="inc/header.html"} 
+<?php
+$this->_var['dpagejs'][] = $this->_var['TMPL_REAL']."/js/avatar.js";
+$this->_var['dcpagejs'][] = $this->_var['TMPL_REAL']."/js/avatar.js";
+$this->_var['dpagejs'][] = $this->_var['TMPL_REAL']."/js/ajaxupload.js";
+$this->_var['dpagejs'][] = $this->_var['TMPL_REAL']."/js/switch_city.js";
+$this->_var['dcpagejs'][] = $this->_var['TMPL_REAL']."/js/switch_city.js";
+$this->_var['dpagejs'][] = APP_ROOT_PATH."/system/region.js";
+$this->_var['dcpagejs'][] = APP_ROOT_PATH."/system/region.js";
+$this->_var['pagecss'][] = $this->_var['TMPL_REAL']."/css/user_register.css";
+?>
+<script type="text/javascript" src="{function name="parse_script" v="$dpagejs" c="$dcpagejs"}"></script>
+<style>
+	.setlist_new {
+		padding: 5px 0;
+		width: 100%;
+	}
+	.tip_box{
+		height:41px;
+		line-height:41px;
+		
+	}
+	.tip_box .form_tip{ color:red;}
+	.tip_box .form_success{ color:green;}
+	.control-group a{height:37px;line-height:37px}
+	.btn_select{_margin-top:10px;}
+	.textareabox{width:300px}
+</style>
+<div class="blank"></div>
+<!--中间开始-->
+<div class="dlmain Myhomepage">
+		 {include file="inc/account_left.html"} 
+		<div class="homeright pageright f_r">
+			<div >
+				<div class="page_title">
+					 申请放款
+				</div>
+				<div class="blank"></div>
+				<div class="left" >
+					<form class="ajax_form" action="{url r="account#save_to_pay"}" id="save_to_pay_form" >			
+						<div class="form_row control-group">
+							<label class="form_lable">项目执行时间:</label>
+							<input type="text" value="" class="textbox" name="do_time" id="do_time"/>
+						</div>
+						<div class="blank0"></div>
+						<div class="form_row control-group">
+							<label class="form_lable">所在地:</label>
+							<a class="btn_select w100 f_l mr10" id="province_select">
+								<span class="cur_select" id="province_cur"></span>
+								<div class="select_arrow"></div>
+								<select name="province" class="select-h" id="province">
+				              		<option value="" rel="0">请选择省份</option>			
+									{foreach from=$region_lv2 item=region}
+										<option value="{$region.name}" rel="{$region.id}" {if $region.selected}selected="selected"{/if}>{$region.name}</option>
+									{/foreach}
+								</select>
+							</a>
+							<a class="btn_select w100 f_l mr10" id="city_select">
+								<span class="cur_select" id="city_cur"></span>
+								<select name="city" class="select-h" id="city">
+				              		<option value="" rel="0">请选择城市</option>
+									{foreach from=$region_lv3 item=region}
+										<option value="{$region.name}" rel="{$region.id}" {if $region.selected}selected="selected"{/if}>{$region.name}</option>
+									{/foreach}
+								</select>
+							</a>
+						</div>
+						<div class="form_row control-group" style="height:163px">
+							<label class="form_lable">详细地址:</label>
+							<input type="text" value="" class="textbox" name="address" id="address"/>
+							<div class="blank1"></div>
+							<div class="form_tip">填写详细地址</div>
+						</div>
+  						<div class="blank15"></div>
+						<div class="form_row control-group ">
+							<input type="hidden" value="{$deal_id}" class="textbox" name="deal_id" id="deal_id"/>
+							<label class="form_lable"></label><input type="submit" value="提交申请"/>
+						</div>
+						<div class="blank15"></div>
+				</div><!--left-->
+				<div class="right" style="width:210px;">
+					<span style="font-size:14px">项目执行资料</span>
+					<div class="blank10"></div>
+					<img id="avatar" src="" />
+					<div class="blank20"></div>
+					<label class="fileupload" onclick="upd_file(this,'avatar_file',{$user_info.id});">
+						<input type="file" class="filebox" name="avatar_file" id="avatar_file"  style="cursor:pointer;padding: 0;height: 39px;width: 97px;filter: alpha(opacity=0);-moz-opacity: 0;-khtml-opacity: 0;opacity: 0;"/>
+					</label>
+					<label class="fileuploading hide" ></label>
+				</div>
+				<div id="gotop" style="display: block; z-index: 99;"></div>
+				<div class="blank"></div>
+					</form>
+			</div>
+	
+	 		<div class="blank"></div>	
+		</div>
+
+<!--中间结束-->
+<div class="blank"></div>
+</div>
+<div class="blank"></div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		// 项目所属行业
+		funSelect("#sex_select","#sex_cur",'#sex_select option:selected');
+		funSelect("#province_select","#province_cur",'#province_select option:selected');
+		funSelect("#city_select","#city_cur",'#city_select option:selected');
+	});	
+</script>
+{include file="inc/footer.html"} 

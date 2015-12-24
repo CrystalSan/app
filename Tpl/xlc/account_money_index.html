@@ -1,0 +1,114 @@
+{include file="inc/header.html"} 
+<script type="text/javascript" src="{$TMPL}/js/refund.js"></script>
+<div style="clear:both;"></div>
+
+<div class="about_a">
+  <div class="about_a_left_pub" style="height: 100%;">
+    {include file="inc/account_left.html"}
+<!--网站左侧下拉结束-->
+  </div>
+  <div class="about_a_right">
+     <div class="about_a_right_a">
+	      <span>我的资金</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;我的全部资金</span>
+		   
+	 </div>
+    <div class="about_b_c">
+    <div class="set_bottom" style="padding-bottom:0px;">
+	<div class="setpay">
+	   <ul>
+	    <li><a href="{url r="account#money_index"}" {if $module eq 'account'&& $action eq 'money_index'}class="setpaya"{/if}>账户主页</a></li>
+			<li><a href="{url r="account#money_carry_bank"}" {if $module eq 'account'&& ($action eq 'money_carry_bank'|| $action eq 'money_carry')}class="setpaya"{/if}>会员提现</a></li>
+			<li><a href="{url r="account#refund"}" {if $module eq 'account'&& $action eq 'refund'}class="setpaya"{/if}>提现日志</a></li>
+			<li><a href="{url r="account#credit"}" {if $module eq 'account'&& $action eq 'credit'}class="setpaya"{/if}>收支明细</a></li>
+	   </ul>
+	 </div>
+    </div>
+	 <div class="host_page">
+	   <p>活动资金：<r style="color:#ff7800;">{function name="format_price" v=$user_info.money p=2}</r><p>
+	   <p>冻结资金：<r style="color:#ff7800;">{function name="format_price" v=$frozen_funds p=2}</r><p>
+	   <p>已筹资金：<r style="color:#ff7800;">{function name="format_price" v=$all_support_amount p=2}</r><p>
+	 </div>
+	<div class="host_page">
+	 <span class="f_l" style="margin:4px 10px 0 0;">{function name="app_conf" v="SITE_NAME"}，感谢您的使用！</span>
+	 <!--<a href="{url r="account#money_inchange"}" class="ui-small-button theme_bgcolor mr10">立即充值</a>-->
+	 {if $user_info.money gt 0}
+	 <a href="{url r="account#money_carry_bank"}" class="ui-small-button bg_red mr10">我要提现</a>
+	 {/if}
+	 
+	 <!--{if app_conf("MORTGAGE_MONEY") gt $user_info.mortgage_money}
+	 <a href="{url r="account#mortgate_pay"}" class="ui-small-button theme_bgcolor mr10">支付诚意金</a>
+	 {/if}-->
+	</div>
+	 </div>
+
+	
+  </div>
+</div>
+
+<!--字体图标结束-->
+<div style="clear:both;"></div>
+
+
+<div style="clear:both;"></div>
+<!--结尾-->
+
+<script>
+	$(function(){
+		funSelect("#search_type_select","#search_type_cur",'#search_type_select option:selected');
+ 		$(".refuse_reason").bind("click",function(){
+			var ajaxurl = APP_ROOT+"/index.php?ctl=ajax&act=refuse_reason";
+ 			var obj=new Object();
+			obj.deal_id=$(this).attr("rel");
+			$.ajax({ 
+				url: ajaxurl,
+				data:obj,
+				type: "POST",
+				dataType: "json",
+				success: function(data){
+					if(data.status==1){
+						$.weeboxs.open(data.info, {boxid:'fanwe_success_box',contentType:'text',showButton:true, showCancel:false, showOk:true,title:'未通过原因',width:250,type:'wee'});
+					}else{
+						$.showErr(data.info);
+					}
+					
+					
+				}
+			});
+		});
+	});
+	
+	function bind_project_form()
+	{	
+			$("#account_project").submit();
+	}
+	
+</script>
+<!--网站左侧下拉-->
+<script type="text/javascript">
+$(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+$(function(){
+	$(".leftsidebar_box dd").hide();
+	$(".leftsidebar_box dt").click(function(){
+		$(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+		$(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+		$(this).parent().find('dd').removeClass("menu_chioce");
+		$(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+		$(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+		$(".menu_chioce").slideUp(); 
+		$(this).parent().find('dd').slideToggle();
+		$(this).parent().find('dd').addClass("menu_chioce");
+	});
+	$(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+	$(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+	$(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+	$(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+	$(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+})
+
+window.onload = function(){
+	//$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+	$(".about_a").css('height', document.body.clientHeight);
+};
+</script>
+{include file="inc/footer.html"}

@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>时间管理</title>
+
+<style>
+body{margin:0;
+     padding:0;
+	 font-size:12px;
+	 background:#666;}
+div,ul,li{ margin:0px;
+        padding:0px;}
+a{font:bold 14px/24px "微软雅黑", Verdana, Arial, Helvetica, sans-serif;
+  color:green; 
+  text-decoration:none;}
+a:hover{color:red;}
+.box{width:1200px;
+       height:620px;
+	   margin:10px auto;}
+.menu{font-family:"微软雅黑", "黑体";
+              	font-size:16px;
+				color:#FFFFFF;
+				height: 40px; 
+				overflow:hidden;
+				/*位置在中间的代码开始*/
+				width:1000px;
+				margin:0 auto;
+				text-align:center;
+				/*位置在中间的代码结束*/}
+.menu ul{ margin:0px;
+         padding:0px; 
+		list-style:none;
+		
+		text-align:center;
+		}
+.menu ul li{ float:left;
+          background:#990000;
+		  list-style:none;  
+		  line-height:40px; 
+		  height:40px;
+		  margin-right:5px;  }
+.menu ul li a{ color:#FFFFFF;  
+         display: inline-block; 
+		  padding:0px 10px;
+		 line-height:40px;   }
+.menu ul li a:visited{ color:#FFFFFF}
+.menu ul li a:hover{ background:#CC0000;}
+.menu ul li a:active{ color:#FFFFFF}
+#tab_content .tab_con table{width:100%;
+                      border-collapse:collapse;}
+#tab_content .tab_con table tr td{border:1px solid #cbcbcb;}
+#tab_content{height:600px; 
+               background:#FFF;
+			   overflow:hidden; 
+			   width:1200px; 
+			   line-height:22px;}
+.td_b{background:#0000FF;}
+.td_g{background:#00FF00;}
+
+/*上一张与下一张*/	
+.focus_l,.focus_r{position:absolute;
+                  display:block;
+				  width:20px;
+				  height:20px;
+				  overflow:hidden;
+				  z-index:2;
+				  top:10px;}
+.focus_l{left:0px;}
+.focus_r{right:0px;}
+.focus_l b,.focus_r b{position:absolute;
+                      z-index:1;
+					  display:block;
+					  width:20px;
+					  height:20px;
+					  overflow:hidden;
+					  cursor:pointer;}
+.focus_l span,.focus_r span{display:inline-block;
+                          position:relative;
+						  z-index:2;
+						  width:20px;
+						  height:20px;
+						  cursor:pointer;}
+.focus_l:hover b,.focus_r:hover b{opacity:0.5;
+                         filter:alpha(opacity=50);}				
+/*表格*/
+.xcydrtop{
+             font-size:16px; 
+			 color:#0073b6; 
+			 height:35px; 
+			 line-height:35px;
+			 padding-left:20px;
+			 border-top:1px solid #ccc;
+			}
+.xcydtable{ padding:15px 0;
+              width:1200px;
+			  background:#fff;
+			  margin:0 auto;
+			  
+			 }
+.xcydtable table{ width:100%;}
+.xcydtable table td{ padding:3px 10px; 
+                   font-size:14px;}
+</style>
+<script type="text/javascript">
+function returnpage(){
+	window.location.href="/index.php?ctl=timelog";
+}
+</script>
+</head>
+<body>
+  <div class="xcydtable">
+  <dl class="xcydrtop"><dt><strong>会议邀请</strong></dt></dl>
+  <form name="save" action="/index.php?ctl=timelog&act=save" enctype="multipart/form-data" method="post">
+  <table border="0" cellspacing="0" cellpadding="0">
+  {if $error}
+  <tr>
+    <td align="right" width="14%"><font color="#FF0000">错误：</font></td>
+    <td width="86%"><font color="#FF0000">{$error}</font></td>
+  </tr>
+  {/if}
+  <tr>
+    <td align="right" width="14%">发布人：</td>
+    <td width="86%">{$user_info.name}<input type="hidden" name="send_id" value="{$user_info.id}" /></td>
+  </tr>
+  <tr>
+    <td align="right"><font color="#FF0000">*</font>会议主题：</td>
+    <td><input type="text" name="title"  class="yd_t2"/></td>
+  </tr>
+  <tr>
+    <td align="right"><font color="#FF0000">*</font>会议内容：</td>
+    <td><textarea name="info"></textarea></td>
+  </tr>
+  <tr>
+    <td align="right"><font color="#FF0000">*</font>会议日期：</td>
+    <td><input type="text" name="start_date"  class="yd_t2"/><label><font color="#666666" size="-2">yyyy-mm-dd例如2015-09-09</font></label></td>
+  </tr>
+  <tr>
+    <td align="right"><font color="#FF0000">*</font>会议开始时间：</td>
+    <td><label>
+        <select name="start_time">
+		{foreach from=$show_time_list item=t name="t"}
+		<option value="{$t}">{$t}:00</option>
+		{/foreach}
+        </select>
+        </label></td>
+  </tr>
+  <tr>
+    <td align="right"><font color="#FF0000">*</font>会议结束时间：</td>
+    <td><label>
+        <select name="end_time">
+		{foreach from=$show_time_list item=t name="t"}
+		<option value="{$t}">{$t}:59</option>
+		{/foreach}
+        </select>
+        </label></td>
+  </tr>
+  <tr>
+    <td align="right"><font color="#FF0000">*</font>会议提醒时间：</td>
+    <td><label>
+        <select name="call_time">
+          <option value="60">1小时</option>
+          <option value="30">30分钟</option>
+          <option value="10">10分钟</option>
+        </select>
+        </label></td>
+  </tr>
+  <tr>
+    <td align="right"><font color="#FF0000">*</font>会议地点：</td>
+    <td><input type="text" name="ads" class="yd_t2"/></td>
+  </tr>
+  <tr>
+    <td align="right"><font color="#FF0000">*</font>参会人员：</td>
+    <td>{foreach from=$user_list item=user_item2 key=keyk name="user_items2"}{if $user_info.id!=$user_item2.id}<input type="checkbox" name="to_user[]" value="{$user_item2.id}"/>{$user_item2.name}&nbsp;&nbsp;{/if}{/foreach}</td>
+  </tr>
+  <tr>
+    <td align="right">会议附件：</td>
+    <td><input type="file" name="fileUpload"></td>
+  </tr>
+  <tr>
+    <td align="right"></td>
+    <td><input type="submit" value="提交保存"/><input type="button" value="返回" onclick="returnpage();"/></td>
+  </tr>
+</table>
+</form>
+  </div>
+</body>
+</html>

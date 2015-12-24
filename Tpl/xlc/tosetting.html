@@ -1,0 +1,136 @@
+﻿{include file="inc/header.html"} 
+<style type="text/css">
+.main_9 {
+    height: 618px;
+    width: 100%;
+}
+.xm_9 {
+    width: 620px;
+    margin: 0px auto;
+    padding-top: 120px;
+    text-align: center;
+}
+.xm_9 h3 {
+    height: 89px;
+    padding-top: 20px;
+}
+.xm_9 p {
+    line-height: 25px;
+    padding: 15px 25px 25px;
+    word-break: break-all;
+		word-wrap: break-word;
+		font: 12px/22px "Microsoft Yahei","微软雅黑",Arial,"Hiragino Sans GB","宋体";
+    font-family: "Microsoft Yahei","微软雅黑",Arial,"Hiragino Sans GB","宋体";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 22px;
+    font-size-adjust: none;
+    font-stretch: normal;
+    -x-system-font: none;
+    font-feature-settings: normal;
+    font-language-override: normal;
+    font-kerning: auto;
+    font-synthesis: weight style;
+    font-variant-alternates: normal;
+    font-variant-caps: normal;
+    font-variant-east-asian: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-position: normal;
+color: #404040;
+}
+input, select {
+    outline: medium none;
+}
+input, button {
+    font-family: "Microsoft YaHei";
+    border: medium none;
+    overflow: visible;
+}
+a {
+    text-decoration: none;
+}
+.ui-button, .ui-button_active, .ui-button_hover, .ui_button {
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    font-size: 16px;
+    text-align: center;
+    padding: 0px 20px;
+    border-radius: 3px;
+}
+.pro-agr-btn {
+    height: 50px;
+   /* width: 220px;*/
+    margin: 30px auto;
+	text-align:center;
+}
+.pro-agr-btn .ui-button {
+		background: #ff7800 none repeat scroll 0% 0%;
+    width: 180px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+	float:left;
+}
+.pro-agr-chk {
+    width: 480px;
+		margin: 0px auto;
+		height: 50px;
+		border-width: 1px medium;
+		border-style: dashed none;
+		border-color: #707070 -moz-use-text-color;
+		-moz-border-top-colors: none;
+		-moz-border-right-colors: none;
+		-moz-border-bottom-colors: none;
+		-moz-border-left-colors: none;
+		border-image: none;
+		color: #707070;
+		padding: 12px 0px;
+}
+.ui-small-button a {
+    color: #FFF;
+}
+</style>
+
+
+
+<script type="text/javascript" src="{$TMPL}/js/project_index.js"></script>
+<script type="text/javascript">
+$(function(){
+	var timetoshow = setInterval(showtime,1000);
+});
+function showtime(){
+	var nowTimeShow = parseInt($("#timeshow").html());
+	var newTimeShow = parseInt(nowTimeShow-1);
+	$("#timeshow").html(newTimeShow);
+	if(newTimeShow<1){
+		clearInterval(showtime);
+		window.location.href = "{url r="settings#bind"}";
+	}
+}
+</script>
+<!--中间开始-->
+<div class="main_9">	
+	<div class="xm_9">
+		<form action="/project-add" name="fqform" method="post">
+			<h3>发布项目前请您先进行实名认证，<span id="timeshow" style="color:red;">5</span>秒后将自动为您跳转</h3>
+			<div class="pro-agr-btn">
+				<div class="ui-button theme_bgcolor" style="margin-right:10%;margin-left:10%;">
+					<a href="{url r="index"}" style="text-decoration:none;"><span class="common-sprite2 prob_c" style="color:#fff;text-decoration:none;">返回首页</span></a>
+				</div>
+				<div class="ui-button theme_bgcolor">
+					<a href="{url r="settings#bind"}" style="text-decoration:none;"><span class="common-sprite2 prob_c" style="color:#fff;text-decoration:none;">实名认证</span></a>
+				</div>
+				<div class="blank20"></div>
+			</div>
+		</form>
+	</div>
+</div>
+<div style="clear:both;"></div>
+<!--中间结束-->
+
+{include file="inc/footer.html"}
