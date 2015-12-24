@@ -60,7 +60,9 @@ function showtips(msg,fun){
 }
 /*显示添加新地址弹框*/
 function addNewAddress(){
-    $.weeboxs.open("#addNewAddress",{boxid:"addressBox",type:'box',width:400,showTitle: false,showCancel:false,/*clickClose:true,*/okBtnName:"保存",onok:function(){
+    $('#title').html('添加新地址');
+
+    $.weeboxs.open("#addNewAddress",{boxid:"addressBox",type:'box',width:400,showTitle: false,showCancel:false,clickClose:true,okBtnName:"保存",onok:function(){
         saveConsignee('addNewAddressForm',function(json){
             if(json.status==1){
                 $.weeboxs.close();
@@ -75,12 +77,22 @@ function addNewAddress(){
     }});
 }
 function editConsignee(id){
+    addNewAddress();
     var $form = $("#addNewAddressForm");var item = list[id];
     for (var i in item){
         //alert( i + "，" + item[i] );
-        $form.find("input[name="+i+"]").val(item[i]);
+        //$form.find("input[name="+i+"]").val(item[i]);
+        var inputVal = $form.find("input[name="+i+"]");
+        if(inputVal.val() !== undefined &&item[i]!== undefined){
+            inputVal.val(item[i]);
+        }
+        if(i=='is_default'&&item[i]==1){
+            $form.find('#isdefault').attr('checked',true);
+            $form.find('label').addClass('onchecked');
+        }
     }
-    //$form.find('input[]')
+    //$form.find('select[name=city]').val(item.city)
+    $('#title').html('编辑地址');
 }
 /* 编辑地址*/
 function saveConsignee(formid,fun){
@@ -99,106 +111,4 @@ function saveConsignee(formid,fun){
     });
 
 }
-/*
-$(document).ready(function(){
-	bind_add_consignee();
-	bind_edit();
-	bind_del();
-});
 
-function bind_add_consignee()
-{	
-	$("#add_consignee").bind("click",function(){		
-		var ajaxurl = $(this).attr("url");
-		$.ajax({ 
-			url: ajaxurl,
-			type: "POST",
-			dataType: "json",
-			success: function(ajaxobj){
-				if(ajaxobj.status==1)
-				{
-					$.weeboxs.open(ajaxobj.html, {boxid:'add_consignee',contentType:'text',showButton:false, showCancel:false, showOk:false,title:'添加配送地址',width:480,type:'wee'});
-
-				}
-				else
-				{
-					$.weeboxs.open(ajaxobj.html, {boxid:'user_login',contentType:'text',showButton:false, showCancel:false, showOk:false,title:'用户登录',width:940,type:'wee'});
-
-				}
-			},
-			error:function(ajaxobj)
-			{
-//				if(ajaxobj.responseText!='')
-//				alert(ajaxobj.responseText);
-			}
-		});		
-		
-	});
-}
-
-function bind_edit()
-{
-	$(".edit_consignee").bind("click",function(){
-		var ajaxurl = APP_ROOT+"/index.php?ctl=settings&act=edit_consignee";
-		var query = new Object();
-		query.id = $(this).attr("rel");
-		$.ajax({ 
-			url: ajaxurl,
-			type: "POST",
-			dataType: "json",
-			data:query,
-			success: function(ajaxobj){
-				if(ajaxobj.status==1)
-				{
-					$.weeboxs.open(ajaxobj.html, {boxid:'edit_consignee',contentType:'text',showButton:false, showCancel:false, showOk:false,title:'修改配送地址',width:480,type:'wee'});
-				}
-				else
-				{
-					$.weeboxs.open(ajaxobj.html, {boxid:'user_login',contentType:'text',showButton:false, showCancel:false, showOk:false,title:'用户登录',width:940,type:'wee'});
-				}
-			},
-			error:function(ajaxobj)
-			{
-//				if(ajaxobj.responseText!='')
-//				alert(ajaxobj.responseText);
-			}
-		});		
-	});
-}
-
-function bind_del()
-{
-	$(".del_consignee").bind("click",function(){
-		var ajaxurl = APP_ROOT+"/index.php?ctl=settings&act=del_consignee";
-		var query = new Object();
-		query.id = $(this).attr("rel");
-		$.showConfirm("确定要删除该记录吗？",function(){			
-			$.ajax({ 
-				url: ajaxurl,
-				type: "POST",
-				dataType: "json",
-				data:query,
-				success: function(ajaxobj){
-					if(ajaxobj.status==1)
-					{
-						location.href = ajaxobj.jump;
-					}
-					else if(ajaxobj.status ==2)
-					{
-						$.weeboxs.open(ajaxobj.html, {boxid:'user_login',contentType:'text',showButton:false, showCancel:false, showOk:false,title:'用户登录',width:940,type:'wee'});					
-					}
-					else
-					{
-						$.showErr(ajaxobj.info);
-					}
-				},
-				error:function(ajaxobj)
-				{
-//					if(ajaxobj.responseText!='')
-//					alert(ajaxobj.responseText);
-				}
-			});	
-		});
-			
-	});
-}*/

@@ -102,7 +102,19 @@
         width: 25%;
         display: inline-block;
     }
-
+    .addNewAddress input,.addNewAddress select{font-size: 12px;}
+    .addNewAddress select{
+        background-color: transparent;
+        background-image: url('{$TMPL}/images/select_xl011.png');
+        background-repeat: no-repeat;
+        background-position: right center;
+        /*width: 268px;*/
+        padding: 5px;
+        padding-right: 24px;
+        border: none;
+        height: 34px;
+        -webkit-appearance: none; /*for chrome*/
+    }
 </style>
 <div style="clear:both;"></div>
 
@@ -188,7 +200,7 @@
     };
 </script>
 <div id="addNewAddress" style="display:none;">
-    <div class="con_direct_top">
+    <div class="con_direct_top" id="title">
         添加新地址
     </div>
     <div class="con_direct_bottom">
