@@ -2,7 +2,9 @@ $(function() {
     $("#showAddNewAddress").live('click',addNewAddress);
 
     $(".isdefault_ckb label").live('click',function(){$(this).toggleClass('onchecked');});
-
+    $(".close").live('click',function(){
+        $.weeboxs.close();
+    });
     $('.abo_id').each(function(){
         var _this = $(this),
             id = _this.attr('data-id'),
@@ -21,9 +23,9 @@ $(function() {
                                     /*$.showSuccess(json.info,function(){
                                      _this.remove();
                                      });*/
-                                    showtips(json.info,function(){
-                                        _this.remove();
-                                    });
+                                    showtips(json.info);
+                                    _this.remove();
+
                                 }else{
                                     showtips(json.info);
                                 }
@@ -53,10 +55,10 @@ $(function() {
         });
 });
 function showtips(msg,fun){
-    $('.light-tips').html(msg).fadeIn(function(){
+   /* $('.light-tips').html(msg).fadeIn(function(){
         setTimeout(function(){$('.light-tips').fadeOut(); fun && fun();},1000)
-    });
-
+    });*/
+    $.weeboxs.open('<div style="height: 50px;text-align: center;line-height: 50px;">'+msg+'</div>',{type:'box',width:400,showTitle: false,showButton:false,clickClose:true,timeout:1.5,animate:true,onclose:fun});
 }
 /*显示添加新地址弹框*/
 function addNewAddress(){
@@ -80,8 +82,6 @@ function editConsignee(id){
     addNewAddress();
     var $form = $("#addNewAddressForm");var item = list[id];
     for (var i in item){
-        //alert( i + "，" + item[i] );
-        //$form.find("input[name="+i+"]").val(item[i]);
         var inputVal = $form.find("input[name="+i+"]");
         if(inputVal.val() !== undefined &&item[i]!== undefined){
             inputVal.val(item[i]);
@@ -91,13 +91,16 @@ function editConsignee(id){
             $form.find('label').addClass('onchecked');
         }
     }
-    //$form.find('select[name=city]').val(item.city)
+    $("#province option[value='"+item.province+"']").attr("selected",true);
+    load_city();
+    $("#city option[value='"+item.city+"']").attr("selected",true);
     $('#title').html('编辑地址');
+    $('.isdefault_ckb').hide();
 }
 /* 编辑地址*/
 function saveConsignee(formid,fun){
     var $form = $("#"+formid),
-        str = "",p=$form.serialize();alert(p)
+        str = "",p=$form.serialize();
     if(!$.checkMobilePhone($.trim($form.find('input[name="mobile"]').val()))){
         str="请填写正确的手机号";showtips(str);return;
     }

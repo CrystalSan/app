@@ -47,21 +47,20 @@ function init_nav_list($nav_list)
 	$u_param = substr($u_param,0,-1);
 
 	foreach($nav_list as $k=>$v)
-	{			
-		if($v['url']=='')
-		{
+	{
+//		if($v['url']=='') {
 				if($v['u_module']=="")$v['u_module']="index";
 				if($v['u_action']=="")$v['u_action']="index";
 				$route = $v['u_module'];
 				if($v['u_action']!='')$route.="#".$v['u_action'];								
 				$str = "u:".$route."|".$v['u_param'];					
-				$nav_list[$k]['url'] =  parse_url_tag($str);		
+				$nav_list[$k]['url'] =  parse_url_tag($str);
 				if(ACTION_NAME==$v['u_action']&&MODULE_NAME==$v['u_module']&&$v['u_param']==$u_param)
 				{					
 					$nav_list[$k]['current'] = 1;										
 				}	
-		}
-	}	
+//		}
+	}
 	return $nav_list;
 }
 

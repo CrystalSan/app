@@ -60,7 +60,7 @@
 							{else}
 								{if $order_item.deal_info.begin_time > $now}未开始{/if}
 								{if $order_item.deal_info.end_time < $now and $order_item.deal_info.end_time neq 0}未成功&nbsp;{if $order_item.is_refund eq 1}已退款{else}等待退款{/if}{/if}
-								{if $order_item.deal_info.begin_time < $now and ($order_item.deal_info.end_time > $now or $order_item.deal_info.end_time eq 0)}未结束{/if}
+								{if $order_item.deal_info.begin_time < $now and ($order_item.deal_info.end_time > $now or $order_item.deal_info.end_time eq 0)}进行中{/if}
 							{/if}
 					{else}
 						{if $order_item.is_success eq 0}
@@ -76,7 +76,7 @@
 						<a href="{if $order_item.is_ap eq 1}{url r="account#apview_order" p="id=$order_item.id"}{else}{url r="account#view_order" p="id=$order_item.id"}{/if}" style="text-decoration:none;float:none;display:inline-block">继续支付</a><br />
 						<a href="{url r="account#del_order" p="id=$order_item.id"}" style="text-decoration:none;">删除</a>
 					{else}
-						<a href="{if $order_item.is_ap eq 1}{url r="account#apview_order" p="id=$order_item.id"}{else}{url r="account#view_order" p="id=$order_item.id"}{/if}" target="_blank" style="text-decoration:none;">查看详情</a>
+						<a href="{if $order_item.is_ap eq 1}{url r="account#apview_order" p="id=$order_item.id"}{else}{url r="account#view_order" p="id=$order_item.id"}{/if}"  style="text-decoration:none;">查看详情</a>
 					{/if}
 				</td>
 			 </tr>

@@ -9,7 +9,7 @@
   </div>
   <div class="about_a_right">
      <div class="about_a_right_a">
-	      <span>我的资金</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;我的全部资金</span>
+	      <span>我的项目</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;我的支持项目</span>
 		   
 	 </div>
     <div class="about_b_c">
@@ -22,7 +22,7 @@
 	    <li><a href="{url r="account#index"}" class="setpaya">支持的项目</a></li>
 	    {/if}
 			<li><a href="{url r="account#project"}" >我的项目</a></li>
-			<li><a href="{url r="account#focus"}" >关注的项目</a></li>
+			<li><a href="{url r="account#focus"}" >关注的项目</a> </li>
 			
 	   </ul>
 	
@@ -99,7 +99,7 @@
 							{if $order_info.is_refund eq 1}
 							项目失败，金额已退回会员帐户
 							{else}
-							项目未成功
+							进行中
 							{/if}
 						{else}
 							{if $order_info.repay_time eq 0}

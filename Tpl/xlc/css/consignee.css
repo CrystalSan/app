@@ -3,3 +3,116 @@
 .consignee_op{ float:right; padding-right:80px; overflow:hidden;}
 .consignee_op a{ color:#690; text-decoration:none; }
 .consignee_op a:hover{ color:#12adff; text-decoration:none; }
+
+/*新增 2015-12-25*/
+.setting_box{
+    padding:20px 0;
+    margin:0 100px;
+    display:none;
+}
+.abo_id{text-align: left;line-height:30px;}
+.abo_id section{margin: 2%;}
+.abo_id_top{
+    font-size: 18px;
+}
+.abo_id_right{
+    float: right;
+}
+.abo_id_right a{
+    /*font-style: normal;*/
+    color: #000;
+    /*margin-left: 5%;*/
+}
+#showAddNewAddress{
+    display: inline-block;
+    height: 40px;
+    margin: 3% auto;
+    text-align: center;
+}
+.abo_id_bottom{width: 50%;}
+.abo_id_bottom span,.isdefault_ckb label{
+    background-image: url("../images/ui-check.png");
+    background-repeat: no-repeat;
+    background-size: 22px;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 30px;
+    background-position: 0 3px;
+}
+.abo_id_bottom span.onchecked,.isdefault_ckb label.onchecked{
+    background-position: 0 -30px;
+}
+.light-tips{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: none;
+    width: 55%;
+    height: 50px;
+    margin: auto;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
+    background: #fff;
+    text-align: center;
+    line-height: 50px;
+    opacity: 0.9;
+    z-index: 99999999;
+}
+.con_direct_top,.dialog-button{
+    width:100%;
+    color:#ff7800;
+    font-size:16px;
+    font-weight:bold;
+    position:relative;
+    height:50px;
+    line-height:50px;
+    text-align:center;
+    margin:0 auto;
+}
+.con_direct_top{    border-bottom:1px solid #cccccc;
+}
+.dialog-box .dialog-button {padding-top: 0}
+.dialog-button input{
+    color:#ff7800;
+    height:50px;
+    line-height:50px;
+    background: transparent;
+}
+.con_direct_top img{
+    position:absolute;
+    top:-18px;right:-25px;
+}
+.con_direct_bottom{
+    width:100%;
+    margin:0 auto;
+    text-align:center;
+    padding: 5px;
+}
+.addNewAddress{
+    text-align: left;
+    margin-top: 2%;
+}
+.addNewAddress p{
+    padding: 5px 0 5px 7%;
+}
+.addNewAddress p span{
+    width: 25%;
+    display: inline-block;
+}
+.addNewAddress input,.addNewAddress select{font-size: 12px;line-height: 20px}
+.addNewAddress select{
+    background-color: transparent;
+    background-image: url('../images/select_xl02.png');
+    background-repeat: no-repeat;
+    background-position: right center;
+    /*width: 268px;*/
+    padding: 5px;
+    padding-right: 24px;
+    border: none;
+    height: 34px;
+    -webkit-appearance: none; /*for chrome*/
+}

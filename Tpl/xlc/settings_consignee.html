@@ -1,4 +1,5 @@
 {include file="inc/header.html"}
+<link rel="stylesheet" type="text/css" href="{$TMPL}/css/consignee.css"/>
 <script type="text/javascript" src="{$TMPL}/js/consignee.js"></script>
 <script type="text/javascript" src="./system/region.js"></script>
 <script type="text/javascript" src="{$TMPL}/js/switch_city.js"></script>
@@ -6,115 +7,11 @@
     var list = [];
 </script>
 <style>
-    .setting_box{
-        padding:20px 0;
-        margin:0 100px;
-        display:none;
-    }
-    .abo_id{text-align: left;}
-    .abo_id section{margin: 2%;}
-    .abo_id_top{
-        font-size: 18px;
-    }
-    .abo_id_right{
-        float: right;
-    }
-    .abo_id_right a{
-        /*font-style: normal;*/
-        color: #000;
-        /*margin-left: 5%;*/
-    }
-    #showAddNewAddress{
-        display: inline-block;
-        height: 40px;
-        margin: 3% auto;
-        text-align: center;
-    }
-    .abo_id_bottom span,.isdefault_ckb label{
-        background-image: url("{$TMPL}/images/ui-check.png");
-        background-repeat: no-repeat;
-        background-size: 22px;
-        display: inline-block;
-        height: 30px;
-        line-height: 30px;
-        padding-left: 30px;
-        background-position: 0 3px;
-    }
-    .abo_id_bottom span.onchecked,.isdefault_ckb label.onchecked{
-        background-position: 0 -30px;
-    }
-    .light-tips{
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        display: none;
-        width: 55%;
-        height: 50px;
-        margin: auto;
-        -webkit-border-radius: 1px;
-        -moz-border-radius: 1px;
-        border-radius: 1px;
-        background: #fff;
-        text-align: center;
-        line-height: 50px;
-        opacity: 0.9;
-        z-index: 99999999;
-    }
-    .con_direct_top,.dialog-button{
-        width:100%;
-        color:#977f70;
-        font-size:16px;
-        font-weight:bold;
-        position:relative;
-        height:50px;
-        line-height:50px;
-        border-bottom:1px solid #977f70;
-        text-align:center;
-        margin:0 auto;
-    }
-    .dialog-box .dialog-button {padding-top: 0}
-    .dialog-button input{
-        color:#977f70;
-        height:50px;
-        line-height:50px;
-        background: transparent;
-    }
-    .con_direct_top img{
-        position:absolute;
-        top:-18px;right:-25px;
-    }
-    .con_direct_bottom{
-        width:100%;
-        margin:0 auto;
-        text-align:center;
-        padding: 5px;
-    }
-    .addNewAddress{
-        text-align: left;
-        margin-top: 2%;
-    }
-    .addNewAddress p{
-        padding: 5px 0 5px 7%;
-    }
-    .addNewAddress p span{
-        width: 25%;
-        display: inline-block;
-    }
-    .addNewAddress input,.addNewAddress select{font-size: 12px;}
-    .addNewAddress select{
-        background-color: transparent;
-        background-image: url('{$TMPL}/images/select_xl011.png');
-        background-repeat: no-repeat;
-        background-position: right center;
-        /*width: 268px;*/
-        padding: 5px;
-        padding-right: 24px;
-        border: none;
-        height: 34px;
-        -webkit-appearance: none; /*for chrome*/
-    }
+.dialog-box .boxbox,#addNewAddress{overflow: auto;}
+    .close{
+        position: absolute;
+        right: 15px;
+        top: 19px;}
 </style>
 <div style="clear:both;"></div>
 
@@ -132,7 +29,7 @@
             {if $consignee_list}
             {foreach from=$consignee_list item=consignee_item}
             <script>
-                list[{$consignee_item.id}] = {consignee:'{$consignee_item.consignee}',mobile:'{$consignee_item.mobile}',province:'{$consignee_item.province}',city:'{$consignee_item.city}',address:'{$consignee_item.address}',zip:'{$consignee_item.zip}',is_default:'{$consignee_item.is_default}'};
+                list[{$consignee_item.id}] = {consignee:'{$consignee_item.consignee}',mobile:'{$consignee_item.mobile}',province:'{$consignee_item.province}',city:'{$consignee_item.city}',address:'{$consignee_item.address}',zip:'{$consignee_item.zip}',is_default:'{$consignee_item.is_default}',id:'{$consignee_item.id}'};
             </script>
             <div class="abo_id" data-id="{$consignee_item.id}">
                 <section>
@@ -200,14 +97,17 @@
     };
 </script>
 <div id="addNewAddress" style="display:none;">
+
     <div class="con_direct_top" id="title">
         添加新地址
     </div>
+    <div class="close"><a href="javascript:void(0)" class="closebox"><img src="{$TMPL}/images/hint33.png" width=18 height=18 border=0></a></div>
+
     <div class="con_direct_bottom">
         <div class="addNewAddress">
             <form id="addNewAddressForm">
-                <p><span>*收件人：</span><input type="text" name="consignee" placeholder="请填写收件人姓名"></p>
-                <p><span>*地区：</span>
+                <p><span><em class="f_red b">*</em>收件人：</span><input type="text" name="consignee" placeholder="请填写收件人姓名"></p>
+                <p><span><em class="f_red b">*</em>地区：</span>
                           <!--<span><em id="provinceValue">请选择省份</em>-->
                           <select name="province" id="province" class="selectStyle">
                               <option value="" rel="0">请选择省份</option>
@@ -222,13 +122,13 @@
                               <option value="{$region.name}" rel="{$region.id}">{$region.name}</option>
                               {/foreach}
                           </select></span>
-                <p><span>*详细地址：</span><input type="text" name="address" placeholder="请填写详细地址"></p>
+                <p><span><em class="f_red b">*</em>详细地址：</span><input type="text" name="address" placeholder="请填写详细地址"></p>
                 <p><span>&nbsp;&nbsp;邮编：</span><input type="text" name="zip" placeholder="请填写邮编"></p>
-                <p><span>*手机：</span><input type="text" name="mobile" placeholder="请填写手机号"></p>
+                <p><span><em class="f_red b">*</em>手机：</span><input type="text" name="mobile" placeholder="请填写手机号"></p>
                 <p class="isdefault_ckb"><label for="isdefault">是否设为默认地址</label><input type="checkbox" name="isdefault" id="isdefault" hidden="hidden"></p>
                 <!--隐藏input，用于保存参数-->
                 <input id="area" hidden="hidden">
-                <!--<input name="id" hidden="hidden" value="{$user_info.id}">-->
+                <input name="id" hidden="hidden" value="0">
                 <!--<p class="tips"></p>-->
             </form>
         </div>

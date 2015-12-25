@@ -34,14 +34,14 @@
 		     <img src="{$TMPL}/images/bank/{$bank.bank_id}.jpg" alt="" style="*margin-bottom:-4px;_margin-bottom:-6px;" onclick="window.location.href='{url r="account#money_carry" p="id=$bank.id" }'">
 				 <p onclick="window.location.href='{url r="account#money_carry" p="id=$bank.id" }'">{$bank.real_name}</p>
 				 <p onclick="window.location.href='{url r="account#money_carry" p="id=$bank.id" }'">尾号：{function name="substr" v="$bank.bankcard" c="-3"}</p>
-				<p class="add_banka"><a href="javascript:void(0);" class="J_deal_bank" dataid="{$bank.id}">删除此银行卡</a></p>
+				<p class="add_banka"><a href="javascript:void(0);" class="J_deal_bank" dataid="{$bank.id}">删除银行卡</a></p>
 				</div>
 			</div>
 			{/foreach}
 	   <div style="width:100%">
-	         <div class="bank">
-			     <p class="add_bank"><a href="javascript:void(0);" id="add_bank">继续添加银行卡</a></p>
-				 <p class="add_banka">添加银行卡</p>
+	         <div class="bank add"  id="add_bank">
+			     <p class="add_bank"><a href="javascript:void(0);">添加银行卡</a></p>
+				 <!--<p class="add_banka">添加银行卡</p>-->
 		 </div>
 	   </div>
 	 </div>
