@@ -8,6 +8,8 @@ class userModule extends BaseModule
         if($GLOBALS['user_info']){
 			app_redirect(url("settings#index"));
 		}
+		$url = $_SERVER['HTTP_REFERER']?$_SERVER['HTTP_REFERER']:url("index");
+		es_session::set("gopreview",$url);
                  //links
                 $g_links =get_link_by_id(14);
                 
