@@ -87,6 +87,13 @@ if($module!="ajax")
 	if($user_info)
 	{
 		$user_info = $GLOBALS['db']->getRow("select * from ".DB_PREFIX."user where id = ".intval($GLOBALS['user_info']['id'])." and is_effect = 1");
+		$user_ap=$GLOBALS['db']->getRow("select ap from ".DB_PREFIX."ap_partner_user where user_id=".intval($GLOBALS['user_info']['id']));
+		if($user_ap){
+			$user_info['is_ap']=1;
+			$user_info['ap'] = $user_ap['ap'];
+			$user_info['partner_user_id'] = $user_ap['partner_user_id'];
+			$GLOBALS['tmpl']->assign("user_ap",$user_ap['ap']);
+		}
 		es_session::set('user_info',$user_info);
 		//查询登入用户所对应的user_level
 		$user_level=$GLOBALS['db']->getAll("select level from ".DB_PREFIX."user_level where id=".intval($GLOBALS['user_info']['user_level']));

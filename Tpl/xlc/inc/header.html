@@ -108,7 +108,7 @@
 		     <div class="top_bar_ul" >
 		     	<ul>
 			    {foreach from=$nav_list item=nav_item}
-						<li><a href="{$nav_item.url}" {if $nav_item.current}class="act"{/if} title="{$nav_item.name}">{$nav_item.name}</a></li>
+						<li><a href="{$nav_item.url}" {if $nav_item.deals=='deals'}class="act"{/if} title="{$nav_item.name}">{$nav_item.name}</a></li>
 					{/foreach}
 				</ul>
 			 </div>
@@ -120,7 +120,7 @@
 			 </div>-->
 			 <div class="imgcon">
 			 <div class="imgright">
-			   积分：{$user_ap}
+			   {if $user_info.is_ap eq 1}积分：{$user_ap}{/if}
 			 </div>
 
 			 <div class="top_login" {if $user_info} onMouseover="showUserInfoUl();"{/if}>

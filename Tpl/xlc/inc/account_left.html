@@ -2,7 +2,7 @@
 	    <img src="{function name="get_user_avatar" uid=$user_info.id type="middle"}">
 		<div style="clear:both;"></div>
 		<span>{$user_info.user_name}</span>
-		<p style="color:#fff;">积分：{$user_ap}</p>
+		<p style="color:#fff;">{if $user_info.is_ap eq 1}积分：{$user_ap}{/if}</p>
 	</div>
 <!--网站左侧下拉开始-->
 <div class="container">
@@ -13,7 +13,8 @@
 			<dd {if $module eq 'settings'&& $action eq 'index'}class="first_dd"{/if}><a href="{url r="settings#index"}">资料修改</a></dd>
 			<dd {if $module eq 'settings'&& $action eq 'bind'}class="first_dd"{/if}><a href="{url r="settings#bind"}">实名认证</a></dd>
 			<dd {if $module eq 'settings'&& $action eq 'security'}class="first_dd"{/if} style="padding-bottom:10px;"><a href="{url r="settings#security"}">安全信息</a></dd>
-            <dd {if $module eq 'settings'&& $action eq 'consignee'}class="first_dd"{/if} style="padding-bottom:10px;"><a href="{url r="settings#consignee"}">地址管理</a></dd>
+			<dd {if $module eq 'settings'&& $action eq 'consignee'}class="first_dd"{/if}><a href="{url r="settings#consignee"}">地址管理</a></dd>
+			
 		</dl>
 	
 		<dl class="custom" style="margin-bottom:0px;">
