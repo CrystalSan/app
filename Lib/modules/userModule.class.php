@@ -1413,15 +1413,18 @@ class userModule extends BaseModule
         if(!$wx_info['unionid']){
             $GLOBALS['tmpl']->assign("error",'用户ID为空或微信号已绑定其他账号');
         }else{
-            $select_openid_sql = "select userid from ".DB_PREFIX."user_idx where wechat_unionid = '".$wx_info['unionid']."'";
-            $unionid_idx = $GLOBALS['db']->getOne($select_openid_sql);
-            if($unionid_idx&&$unionid_idx!==$userinfo['id']){
-                $GLOBALS['tmpl']->assign("error",'此微信已绑定其他帐号。');
-                $html = "inc/user_bind_mobile.html";
-                $GLOBALS['tmpl']->display($html);
-                exit;
-            }
+
             if($userinfo){
+                $select_openid_sql = "select userid from ".DB_PREFIX."user_idx where wechat_unionid = '".$wx_info['unionid']."'";
+                $unionid_idx = $GLOBALS['db']->getOne($select_openid_sql);
+                if($unionid_idx&&$unionid_idx!==$userinfo['id']){
+                    $pre = get_gopreview();
+                    $GLOBALS['tmpl']->assign("msg",'此微信已绑定其他帐号。');
+                    $GLOBALS['tmpl']->assign("jump",$pre);
+                    $html = "error.html";
+                    $GLOBALS['tmpl']->display($html);
+                    exit;
+                }
                 //用户信息存在，检查用户绑定情况：
                 //  没有绑定信息：使用手机密码登录，并绑定微信；
                 //  有绑定信息：进入绑定页面进行异常提示；
@@ -1463,6 +1466,18 @@ class userModule extends BaseModule
                 }
                 //完成绑定跳转回个人中心
                 app_redirect(url("settings#thirdparties"));
+            }else{
+                $sql_user_info ="select a.*,b.userid from ".DB_PREFIX."user as a , ".DB_PREFIX."user_idx as b where a.id=b.userid and b.wechat_unionid='".$wx_info['unionid']."' limit 1";
+                $wx_user_info = $GLOBALS['db']->getRow($sql_user_info);
+                if($wx_user_info){
+                    if($wx_user_info['mobile']){
+                        require_once APP_ROOT_PATH . "system/libs/user.php";
+                        //如果会员存在，直接登录
+                        do_login_user($wx_user_info['mobile'], $wx_user_info['user_pwd']);
+                        app_redirect(url("settings#index"));
+                        exit;
+                    }
+                }
             }
 
             $page_title = '绑定手机';

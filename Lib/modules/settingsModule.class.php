@@ -1051,18 +1051,18 @@ class settingsModule extends BaseModule
     /*用于绑定解绑第三方帐号 20160120*/
     public function thirdParties(){
 //        print_r($GLOBALS['user_info']);
-        if(!$GLOBALS['user_info']){
-            app_redirect(url("user#login"));
+        if(!$GLOBALS['user_info']) {
+            app_redirect(url_wap("user#login"));
         }else{
             $userid = $GLOBALS['user_info']['id'];
-            $select_sql = "select id from ".DB_PREFIX."user_idx where userid = ".$userid;
-            $idx = $GLOBALS['db']->getOne($select_sql);
-            echo $idx;
+//            echo $userid;
+            $select_sql = "select * from ".DB_PREFIX."user_idx where userid = ".$userid;
+            $idx = $GLOBALS['db']->getRow($select_sql);
             if($idx){
                 $GLOBALS['tmpl']->assign("user",$GLOBALS['user_info']);
             }
             $GLOBALS['tmpl']->assign("idx",$idx);
-//            $GLOBALS['tmpl']->assign("page_title",'绑定第三方帐号');
+            $GLOBALS['tmpl']->assign("page_title",'绑定第三方帐号');
             $GLOBALS['tmpl']->display("settings_third_parties.html");
         }
 
