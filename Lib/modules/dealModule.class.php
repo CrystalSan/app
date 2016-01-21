@@ -188,10 +188,10 @@ require APP_ROOT_PATH.'app/Lib/shop_lip.php';
 		}else{
 			$deal_info['limit_price_format'] = number_price_format(($deal_info['limit_price']));
 		}
-		$deal_info['remain_days'] = ceil(($deal_info['end_time'] - time())/(24*3600));
+		$deal_info['remain_days'] = ceil(($deal_info['end_time'] - NOW_TIME)/(24*3600));
  		$deal_info['person']=0;
 		
-		$GLOBALS['tmpl']->assign("now_time",time());
+		$GLOBALS['tmpl']->assign("now_time",NOW_TIME);
 		//初始化与虚拟金额有所关联的几个比较特殊的数据 start
 		foreach ($deal_info['deal_item_list'] as $k=>$v){
  			//统计每个子项目真实+虚拟（人）

@@ -1,226 +1,166 @@
-{include file="inc/header.html"} 
-<div id="J_wrap">
-	<div class="blank20"></div>
-	<div class="user_bind_mobile mod_box">
-		<p class="f_red f16">您需要绑定手机号码才能进行对项目的支持！</P>
-		<div class="blank20"></div>
-		<div class="form_row control-group">
-			<label class="form_lable">会 员 帐 号:</label>
-			<input type="text" value="{$user_info.user_name}" class="textbox" disabled="true" style="width:348px;"/>
-			<div class="blank15"></div>
-		</div>
-		<div class="form_row control-group" >
-			<label class="form_lable">手 机 号 码:</label>
-			<input type="text" value="{$user_info.mobile}" id="settings-mobile" name="mobile" class="textbox" style="width:188px;"/>
-			<input type="button" value="获取验证码" class="send_sms_verify ui-button bg_red f_l" id="J_send_sms_verify" rel="ui-button">
-			
-			<div class="tip_box"></div>
-			<div class="blank15"></div>
-		</div>
-		<div class="form_row control-group">
-			<label class="form_lable">手机验证码:</label>
-			<input type="text" value="" name="verify_coder" id="verify_coder"  class="textbox"  style="width:148px;"/>
-			<div class="tip_box"></div>
-			<div class="blank15"></div>
-		</div>
-		<div class="blank0"></div>
-		<div class="submit_btn_row control-group">
-			<label class="form_lable"></label>
-			<div class="ui-button theme_bgcolor" rel="ui-button" onclick="javascript:save_mobile();">
-				绑定手机
-			</div>
-			<input type="hidden" value="{$cid}" id="cid" />
-			<div class="blank15"></div>
-		</div>
-	</div>
-	<div class="blank20"></div>
-</div>
-<script type="text/javascript">
-	var code_timeer = null;
-	$(function(){
-		$("#J_send_sms_verify").bind("click",function(){
-			if($("#settings-mobile").val()==''){
-				$.showErr("手机号码不能为空！");
-				return false;
-			}else{
-				send_mobile_verify_sms();
-			}
-		});
-		$("#verify_coder").bind("blur",function(){	
-			if($(this).val()==''){
-				$.showErr("验证码不能为空！");
-				return false;
-			}else{
-				check_register_verifyCoder();
-			}		
-		});
-	});
-	
-	function send_mobile_verify_sms(){
-		$("#J_send_sms_verify").unbind("click");
-	
-		if(!$.checkMobilePhone($("#settings-mobile").val()))
-		{
-			$.showErr("手机号码格式错误!");	
-			$("#J_send_sms_verify").bind("click",function(){
-				send_mobile_verify_sms();
-			});
-			return false;
-		}
-		
-		
-		if(!$.maxLength($("#settings-mobile").val(),11,true))
-		{
-			$("#settings-mobile").focus();
-			$("#settings-mobile").next().show().text("长度不能超过11位");			
-			$("#settings-mobile").next().css({"color":"red"});
-			$("#J_send_sms_verify").bind("click",function(){
-				
-				send_mobile_verify_sms();
-			});
-			return false;
-		}
- 		if($.trim($("#settings-mobile").val()).length == 0)
-		{				
-			$.showErr("手机号码不能为空!");
-			$("#J_send_sms_verify").bind("click",function(){
-				send_mobile_verify_sms();
-			});
-			return false;
-		}
-	
-		var sajaxurl = APP_ROOT+"/index.php?ctl=ajax&act=send_mobile_verify_code&is_only=1";
-		var squery = new Object();
-		squery.mobile = $.trim($("#settings-mobile").val());
-		$.ajax({ 
-			url: sajaxurl,
-			data:squery,
-			type: "POST",
-			dataType: "json",
-			success: function(sdata){
-				if(sdata.status==1)
-				{
-					code_lefttime = 60;
-					code_lefttime_func();
-					$.showSuccess(sdata.info);
-					return false;
-				}
-				else
-				{
-						
-					$("#J_send_sms_verify").bind("click",function(){
-						send_mobile_verify_sms();
-					});
-					$.showErr(sdata.info);
-					return false;
-				}
-			}
-		});	
-		
-		
-	}
+{include file="inc/header.html"}
+<style>
+    .pay_bind_bottom{position: relative}
+    #registerInput{
+        display: none;
+    }
+    .bind{width: 35%;padding: 5%;text-align: center;position: absolute;top: 15%;left: 0;}
+    .bind_tips{
+        position: absolute;
+        top: -40px;
+        line-height: 20px;
+        text-align: center;
+        width: 100%;
+        overflow: hidden;
+        height: 40px;
+        font-size: 12px;
+    }
+    .avatar{display: block;width: 30%;margin: 5% auto;}
+    .font_aa{
+        /*color: #c0c0c0;*/
+        font-size: 14px;
+    }
+    .font_b{color: #ff7800;}
+    .tip_box{
+        position: absolute;
+        top: 140px;
+        left: 0;
+        right: 0;}
+    .button_login.disabled{
+        background:#dddddd;
+        color:#999999;
+    }
+</style>
+<script>
+    /*user.js中所用的url*/
+    var urls = {}
+    urls.submitUrl = '{url r="user#do_register"}';
+    urls.sendSMSUrl = APP_ROOT+"/index.php?ctl=ajax&act=send_mobile_verify_code&is_only=1";
+    urls.checkVerifyCodeUrl = '{url r="user#check_field"}';
+</script>
+<!--选择登录方式-->
+<!--<div class="bind">
+    <div class="bind_top">
+        <div class="bind_top_left">
+            <img src="{if $wx_info.headimgurl}{$wx_info.headimgurl}{else}{$TMPL}/images/u36.png{/if}" class="img-circle avatar">
+        </div>
+        <div class="bind_top_right">
+            <p class="font_aa">欢迎您！</p>
+            <p><strong class="font_age">{$wx_info.nickname}</strong></p>
+            <p class="font_aa">正在使用微信账号登录新乐筹</p>
+        </div>
+    </div>
+</div>-->
+<div class="blank"></div>
+<div class="login">
+    <div class="tip_box font_b">{if $error}{$error}{else}恭喜您成功用微信号注册新乐筹用户，请进行手机号绑定，享受更好的服务{/if}</div>
 
-	function code_lefttime_func(){
-		
-		clearTimeout(code_timeer);
-		$("#J_send_sms_verify").val(code_lefttime+"秒后重新发送");
-		$("#J_send_sms_verify").css({"color":"#f1f1f1"});
-		code_lefttime--;
-		if(code_lefttime >0){
-			$("#J_send_sms_verify").attr("disabled","true");
-			code_timeer = setTimeout(code_lefttime_func,1000);
-		}
-		else{
-			code_lefttime = 60;
-			$("#J_send_sms_verify").val("发送验证码");
-			$("#J_send_sms_verify").attr("disabled","false");
-			$("#J_send_sms_verify").css({"color":"#fff"});
-			$("#J_send_sms_verify").bind("click",function(){
-				send_mobile_verify_sms();
-			});
-		}	
-	}
-	//检查验证码
-	function check_register_verifyCoder(){
- 		if($.trim($("#verify_coder").val())=="")
-		{
-			$.showErr("请输入验证码!");		
-		}
-		else
-		{
-			var mobile = $.trim($("#settings-mobile").val());
-			var code = $.trim($("#verify_coder").val());
-			if(mobile!=""||code!=""){
-				var ajaxurl = APP_ROOT+"/index.php?ctl=user&act=check_verify_code";
-				var query = new Object();
-				query.mobile = mobile;
-				query.code = code;
-				$.ajax({
-					url: ajaxurl,
-					dataType: "json",
-					data:query,
-					type: "POST",
-					success:function(ajaxobj){
-						if(ajaxobj.status==1)
-						{
-							//$.showSuccess("验证码正确!");
-						}
-						if(ajaxobj.status==0)
-						{
-							$.showErr("验证码不正确!");
-						}
-					}
-				});
-			}
-		}
-	}
-	function save_mobile(){
-		if(!$.checkMobilePhone($("#settings-mobile").val()))
-		{
-			$.showErr("手机号码格式错误!");	
-			return false;
-		}
-		
-		if(!$.maxLength($("#settings-mobile").val(),11,true))
-		{
-			$.showErr("长度不能超过11位!");	
-			return false;
-		}
- 		if($.trim($("#settings-mobile").val()).length == 0)
-		{				
-			$.showErr("手机号码不能为空!");
-			return false;
-		}
-		if($.trim($("#verify_coder").val()).length == 0){
-			$.showErr("验证码不能为空！");
-			return false;
-		}
-			var mobile = $.trim($("#settings-mobile").val());
-			var cid= $.trim($("#cid").val());
-			var verify_coder=$.trim($("#verify_coder").val());
-			var ajaxurl = APP_ROOT+"/index.php?ctl=user&act=save_mobile";
-			var query=new Object();
-			query.mobile=mobile;
-			query.cid=cid;
-			query.verify_coder=verify_coder;
-			$.ajax({
-				url: ajaxurl,
-				dataType: "json",
-				data:query,
-				type: "POST",
-				success:function(ajaxobj){
-						if(ajaxobj.status==1)
-						{
-							window.location.href='{url r="ajax#three_seconds_jump" p="id=$cid"}';
-						}
-						if(ajaxobj.status==0)
-						{
-							$.showErr(ajaxobj.info);
-						}
-				}
-			});
-			return false;
-	}
+    <!--div class="form-group logo_table logo_table1">
+        <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border="0"></span>会员名称:</label>
+        <input type="text" id="user_name" name="user_name" class="form-control input_width" placeholder="请输入会员名称">
+        <div class="tip_box"><div class="form_tip">请输入会员帐号</div></div>
+    </div>-->
+    <input type="text" id="user_name" name="user_name" hidden="hidden" value="{$wx_info.nickname}">
+    <div class="form-group logo_table logo_table1">
+        <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border="0"></span>手机号码:</label>
+        <input type="text" class="form-control input_width" id="settings_mobile" name="mobile" placeholder="请输入手机号码11位">
+    </div>
+    <div class="form-group logo_table logo_table1">
+        <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border="0"></span>输入密码:</label>
+        <input type="password" id="user_pwd" name="user_pwd" class="form-control input_width" placeholder="请输入至少8位数字加英文密码">
+    </div>
+
+    <div id="registerInput" style="display: none;">
+        <div class="form-group logo_table logo_table1">
+            <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border="0"></span>确认密码:</label>
+            <input type="password" id="confirm_user_pwd" name="confirm_user_pwd" class="form-control input_width" placeholder="请输入至少8位数字加英文密码">
+        </div>
+
+        <div class="form-group logo_table logo_table1">
+            <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border="0"></span>手机验证:</label>
+            <input type="text" class="form-control input_test" id="verify_coder" name="verify_coder" placeholder="请输入验证码">
+            <a href="javascript:void(0);" id="J_send_sms_verify" class="test_code">获取验证码</a>
+        </div>
+
+    </div>
+    <div class="form-group logo_table " style="margin:0 auto;text-align:center;">
+        <button id="submitBindBtn" class="button_login {if $error}disabled{/if}" style="margin-left:37%;" {if $error}disabled="disabled"{/if}>绑定并登录</button>
+    </div>
+</div>
+
+</div>
+<script type="text/javascript" src="{$TMPL}/js/user.js"></script>
+<!--bind-->
+<script>
+    $(function(){
+        $("#settings_mobile").live('blur',bind.next);// check mobile status
+        $("#submitBindBtn").bind('click',bind.submit);
+    })
+    var bind = {
+        type:'reg',//默认注册
+        next:function(){
+            if(user.checkPhone()){
+                bind.checkMobileStatus();
+            };
+        },
+        checkMobileStatus:function(){
+            var url = APP_ROOT+"/appdata.php?act=app_check_mobile";
+            var p = {'mobile':$("#settings_mobile").val()};
+            user.sendAjax(url,p,function(json){
+                var oBtn = $('#submitBindBtn');
+                switch (json.error){
+                    case '0':
+                        //新用户
+                        showBindtips('新用户，请输入密码&验证码完成绑定');
+                        bind.type = 'reg';
+                        $('#registerInput').slideDown();
+                        if(oBtn.hasClass('disabled')){oBtn.attr('disabled',false).removeClass('disabled')}
+//                            $('#registerInput').addClass('show');
+                        break;
+                    case '-1':
+                        //老用户，可输入密码绑定
+                        showBindtips('老用户，输入密码完成绑定');
+                        bind.type = 'login';
+                        $('#registerInput').slideUp();
+                        if(oBtn.hasClass('disabled')){oBtn.attr('disabled',false).removeClass('disabled')}
+                        break;
+                    case '-2':
+                        showBindtips('此账号已绑定微信，请去个人中心解绑');
+                        oBtn.attr('disabled',true).addClass('disabled');
+                        break;
+
+                }
+            });
+        },
+        submit:function(){
+            var u_info = user.formData,username = "{$wx_info.nickname}",
+                    param = {user_name:username,mobile:u_info.phone.val(),user_pwd:u_info.password.val(),type:bind.type},
+                    url = APP_ROOT+'/?ctl=user&act=do_bind_mobile';
+
+            if(bind.type=="reg"){
+                param.confirm_user_pwd = u_info.rePassword.val();
+                param.verify_coder = u_info.verifyCode.val();
+                if(!(user.checkPhone()&&user.checkPassword())) return false;
+            }else{
+                if(!user.checkPhone()) return false;
+                if(param.user_pwd==""||param.user_pwd.length<4){
+                    $.showErr('密码格式不正确');return false;
+                }
+            }
+            user.sendAjax(url,param,function(json){
+//                        alert(e.status)
+                if (json.status == 1) {
+                    location.href = json.jump;
+                } else {
+                    $.showErr(json.info);
+                }
+            });
+        }
+    }
+    function showBindtips(msg){
+        var $div = $('.tip_box');
+        $div.html(msg).fadeIn();
+    }
 </script>
 {include file="inc/footer.html"} 
 

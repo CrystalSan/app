@@ -1,0 +1,100 @@
+<html>
+  <head>
+   <meta name="Generator">
+   <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=0,minimum-scale=0.5">
+   <meta name="apple-mobile-web-app-capable" content="yes">
+   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+   <meta name="format-detection" content="telephone=no">
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <link href="{$TMPL}/calendar/css/css.css" rel="stylesheet">
+		<script type="text/javascript" src="{$TMPL}/js/jquery-1.8.2.min.js"></script>
+   <title>看你什么时候去死/死亡预测/</title>
+
+<script type="text/javascript">
+	$(function(){
+		$("#savebutton").bind("click",function(){
+			if($("#name").val()==''){
+				alert('请输入姓名');
+				$("#name").font();
+				return false;
+			}
+			$("#saveform").submit();
+		});
+	});
+	
+	function changeDeath(){
+		$("#death").html("");
+		var startage = 2017-$("#year").val();
+		for(var i = startage ; i < 120 ; i++){
+			if(i==80){
+				$("#death").append("<option value='"+i+"' selected>"+i+"</option>");
+			}else{
+				$("#death").append("<option value='"+i+"'>"+i+"</option>");
+			}
+		}
+	}
+
+</script>
+  </head>
+   <body>
+     <div class="content">
+	   
+	     <div class="contenta_font">
+		  逝者如斯夫，不舍昼夜。<br>
+		  在到达死亡彼岸之前，<br>
+		  我们还够时间去做些什么？
+        </div>
+		
+		
+		 <div class="contentb_a">
+		    <form id="saveform" name="saveform" action="/index.php?ctl=time&act=save" method="post">
+			     <div class="formdate"> 
+				   <label class="label_font">姓名:</label>
+				    <div class="input_bg"><input type="text" id="name" name="name" value="{$data_info.name}"/></div>
+				 </div>
+				 <div class="clear"></div>
+				 <div class="formdate"> 
+				   <label class="label_font">生日:</label>
+				    <div class="input_bg1">
+					   <select class="slect_input1" id="year" name="year" onchange="changeDeath();">
+					   	{foreach from=$yearArr item=year}
+					       <option value="{$year}" {if $data_info.year}{if $data_info.year eq $year}selected{/if}{else}{if $year eq 1985}selected{/if}{/if}>{$year}</option>
+					    {/foreach}
+					  </select>
+					   <select class="slect_input2" name="month">
+					      {foreach from=$monthArr item=month}
+					       <option value="{$month}" {if $data_info.month eq $month}selected{/if}>{$month}</option>
+					    	{/foreach}
+					  </select>
+					   <select class="slect_input3" name="day">
+					      {foreach from=$dayArr item=day}
+					       <option value="{$day}" {if $data_info.day eq $day}selected{/if}>{$day}</option>
+					    	{/foreach}
+					  </select>
+					</div>
+				 </div>
+                <div class="formdate"> 
+				   <label class="label_font1">预测死亡年龄:</label>
+				    <div class="input_bg2">
+					   <select class="select2" name="death" id="death">
+					      {foreach from=$deathArr item=death}
+					       <option value="{$death}" {if $data_info.death eq $death}selected{/if}>{$death}</option>
+					    	{/foreach}
+					  </select>
+					  
+					</div>
+				 </div>
+				 <div class="submit">
+				     <input type="hidden" value="{$wx_info.openid}" name="wid">
+				     <input type="hidden" value="{$fid}" name="fid">
+				     <input type="hidden" value="{$data_info.id}" name="id">
+				     <input type="button" value="查看结果" id="savebutton">
+				 </div>
+			</form>
+		 </div>
+		
+
+	 </div>
+  </body>
+</html> 

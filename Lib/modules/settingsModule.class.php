@@ -70,7 +70,16 @@ class settingsModule extends BaseModule
 		$user_data['city'] = strim($_REQUEST['city']);
 		$user_data['sex'] = intval($_REQUEST['sex']);
 		$user_data['intro'] = strim($_REQUEST['intro']);
-		$user_data['intro'] = strim($_REQUEST['intro']);
+        //增加昵称修改 20160121
+
+        if(!empty($_REQUEST['user_name'])){
+            $user_data['user_name'] = strim($_REQUEST['user_name']);
+            $user_data['has_set_name'] = 1;
+            $num=$GLOBALS['db']->getOne("select id from  ".DB_PREFIX."user where user_name='".$user_data['user_name']."'");
+            if($num>0&&($GLOBALS['user_info']['id']!==$num)){
+                showErr("昵称已存在！",$ajax,"");
+            }
+        }
 		
 		if(strim($_REQUEST['mobile'])){
 			$user_data['mobile'] = strim($_REQUEST['mobile']);
@@ -1038,5 +1047,25 @@ class settingsModule extends BaseModule
  				
 		}
 	}
+    /*第三方帐号管理*/
+    /*用于绑定解绑第三方帐号 20160120*/
+    public function thirdParties(){
+//        print_r($GLOBALS['user_info']);
+        if(!$GLOBALS['user_info']){
+            app_redirect(url("user#login"));
+        }else{
+            $userid = $GLOBALS['user_info']['id'];
+            $select_sql = "select id from ".DB_PREFIX."user_idx where userid = ".$userid;
+            $idx = $GLOBALS['db']->getOne($select_sql);
+            echo $idx;
+            if($idx){
+                $GLOBALS['tmpl']->assign("user",$GLOBALS['user_info']);
+            }
+            $GLOBALS['tmpl']->assign("idx",$idx);
+//            $GLOBALS['tmpl']->assign("page_title",'绑定第三方帐号');
+            $GLOBALS['tmpl']->display("settings_third_parties.html");
+        }
+
+    }
 }
 ?>

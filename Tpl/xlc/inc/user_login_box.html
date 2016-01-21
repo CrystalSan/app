@@ -4,11 +4,39 @@
 	.control-group{ position:relative; _float:left; }
 	.dlmain { background:url({$TMPL}/images/images/reglog_bg.gif) repeat-y; }
 	.control-group label{width:30px}
+    .choose_login_method{
+        width:40%;margin: 0 auto;padding: 5%;
+    }
+    /*.choose_login_method ul{}*/
+    .choose_login_method ul li{display: block;border:1px solid #977f70;margin: 4%; line-height: 55px;border-radius: 5px;}
+    .choose_login_method ul li a{
+        text-decoration: none;
+        color: #977f70;
+        width: 40px;
+        margin-left:3% ;
+    }
+    .choose_login_method ul li img{
+        display:inline-block;
+    }
+    .choose_login_method_content{display: none}
 </style>
 <div class="blank"></div>
 <!--中间开始-->
-
-<div class="login">
+<div class="choose_login_method">
+    <ul>
+        <li><img src="{$TMPL}/images/u41.png" border=0 width=8%><a href="{url r="user#register"}"" >手机号注册</a></li>
+        <li><img src="{$TMPL}/images/u41.png" border=0 width=8%><a href="{url r="user#login"}"" >手机号登录</a></li>
+        <!--<li class="login_tips"><p class="login_thirdp">您也可以用第三方账号直接登录</p></li>-->
+        <li id="wechatLoginBtn">
+            <img src="{$TMPL}/images/u36.png" border=0 width=8%><a href="{url r="user#wx_login"}"" >微信登录</a>
+            <!--<div class="wxLogin drop_content" style="display: none;">
+                <div id="qr_container"></div>
+                <div class="wxtips"></div>
+            </div>-->
+        </li>
+    </ul>
+</div>
+<div class="login choose_login_method_content" date-model="login">
      <form id="user_login_form" name="user_login_form" action="{url r="user#do_login"}">
         <div class="form-group logo_table">
          <label for="name" class="logo_tex">手机号:</label>
@@ -29,7 +57,10 @@
         </div>
     </form>
 </div>
-   
+<div class="wx_login content" date-model="wxlogin">
+    <div class="wxLogin drop_content" style="display: none;">
+    <div id="qr_container"></div>
+    <div class="wxtips"></div></div>
 <!--中间结束-->
 <script type="text/javascript">
 	show_tip();

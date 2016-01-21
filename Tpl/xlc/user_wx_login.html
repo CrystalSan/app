@@ -1,0 +1,33 @@
+{include file="inc/header.html"}
+<style>
+    .login{margin: 2% auto;}
+</style>
+<div class="login">
+    <!--扫码登录-->
+    <div class="login_register">
+        <div id="qr_container"></div>
+        <div class="wxtips"></div>
+        <p>或<a href="{url r="user#register"}" class="login_link">手机号注册</a></p>
+        <p><a href="{url r="user#login"}" class="login_link">已有账号，直接登录</a></p>
+    </div>
+    <!--内嵌二维码微信登录JS-->
+    <script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+    <script type="text/javascript" src="{$TMPL}/js/wechat.js"></script>
+
+    <script>
+        /**
+         * Created by admin on 16/1/19.
+         */
+        $(function(){
+
+            if($("#qr_container").length > 0){
+                //非微信浏览器获取微信登录二维码
+                weChatUtils.getWechatLoginQr();
+                if(typeof WxLogin == 'undefined'){
+                    $('.wxtips').html('出问题啦。是不是网络没连上？');
+                };
+            }
+        })
+    </script>
+</div>
+{include file="inc/footer.html"} 

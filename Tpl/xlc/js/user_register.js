@@ -211,16 +211,19 @@ function do_register()
 						form_success($("#user_type"),"");
 						var integrate = $("<span id='integrate'>"+ajaxobj.data+"</span>");
 						$("body").append(integrate);
-						location.href = ajaxobj.jump;
-							
-					}
-					else
+                        $('.login').hide();
+                        $('.register_complete').show();
+                        $('#later').click(function(){
+                            var url = ajaxobj.jump?ajaxobj.jump:APP_ROOT+"/";
+                            location.href = ajaxobj.jump;
+                        });
+                    }else
 					{
 						is_submiting = false;
 						if(ajaxobj.info!="")
 						{
 							$.showErr(ajaxobj.info,function(){
-								location.href = APP_ROOT+"/";
+								//location.href = APP_ROOT+"/";
 							});
 						}
 						for(var i=0;i<ajaxobj.data.length;i++)

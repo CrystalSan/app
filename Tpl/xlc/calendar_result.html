@@ -1,0 +1,174 @@
+<html>
+  <head>
+   <meta name="Generator">
+   <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=0,minimum-scale=0.5">
+   <meta name="apple-mobile-web-app-capable" content="yes">
+   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+   <meta name="format-detection" content="telephone=no">
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <link href="{$TMPL}/calendar/css/css.css" rel="stylesheet">
+    <link href="{$TMPL}/calendar/css/result.css" rel="stylesheet">
+		<script type="text/javascript" src="{$TMPL}/js/jquery-1.8.2.min.js"></script>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+   <title>{$user_info.name}的死亡倒计时</title>
+   <meta name="description" content="{$user_info.name}的死亡倒计时!!!">
+  </head>
+  <script type="text/javascript">
+  		wx.config({
+			    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			    appId: '{$signPackage.appId}', // 必填，公众号的唯一标识
+			    timestamp: '{$signPackage.timestamp}', // 必填，生成签名的时间戳
+			    nonceStr: '{$signPackage.nonceStr}', // 必填，生成签名的随机串
+			    signature: '{$signPackage.signature}',// 必填，签名，见附录1
+			    jsApiList: [
+			    	'checkJsApi',
+            'openLocation',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage'
+          ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			});
+			wx.ready(function(){
+				wx.checkJsApi({
+		        jsApiList: [
+		            'onMenuShareTimeline',
+		            'onMenuShareAppMessage'
+		        ],
+		        success: function (res) {
+		            //alert(JSON.stringify(res));
+		        }
+		    });
+		    var imgUrl = '{$TMPL}/calendar/images/fenxiang.png'; // 分享后展示的一张图片
+		    var lineLink = window.location.href; // 点击分享后跳转的页面地址
+		    var descContent = "{$user_info.name}的死亡倒计时!!"; // 分享后的描述信息
+		    var shareTitle = '{$user_info.name}的死亡倒计时!!'; // 分享后的标题
+		    var appid = ''; // 应用id,如果有可以填，没有就留空
+		   
+		    wx.onMenuShareTimeline({
+				    title: shareTitle, // 分享标题
+				    link: lineLink, // 分享链接
+				    imgUrl: imgUrl, // 分享图标
+				    success: function () { 
+				        // 用户确认分享后执行的回调函数
+				    },
+				    cancel: function () { 
+				        // 用户取消分享后执行的回调函数
+				    }
+				});
+				wx.onMenuShareAppMessage({
+				    title: shareTitle, // 分享标题
+				    desc: descContent, // 分享描述
+				    link: lineLink, // 分享链接
+				    imgUrl: imgUrl, // 分享图标
+				    type: '', // 分享类型,music、video或link，不填默认为link
+				    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+				    success: function () {
+				    },
+				    cancel: function () { 
+				        // 用户取消分享后执行的回调函数
+				    }
+				});
+				wx.onMenuShareQQ({
+				    title: shareTitle, // 分享标题
+				    desc: descContent, // 分享描述
+				    link: lineLink, // 分享链接
+				    imgUrl: imgUrl, // 分享图标
+				    success: function () { 
+				       // 用户确认分享后执行的回调函数
+				    },
+				    cancel: function () { 
+				       // 用户取消分享后执行的回调函数
+				    }
+				});
+				
+				wx.onMenuShareWeibo({
+				    title: shareTitle, // 分享标题
+				    desc: descContent, // 分享描述
+				    link: lineLink, // 分享链接
+				    imgUrl: imgUrl, // 分享图标
+				    success: function () { 
+				       // 用户确认分享后执行的回调函数
+				    },
+				    cancel: function () { 
+				        // 用户取消分享后执行的回调函数
+				    }
+				});
+				
+				wx.onMenuShareQZone({
+				    title: shareTitle, // 分享标题
+				    desc: descContent, // 分享描述
+				    link: lineLink, // 分享链接
+				    imgUrl: imgUrl, // 分享图标
+				    success: function () { 
+				       // 用户确认分享后执行的回调函数
+				    },
+				    cancel: function () { 
+				        // 用户取消分享后执行的回调函数
+				    }
+				});
+  		});
+  		$(document).ready(function(){
+  			if($("#showdiv").length > 0){
+	  			$("#showdiv").show();
+	  			$("#showdiv").bind("click",function(){
+	  				$("#showdiv").hide();
+	  			});
+  			}
+  		});
+	</script>
+   <body>
+   	<div style="display:none;"><img src="{$TMPL}/calendar/images/fenxiang.png" width="200px" height="200px"></div>
+     <div class="content">
+	   <div class="con_a">
+	      <div class="con_a_font">
+		     <div class="con_a_img_bg">
+				    <div class="con_a_img_month"><img src="{$TMPL}/calendar/images/m{$user_info.life_month}.png" width=70%></div>
+					<div class="con_a_img_date"><img src="{$TMPL}/calendar/images/d{$user_info.life_day}.png" width=70%></div>
+				</div>
+				<div class="cona_fontb">
+		     这是{$user_info.name}生命中的{$user_info.life_month}月{$user_info.life_day}日<br><br>
+			 </div>
+				  <div class="cona_fonta">
+			 在余下的生命中，大约可以：<br>
+			 吃<div class="color">{$user_info.death_eat}</div>顿饭,做<div class="color">{$user_info.death_fuck}</div>次爱<br>
+			  陪家人过<div class="color">{$user_info.death_year}</div>个年<br>
+			  和<br>
+			  体验<div class="color">1</div>次真正意义上的死亡<br><br>
+			  </div>
+			  <div class="cona_fontc border bordera"><br>
+			  如倒计时搬生活吧，就像死亡即将到来一样<br>
+                   去认真吃每一顿饭，去用力爱那一个人<br>
+                       去珍惜你与家人的每一秒<br>
+                               和<br>
+                     去努力实现每一个愿望
+				 </div>
+			  {if $edit eq 1}<a class="onclick" href="/index.php?ctl=time&act=save&edit=1&fid={$user_info.id}">修改我的死亡倒计时</a>{else}<a class="onclick" href="/index.php?ctl=time&act=save&fid={$user_info.id}">测算我的死亡倒计时</a>{/if}
+		  
+			  </div>
+	   </div>
+	   <div class="clear"></div>
+	   <div class="con_b">
+	          
+           生命之轮只有结果，没有遗憾。<br>
+           长按扫描二维码关注信新乐筹。<br>
+          勇敢说出你的愿望，让生命璀璨！
+          <img src="{$TMPL}/calendar/images/weixin.png" border=0 height=60%>
+	   </div>
+	</div>
+	{if $edit eq 1}
+ <div id="showdiv" class="trans_bg">
+ 	<img src="{$TMPL}/calendar/images/trans_bg.png" border=0 width=100% height=100%>
+</div>
+{/if}
+
+<script>
+	var url = top.location.href;
+	var referer = document.referrer;
+  var oHead = document.getElementsByTagName('HEAD').item(0);
+	var oScript= document.createElement("script"); 
+	oScript.type = "text/javascript"; 
+	oScript.src="/c.php?url="+url+"&referer="+referer; 
+	oHead.appendChild(oScript);
+</script>
+  </body>
+</html> 

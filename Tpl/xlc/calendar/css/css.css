@@ -1,0 +1,142 @@
+﻿*{margin:0;padding:0;
+ font-family:"SimHei",黑体;
+}
+	
+ img{
+	 vertical-align:middle;
+	 border:0;
+	 display:block;
+	  }
+	  
+.content{
+	   width:100%;
+	   height:100%;
+	   margin:0 auto;
+	   padding:0 auto;
+	  background:url(../images/bg.png) no-repeat top center;
+	  background-size:100% 100%;
+	  
+	   
+     }
+.clear:{
+	clear:both;
+}	 
+.contenta_font{
+	 width:70%;
+	 margin:0 auto;
+	 padding:0 auto;
+	 color:#fff;
+	 font-size:16px;
+	 font-weight:600px;
+	 line-height:30px;
+	 text-align:left;
+	 padding-top:15%;
+	 
+	 
+}	
+.contentb_a{
+	width:90%;
+	margin:0 auto;
+	padding:0 auto;
+	margin-top:15%;
+	text-align:center;
+}
+
+.formdate{
+	width:80%;
+	margin:0 auto;
+	padding:0 auto;
+	text-align:left;
+	display:inline-block;
+	padding-bottom:5%;
+	height:30px;
+	line-height:30px;
+}
+.label_font{
+	width:30%;
+	text-align:left;
+	float:left;
+	color:#fff;
+	font-size:16px;
+}	
+.label_font1{
+	width:60%;
+	text-align:left;
+	float:left;
+	color:#fff;
+	font-size:16px;
+}
+.input_bg{
+	width:70%;
+	float:right;
+	background:rgba(255,255,255,0.8);
+	background-color:#fff;
+	opacity:0.8;
+	filter:alpha(opacity:80);
+	
+}
+.input_bg1{
+	width:70%;
+	float:right;
+	
+	
+}
+.input_bg2{
+	width:40%;
+	float:left;
+	
+	
+}
+.select2{
+	width:100%;
+	
+}
+.slect_input1{
+	width:37%;
+}
+.slect_input2{
+	width:25%;
+}
+.slect_input3{
+	width:27%;
+}
+.input_bg1>select,.input_bg2>select{
+
+	background:rgba(255,255,255,0.8);
+	background-color:#fff;
+	opacity:0.8;
+	filter:alpha(opacity:80);
+	padding-right:14px;
+	height:30px;
+	
+	
+}
+.formdate  input[type=text]{
+	background:none;
+	border:none;
+	height:30px;
+}
+.submit{
+	width:100%;
+	margin:20% 0 0 0 ;
+	text-align:center;
+	
+}
+.submit input[type=button]{
+	width:60%;
+	margin:0 5% 0 auto;
+	padding:0 auto;
+	text-align:center;
+	background-color:#fff;
+	background:rgba(255,255,255,0.8);
+	opacity:0.8;
+	filter:alpha(opacity:80);
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	font-size:16px;
+	height:40px;
+	cursor:pointer;
+	
+}
+

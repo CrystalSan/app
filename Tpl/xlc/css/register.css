@@ -1,0 +1,133 @@
+﻿.login_register{
+	width:100%;
+    text-align: center;
+	margin:0 auto;
+	padding:0 auto;
+	
+	
+}
+.foot_bottom{
+	position:absolute;
+	bottom:0;
+}
+.login_link{
+	color:#ff7800;
+	text-align:left;
+}
+.login_link:hover{
+	color:#ff7800;
+	text-decoration:none;
+}
+.wechat_registera{
+	color:#ff7800;
+	text-decoration:none;
+}
+.wechat_registera:hover{
+	color:#ff7800;
+	text-decoration:none;
+}
+.login_pfont{
+	width:55%;
+	padding:0 auto;
+	text-align:left;
+	line-height:24px;
+    margin: 5% auto 2%;
+    text-align: center;
+}
+.logo_table .register_tel{
+	margin-left:35%;
+}
+.login_pfonta{
+	width:40%;
+}
+.logo_table .register_tela{
+	margin-left:30%;
+}
+.register_po{
+	/*margin-top:5%;*/
+	margin-left:50px;
+	float:left;
+	margin-top:30px;
+    width: 85%;
+}
+.register_poa{
+	color:#fff;
+	background:#ff7800;
+	/*padding:3% 5%;*/
+	padding:10px 20px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	
+}
+.register_poa:hover{
+	text-decoration:none;
+	color:#fff;
+	
+}
+.register_right{float: right;}
+.bindcon{
+	color:#ff7800;
+	text-decoration:none;
+}
+.bindcon:hover{
+	color:#ff7800;
+	text-decoration:none;
+}
+/*增加的*/
+
+.hintl{width:300px;
+       height:200px;
+	   margin:0 auto;
+	   background:#fff;
+	   position:fixed;top:50%;left:60%;
+      margin-left:-250px;
+	  margin-top:-166px;
+	  z-index:111;
+	  display:none;border:1px solid #977f70;
+      box-shadow:5px 5px 5px #eeedeb;}
+.hintl-in1{width:500px;
+           height:70px;
+		   background:#ff6600;
+		   position:relative;}
+.hintl1{width:48px;
+         height:47px;
+        top:12px;
+		left:98px;
+		position:absolute;z-index:111;}
+
+.hintl-in2{line-height:150px;
+          font-size:14px;
+		  text-align:center;
+		  color:#ff6600;}
+.hintl-in3{font-size:14px ;
+           width:90px;
+		   height:30px;
+		   background:#ff7800;
+		   color:#f4e8df;
+           position:absolute;
+		   bottom:50px;left:10%;
+		   text-align:center;
+		   line-height:30px;border-radius:8px;}
+.hintl-in4{font-size:14px ;
+            width:90px;
+			height:30px;
+			background:#fff;color:#ff7800;
+            position:absolute;
+			bottom:50px;right:10%;
+			text-align:center;line-height:30px;
+             border-radius:8px;border:1px solid #ff7800;}
+.register_poap{
+	         margin-top:10px;
+			 float:left;
+			 margin-left:0;
+			 margin-right:20px;
+}
+.img_register_logo{
+	width:130px;
+	height:130px;
+	border:0;
+	position:absolute;
+	top:50%;
+	left:50%;
+}			 

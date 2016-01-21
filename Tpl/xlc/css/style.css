@@ -2909,3 +2909,44 @@ input, button {
 	text-decoration:none;
 	color:#fff;
 }
+/*新增login 2016-01-20*/
+a.login-btn{
+    margin-top: 15px;
+    line-height: 40px;
+    padding: 0 12px;
+}
+.btn-default{
+    background:#ff7800;
+    border: none;
+}
+a.login-btn:hover,a.login-btn:visited{
+    background: #60584E;
+    color: #ff7800;;
+}
+
+.login-weixin-btn{
+    background: #619619 none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #ffffff;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 auto;
+    text-align: center;
+    width: 40%;
+}
+.login-weixin{
+    margin-top: 10px;
+    border-top: 1px solid #ff7800;
+    width: 100%;
+    margin: 0 auto;
+    padding: 5%;
+}
+.login-weixin p{
+    margin: 20px;
+}
+.login-weixin a.button_login {
+    color: #fff;
+    width: 60%;
+    margin-left: 19%;
+}

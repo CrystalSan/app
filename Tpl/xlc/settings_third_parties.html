@@ -1,0 +1,101 @@
+{include file="inc/header.html"}
+<link href="{$TMPL}/css/register.css" type="text/css" rel="stylesheet">
+<div style="clear:both;"></div>
+
+<div class="about_a">
+    <div class="about_a_left_pub" style="height: 100%;">
+        {include file="inc/account_left.html"}
+        <!--网站左侧下拉结束-->
+    </div>
+<div class="about_a_right">
+    <div class="about_a_right_a">
+        <span>微信</span><span style="font-size:16px;color:#666666">&nbsp;&nbsp;/&nbsp;&nbsp;绑定管理</span>
+
+    </div>
+	<div class="about_b_c">
+            {if $idx}
+            <div class="register_po">
+                <p class="register_poap"><a href="#" class="bindcon">绑定状态：{$user.user_name}</a></p>
+                <p class="register_right"><button class="register_poa btn4" id="unbind" data-act="unbindWechat">解除绑定</button></p>
+            </div>
+            <div style="clear:both;"></div>
+            {else}
+            <div class="register_po">
+                <p class="register_poap"><a href="#" class="bindcon">绑定状态：未绑定</a></p>
+                <p class="register_right"><button class="register_poa btn4" id="bind">绑定微信号</button></p>
+            </div>
+            {/if}
+        <div class="qr" style="display: none;"><p id="qr_container"></p><div class="wxtips"></div></div>
+    </div>
+</div>
+</div>
+<!--中间结束-->
+<div style="clear:both;"></div>
+<!--网站左侧下拉-->
+<script type="text/javascript">
+    $(".leftsidebar_box dt").css({"background-color":"#4e4439"});
+    $(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+    $(function(){
+        $(".leftsidebar_box dd").hide();
+        $(".leftsidebar_box dt").click(function(){
+            $(".leftsidebar_box dt").css({"background-color":"#4e4439","border-left":"none"})
+            $(this).css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+            $(this).parent().find('dd').removeClass("menu_chioce");
+            $(".leftsidebar_box dt img").attr("src","{$TMPL}/images/select_xl011.png");
+            $(this).parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+            $(".menu_chioce").slideUp();
+            $(this).parent().find('dd').slideToggle();
+            $(this).parent().find('dd').addClass("menu_chioce");
+        });
+        $(".leftsidebar_box .first_dd").parent().find('dt').css({"background-color": "#1f1812","border-left":"4px solid #ff7800"});
+        $(".leftsidebar_box .first_dd").parent().find('img').attr("src","{$TMPL}/images/select_xl02.png");
+        $(".leftsidebar_box .first_dd").parent().find('dd').slideToggle();
+        $(".leftsidebar_box .first_dd").parent().find('dd').addClass("menu_chioce");
+        $(".leftsidebar_box .first_dd").find('a').css("color","#ff7800");
+    })
+    window.onload = function(){
+        //$(window).bind('resize load', function(){ $("body").css("zoom", $(window).width() / 640); $("body").css("display" , "block"); });
+        $(".about_a").css('height', document.body.clientHeight);
+    };
+</script>
+    {include file="inc/footer.html"}
+
+<!--内嵌二维码微信登录JS-->
+<script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+<script type="text/javascript" src="{$TMPL}/js/wechat.js"></script>
+<script>
+    $(function(){
+        var userid = "{$user.id}",unbindUrl = APP_ROOT+'/?ctl=ajax&userid='+userid+'&act=';
+        $("#unbind").bind('click',function(e){
+            var url = unbindUrl+$(this).attr('data-act');
+            $.showConfirm("<div>确定解绑微信吗？</div>",function(){
+                $.weeboxs.close();
+                $("#loading").show();
+                $.ajax({url:url,dataType:"json",type:"get",
+                    success:function(json){
+                        $("#loading").hide();
+                        if(json.status==1){
+                            $.showSuccess("解绑成功！",function(){
+                                window.location.reload();
+                            });
+                        }else{
+                            $.showErr(json.info);
+                        }
+
+                    },error:function(json){
+                        if(json.responseText!=''){alert(json.responseText);}}
+                });
+            });
+        });
+        $("#bind").bind('click',function(e){
+            $(".qr").fadeIn();
+        });
+        if($("#qr_container").length > 0){
+            //非微信浏览器获取微信登录二维码
+            weChatUtils.getWechatLoginQr();
+            if(typeof WxLogin == 'undefined'){
+                $('.wxtips').html('出问题啦。是不是网络没连上？');
+            };
+        }
+    })
+</script>

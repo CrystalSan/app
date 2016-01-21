@@ -21,10 +21,10 @@
 	height:240px;
 	right:10%;
 	top:100px;
-	background:rgba(255,255,255,0.8)!important;
+	background:rgba(255,255,255,0.9)!important;
 	background-color:#fff;
-	opacity:0.8;
-	filter:alpha(opacity:80);
+	opacity:0.9;
+	filter:alpha(opacity:90);
 }
 .login_loga{
 	width:80%;

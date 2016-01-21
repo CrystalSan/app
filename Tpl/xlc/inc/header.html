@@ -108,7 +108,7 @@
 		     <div class="top_bar_ul" >
 		     	<ul>
 			    {foreach from=$nav_list item=nav_item}
-						<li><a href="{$nav_item.url}" {if $nav_item.deals=='deals'}class="act"{/if} title="{$nav_item.name}">{$nav_item.name}</a></li>
+						<li><a href="{$nav_item.url}" {if $nav_item.current}class="act"{/if} title="{$nav_item.name}">{$nav_item.name}</a></li>
 					{/foreach}
 				</ul>
 			 </div>
@@ -146,8 +146,8 @@
 								</ul>
 							</div>
          {else}
-         <a href="javascript:void(0);" onclick="javascript:show_pop_login();"><img src="{$TMPL}/images/index_login.png" border=0></a>
-				 <a href="{url r="user#register"}"><img src="{$TMPL}/images/index_register.png" border=0></a>
+         <a href="javascript:void(0);" onclick="javascript:show_pop_login();" class="btn btn-default login-btn">登录/注册</a>
+
          {/if}
 			 </div>
 			 </div>
