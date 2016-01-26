@@ -1,31 +1,53 @@
-{include file="inc/header.html"} 
+
+{include file="inc/header.html"}
+<style>
+    .shadow_bg{
+        width: 80%;
+        margin: 0 auto;
+        background: #fff;
+        padding: 5%;
+        -o-box-shadow: #977f70 2px;
+        -moz-box-shadow: 1px 1px 2px #977f70; /* 老的 Firefox */
+        box-shadow: 1px 1px 2px #977f70;
+    }
+    .page_title{
+        width: 100px;
+        margin: 5% auto;
+        text-align: center;}
+    .f_b{
+        /*color: #977f70;*/
+        font-size: 20px;
+    }
+    .return_jump{font-size: 12px; color: #977f70;}
+</style>
 {if $stay eq 0}
 <meta http-equiv="refresh" content="3;URL={$jump}" />
 {/if}
 <div id="J_wrap">
-	<div class="blank20"></div>
-	<div class="shadow_bg">
-		<div class="wrap white_box" style="height:400px">
-			<div class="page_title">成功</div>
-			<div class="switch_nav" style="height:1px;"></div>				
-			<div class="full msgbox tc">
-				<div class="blank20"></div>
-				<p class="f24 f_red">
-				{if $integrate_result}
-				{$integrate_result}
-				{/if}&nbsp;&nbsp;
-				{$msg}	
-				</p>
-				<div class="blank20"></div>
-				{if $stay eq 0}
-				<div class="return_jump f16">
-					请点击此处直接<span class="theme_fcolor"> [<a href="{$jump}" class="theme_fcolor">返回</a>] </span>或者等待三秒钟后自动跳转。		
-				</div>
-				{/if}
-				<div class="blank20"></div>
-			</div>
-		</div>
-	</div>			
-	<div class="blank20"></div>
+    <div class="blank20"></div>
+    <div class="shadow_bg">
+        <div class="wrap white_box" style="height:400px">
+            <!--<div class="page_title"></div>-->
+            <div class="blank20"></div>
+            <div class="switch_nav" style="height:1px;"></div>
+            <div class="full msgbox tc">
+                <div class="blank20"></div>
+                <p class="f24 f_b">
+                    {if $integrate_result}
+                    {$integrate_result}
+                    {/if}<br>
+                    {$msg}
+                </p>
+                <div class="blank20"></div>
+                {if $stay eq 0}
+                <div class="return_jump">
+                    请点击此处直接 [<a href="{$jump}">返回</a>] 或者等待三秒钟后自动跳转。
+                </div>
+                {/if}
+                <div class="blank20"></div>
+            </div>
+        </div>
+    </div>
+    <div class="blank20"></div>
 </div>
-{include file="inc/footer.html"} 
+{include file="inc/footer.html"}

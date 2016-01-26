@@ -19,7 +19,7 @@ var weChatUtils = {
     },
     getWechatUserInfo:function(){
         //临时地址
-        var url = 'http://'+window.location.host+'/htdocs/wxpay_web/wxUtil.php?act=getWechatAuthBase';
+        var url = 'http://'+window.location.host+'/wxpay_web/wxUtil.php?act=getWechatAuthBase';
         window.location.href = url;
     }
 }

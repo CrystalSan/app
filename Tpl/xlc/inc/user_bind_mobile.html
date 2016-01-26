@@ -38,22 +38,10 @@
     urls.sendSMSUrl = APP_ROOT+"/index.php?ctl=ajax&act=send_mobile_verify_code&is_only=1";
     urls.checkVerifyCodeUrl = '{url r="user#check_field"}';
 </script>
-<!--选择登录方式-->
-<!--<div class="bind">
-    <div class="bind_top">
-        <div class="bind_top_left">
-            <img src="{if $wx_info.headimgurl}{$wx_info.headimgurl}{else}{$TMPL}/images/u36.png{/if}" class="img-circle avatar">
-        </div>
-        <div class="bind_top_right">
-            <p class="font_aa">欢迎您！</p>
-            <p><strong class="font_age">{$wx_info.nickname}</strong></p>
-            <p class="font_aa">正在使用微信账号登录新乐筹</p>
-        </div>
-    </div>
-</div>-->
+
 <div class="blank"></div>
 <div class="login">
-    <div class="tip_box font_b">{if $error}{$error}{else}恭喜您成功用微信号注册新乐筹用户，请进行手机号绑定，享受更好的服务{/if}</div>
+    <div class="tip_box font_b">{if $error}{$error}{else}恭喜您成功注册新乐筹用户，您可以绑定手机号，享受更好的服务{/if}</div>
 
     <!--div class="form-group logo_table logo_table1">
         <label for="name" class="logo_tex"><span><img src="{$TMPL}/images/biao.png" border="0"></span>会员名称:</label>
@@ -111,7 +99,7 @@
                 switch (json.error){
                     case '0':
                         //新用户
-                        showBindtips('新用户，请输入密码&验证码完成绑定');
+                        showBindtips('请输入密码和验证码完成绑定');
                         bind.type = 'reg';
                         $('#registerInput').slideDown();
                         if(oBtn.hasClass('disabled')){oBtn.attr('disabled',false).removeClass('disabled')}
@@ -119,13 +107,13 @@
                         break;
                     case '-1':
                         //老用户，可输入密码绑定
-                        showBindtips('老用户，输入密码完成绑定');
+                        showBindtips('请输入密码完成绑定');
                         bind.type = 'login';
                         $('#registerInput').slideUp();
                         if(oBtn.hasClass('disabled')){oBtn.attr('disabled',false).removeClass('disabled')}
                         break;
                     case '-2':
-                        showBindtips('此账号已绑定微信，请去个人中心解绑');
+                        showBindtips('此账号已与其它微信绑定，请更换手机号，或用手机号登录');
                         oBtn.attr('disabled',true).addClass('disabled');
                         break;
 

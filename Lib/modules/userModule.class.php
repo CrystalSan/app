@@ -1287,13 +1287,13 @@ class userModule extends BaseModule
         $wx_info = es_session::get('wx_user_info');
         $user_info = $wx_login_info?$wx_login_info:$wx_info;
         //没有微信帐号信息
-        if(!$user_info){showErr("请使用微信扫描后绑定手机！",1,"");}
+        if(!$user_info){showErr("请使用微信扫描二维码后完成帐号绑定",1,"");}
         //判断微信号是否已存在
         $select_openid_sql = "select id from ".DB_PREFIX."user_idx where wechat_unionid = '".$user_info['unionid']."'";
         $unionid_idx = $GLOBALS['db']->getOne($select_openid_sql);
-        if($unionid_idx){showErr("此微信号已绑定其他帐号！",1,"");}
+        if($unionid_idx){showErr("此微信已与其它手机号绑定，请登录后至个人中心解绑，再绑定此微信号",1,"");}
 
-        $user_info['sex'] = $user_info['sex']==2?0:1;
+        $user_info['sex'] = $user_info['sex']==1?1:0;
         $wx_type = $wx_login_info?'login':'auth';
         if($type=='reg'){
             //绑定注册新帐号
@@ -1355,12 +1355,14 @@ class userModule extends BaseModule
         }else{
             //帐号已存在，绑定并登录
             require_once APP_ROOT_PATH."system/libs/user.php";
-            if(check_ipop_limit(get_client_ip(),"user_dologin",5))
+            if(check_ipop_limit(get_client_ip(),"user_dologin",2)){
                 $result = do_login_user($mobile,$password);
-
+            }else{
+                showErr('提交太频繁',1);
+            }
         }
         //插入新索引
-        if($result['status']){
+        if($result['status']===1){
 //                if($result['user']['has_set_name']==1){
             //不替换用户昵称等信息
             if($user_info['unionid']){
@@ -1380,7 +1382,7 @@ class userModule extends BaseModule
                 }
             }else{
                 $return['status'] = -1;
-                $return['info'] = array('msg'=>'用户ID为空或微信号已绑定其他账号。');
+                $return['info'] = array('msg'=>'无法获取您的微信用户信息');
                 ajax_return($return);
             }
 
@@ -1400,29 +1402,32 @@ class userModule extends BaseModule
                 case ACCOUNT_NO_VERIFY_ERROR:
                     $err = "用户未通过验证";
                     break;
+                default:
+                    $err = "绑定失败，请重试";
+                    break;
             }
             showErr($err,1);
         };
     }
+
+
     //wechat 绑定手机号码
     public function user_bind_mobile(){
         $userinfo = $GLOBALS['user_info'];
         $wx_Login_info = es_session::get('wx_login_user_info');
         $wx_info = $wx_Login_info?$wx_Login_info:es_session::get('wx_user_info');
         $wx_type = $wx_Login_info?'login':'auth';
+        $pre = get_gopreview();
         if(!$wx_info['unionid']){
-            $GLOBALS['tmpl']->assign("error",'用户ID为空或微信号已绑定其他账号');
+            showErr('无法获取您的微信用户信息');
+            exit;
         }else{
 
             if($userinfo){
                 $select_openid_sql = "select userid from ".DB_PREFIX."user_idx where wechat_unionid = '".$wx_info['unionid']."'";
                 $unionid_idx = $GLOBALS['db']->getOne($select_openid_sql);
                 if($unionid_idx&&$unionid_idx!==$userinfo['id']){
-                    $pre = get_gopreview();
-                    $GLOBALS['tmpl']->assign("msg",'此微信已绑定其他帐号。');
-                    $GLOBALS['tmpl']->assign("jump",$pre);
-                    $html = "error.html";
-                    $GLOBALS['tmpl']->display($html);
+                    showErr('此微信已与其它手机号绑定，请登录后至个人中心解绑，再绑定此微信号');
                     exit;
                 }
                 //用户信息存在，检查用户绑定情况：
@@ -1436,15 +1441,14 @@ class userModule extends BaseModule
                 if($user_unionid){
                     //有绑定信息：判断是否为该unionid
                     if($user_unionid == $wx_info['unionid']){
-//                        echo $user_unionid;exit;
                         if($userinfo['is_effect']==1){
                             //在此自动登录
                             require_once APP_ROOT_PATH."system/libs/user.php";
                             do_login_user($userinfo['user_name'],$userinfo['user_pwd']);
                         }
                     }else{
-                        $GLOBALS['tmpl']->assign("error",'已绑定其他微信，请先去个人中心解绑。');
-                        $GLOBALS['tmpl']->assign("mobile",$userinfo['mobile']);
+                        showErr('此账号已与其它微信绑定，请更换手机号，或用手机号登录');
+                        exit;
                     }
                 }else{
                     $sql_user_idx_insert = "INSERT INTO `xlc_user_idx` SET userid=".$userinfo['id'].",mobile='".$userinfo['mobile']."',nickname='".$wx_info['nickname']."',wechat_".$wx_type."_openid='".$wx_info['openid']."',wechat_unionid='".$wx_info['unionid']."'";
@@ -1465,7 +1469,9 @@ class userModule extends BaseModule
                     $GLOBALS['db']->query($sql_user_update);
                 }
                 //完成绑定跳转回个人中心
-                app_redirect(url("settings#thirdparties"));
+                $url = $pre?$pre:url("settings#thirdparties");
+                showSuccess('绑定成功！',"",$url,0);
+//                app_redirect($url);exit;
             }else{
                 $sql_user_info ="select a.*,b.userid from ".DB_PREFIX."user as a , ".DB_PREFIX."user_idx as b where a.id=b.userid and b.wechat_unionid='".$wx_info['unionid']."' limit 1";
                 $wx_user_info = $GLOBALS['db']->getRow($sql_user_info);
@@ -1474,7 +1480,8 @@ class userModule extends BaseModule
                         require_once APP_ROOT_PATH . "system/libs/user.php";
                         //如果会员存在，直接登录
                         do_login_user($wx_user_info['mobile'], $wx_user_info['user_pwd']);
-                        app_redirect(url("settings#index"));
+                        $url = $pre?$pre:url("settings#index");
+                        app_redirect($url);
                         exit;
                     }
                 }

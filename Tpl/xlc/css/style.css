@@ -13,7 +13,7 @@ body{
 	background:#f0f1f1;
 	behavior:url("../ie-css3.htc");*/
 	background:#dee0e0;
-	
+    -webkit-font-smoothing: antialiased;
 	}
 img{border:0px;}	
 a{text-decoration:none;}
