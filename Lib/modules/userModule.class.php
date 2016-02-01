@@ -1369,12 +1369,12 @@ class userModule extends BaseModule
                 $sql_user_idx_insert = "INSERT INTO `xlc_user_idx` SET userid=".$result['user']['id'].",mobile='".$result['user']['mobile']."',nickname='".$user_info['nickname']."',wechat_".$wx_type."_openid='".$user_info['openid']."',wechat_unionid='".$user_info['unionid']."'";
                 $GLOBALS['db']->query($sql_user_idx_insert);
                 if($result['user']['has_set_name']==0){
-                    $sql_user_name_info ="select * from xlc_user where user_name='".$user_info['nickname']."' limit 1";
+                    /*$sql_user_name_info ="select * from xlc_user where user_name='".$user_info['nickname']."' limit 1";
                     $tmp_user_name_info = $GLOBALS['db']->query($sql_user_name_info);
                     if($tmp_user_name_info){
                         //微信用户昵称存在
                         $user_info['nickname'] .= rand(10000,99999);
-                    }
+                    }*/
                     //更新用户表
                     $sql_user_update = "UPDATE `xlc_user` SET user_name='".$user_info['nickname']."',headimgurl='".$user_info['headimgurl']."',sex=".$user_info['sex'].",province='".$user_info['province']."',city='".$user_info['city']."' where id=".$result['user']['id'];
 //                        print_r($sql_user_update);

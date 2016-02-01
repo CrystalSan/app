@@ -557,9 +557,11 @@ function get_user_avatar($id,$type)
     if(file_exists($avatar_check_file)){
         return $avatar_file;
     }else{
+        //检查用户是否有绑定微信
+        $idx = $GLOBALS['db']->getRow("select * from  ".DB_PREFIX."user_idx where userid=".$uid);
         //检查用户是否有微信头像
         $pic=$GLOBALS['db']->getOne("select `headimgurl` from  ".DB_PREFIX."user where id=".$uid);
-        if($pic!==null&&@fopen($pic,'r')){//如果有绑定微信&头像地址有效
+        if($pic!==null&&@fopen($pic,'r')&&$idx){//如果有绑定微信&头像地址有效
             return $pic;
         }else{
             return APP_ROOT."/public/avatar/noavatar_".$type.".gif";

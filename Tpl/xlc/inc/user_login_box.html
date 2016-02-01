@@ -14,6 +14,17 @@
         color: #977f70;
         width: 40px;
         margin-left:3% ;
+        line-height: 55px;
+        display: inline-block;
+        background-repeat: no-repeat;
+        background-size: 40px;
+        background-position: 34% center;
+        width: 100%;
+        padding-left: 12%;
+        background-image: url("{$TMPL}/images/u41.png");
+    }
+    .choose_login_method ul li a.wx{
+        background-image: url("{$TMPL}/images/u36.png");
     }
     .choose_login_method ul li img{
         display:inline-block;
@@ -24,11 +35,11 @@
 <!--中间开始-->
 <div class="choose_login_method">
     <ul>
-        <li><img src="{$TMPL}/images/u41.png" border=0 width=8%><a href="{url r="user#register"}"" >手机号注册</a></li>
-        <li><img src="{$TMPL}/images/u41.png" border=0 width=8%><a href="{url r="user#login"}"" >手机号登录</a></li>
+        <li><!--<img src="{$TMPL}/images/u41.png" border=0 width=8%>--><a href="{url r="user#register"}"" >手机号注册</a></li>
+        <li><!--<img src="{$TMPL}/images/u41.png" border=0 width=8%>--><a href="{url r="user#login"}"" >手机号登录</a></li>
         <!--<li class="login_tips"><p class="login_thirdp">您也可以用第三方账号直接登录</p></li>-->
         <li id="wechatLoginBtn">
-            <img src="{$TMPL}/images/u36.png" border=0 width=8%><a href="{url r="user#wx_login"}"" >微信登录</a>
+            <!--<img src="{$TMPL}/images/u36.png" border=0 width=8%>--><a href="{url r="user#wx_login"}"" class="wx">微信登录</a>
             <!--<div class="wxLogin drop_content" style="display: none;">
                 <div id="qr_container"></div>
                 <div class="wxtips"></div>
